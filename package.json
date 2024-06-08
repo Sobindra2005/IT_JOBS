@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "name": "codsoft",
+  "description": "Repository for all the task that is given by the codsoft during the internship period .",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "nodemon main.js"
+  },
+  "author": "sobhindra budhathoki",
+  "license": "ISC"
+}
