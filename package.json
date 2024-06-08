@@ -1,14 +1,16 @@
 {
   "dependencies": {
-    "express": "^4.19.2"
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "nodemon": "^3.1.3",
+    "path": "^0.12.7"
   },
   "name": "codsoft",
   "description": "Repository for all the task that is given by the codsoft during the internship period .",
   "version": "1.0.0",
-  "main": "index.js",
-  "devDependencies": {},
+  "main": "jobBoard/main.js",
   "scripts": {
-    "start": "nodemon main.js"
+    "start": "nodemon jobBoard/main.js"
   },
   "author": "sobhindra budhathoki",
   "license": "ISC"

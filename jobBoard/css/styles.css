@@ -1,0 +1,123 @@
+/* public/css/styles.css */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 0;
+  }
+  
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+  }
+  
+  .logo h1 {
+    margin: 0;
+    cursor: pointer;
+
+  }
+  
+  .nav-buttons {
+    display: flex;
+  }
+  
+  .nav-buttons .btn {
+    background-color: white;
+    color: #4CAF50;
+    border: none;
+    padding: 10px 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .nav-buttons .btn:hover {
+    background-color: #45a049;
+    color:white;
+  }
+  
+  .main-content {
+    text-align: center;
+    padding: 50px;
+    background-color: #f4f4f4;
+    height: calc(100vh - 62px); /* Adjusting for header height */
+  }
+  
+  .search-container {
+    max-width: 600px;
+    margin: 0 auto;
+    
+  }
+  
+  .search-container h2 {
+    margin-bottom: 20px;
+  }
+  
+  .search-container input {
+    width: 70%;
+    padding: 10px;
+    font-size: 16px;
+    margin-right: -5px;
+    border: 1px solid #ccc;
+    border-radius: 4px 0 0 4px;
+    outline:none;
+  }
+  
+  .search-container .search-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 1px solid #4CAF50;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+  }
+  
+  .search-container .search-btn:hover {
+    background-color: #45a049;
+  }
+  
+  /* public/css/styles.css */
+
+/* Footer styles */
+footer {
+  background-color: #333;
+  color: #fff;
+  padding: 20px 0;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-content p {
+  margin: 0;
+}
+
+.footer-links {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-links li {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.footer-links li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.footer-links li a:hover {
+  text-decoration: underline;
+}
