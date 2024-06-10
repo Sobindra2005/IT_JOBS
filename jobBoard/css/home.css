@@ -1,0 +1,17 @@
+ .profile{
+    cursor:pointer;
+ }
+
+.nav-bar{
+    margin: 0; 
+    padding: 0; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width:25em;
+    cursor: pointer;
+}
+
+.top-bar{
+    padding-right:20px;
+}
