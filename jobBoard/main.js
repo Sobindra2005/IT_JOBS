@@ -19,6 +19,9 @@ connectMongoDb(url)
 
 app.use(express.urlencoded({extended:false}))
 app.use(express.static(path.join(__dirname,'css')))
+app.use(express.static(path.join(__dirname,'script')))
+app.use(express.static(path.join(__dirname,'controllers')))
+
 app.set('views', path.join(__dirname,'views'))
 app.set('view engine', 'ejs')
 

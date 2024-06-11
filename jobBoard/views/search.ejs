@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+  <link href="/styles.css" rel="stylesheet">
+  <link href="/home.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="top-bar">
+        <div class="logo">
+          <a href="">
+            <h1>Job Board</h1>
+          </a>
+        </div>
+        <div class="nav-bar">
+          <div><i id="home" class="bi bi-house"></i></div>
+          <div><i onclick="redirectMessage()" class="bi bi-chat-left-text"></i></div>
+          <div><i onclick="redirectNotifications()" class="bi bi-bell"></i></div>
+          <div><i onclick="redirectJobApplied()" class="bi bi-briefcase"></i></div>
+          <div><i onclick="redirectSearch()" class="bi bi-search"></i></div>
+        </div>
+        <div class="profile">
+          <div id="profile-button"><i class="bi bi-person"></i></div>
+          <div class="profile-options">
+            <ul>
+              <li class="hoverOptions">Dashboard</li>
+              <li class="hoverOptions" >Setting</li>
+              <li class="hoverOptions">Logout</li>
+  
+            </ul>
+          </div>
+          
+        </div>
+      </div>
+    </header>
+
+    <section class="main-content">
+      <div class="search-container">
+        <h2>Find Your Dream Job</h2>
+        <input type="text" placeholder="Search for jobs...">
+        <button class="search-btn">Search</button>
+      </div>
+      <div class="recent-jobs-section">
+        <h2>Recent Jobs</h2>
+        <div class="job-grid">
+          <div class="job-card">
+            <h3>web development</h3>
+            <p>codsoft<br>kolkata,west bengal</p>
+          </div>
+          <div class="job-card">
+            <h3>web development</h3>
+            <p>codsoft<br>kolkata,west bengal</p>
+          </div> <div class="job-card">
+            <h3>web development</h3>
+            <p>codsoft<br>kolkata,west bengal</p>
+          </div> <div class="job-card">
+            <h3>web development</h3>
+            <p>codsoft<br>kolkata,west bengal</p>
+          </div>
+          <div class="job-card">
+            <h3>web development</h3>
+            <p>codsoft<br>kolkata,west bengal</p>
+          </div> <div class="job-card">
+            <h3>web development</h3>
+            <p>codsoft<br>kolkata,west bengal</p>
+          </div> <div class="job-card">
+            <h3>web development</h3>
+            <p>codsoft<br>kolkata,west bengal</p>
+          </div> <div class="job-card">
+            <h3>web development</h3>
+            <p>codsoft<br>kolkata,west bengal</p>
+          </div>
+        
+        </div>
+        <div class="seeMore">
+          <button type="submit">See More</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2024 Job Board</p>
+    </div>
+  </footer>
+  <script src="/profileoption.js"></script>
+  
+
+</body>
+</html>

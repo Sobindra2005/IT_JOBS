@@ -26,6 +26,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
+    padding-right: 40px;
   }
   
   .logo a{

@@ -2,6 +2,7 @@
     cursor:pointer;
  }
 
+
 .nav-bar{
     margin: 0; 
     padding: 0; 
@@ -10,8 +11,25 @@
     align-items: center;
     width:25em;
     cursor: pointer;
+    
 }
 
-.top-bar{
-    padding-right:20px;
+
+.profile div i ,.nav-bar div i {
+    font-size: 20px;
+    border:1px solid rgb(151, 146, 146) ;
+    padding:5px;
+   color:white;
+    border-radius:10%; 
 }
+
+.profile div i:hover , .nav-bar div i:hover{
+    color:rgb(99, 95, 95);
+    border-color: rgb(99, 95, 95) ;
+}
+
+#home{
+    color:rgb(99, 95, 95);
+    border-color: rgb(99, 95, 95) ;
+}
+
