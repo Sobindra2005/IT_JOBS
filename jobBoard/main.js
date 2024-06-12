@@ -8,7 +8,7 @@ const path=require('path')
 require('dotenv').config()
 
 
-const port=process.env.PORT
+const port=4000
 const url=process.env.url
 
 app.listen(port,(req,res)=>{
@@ -19,8 +19,7 @@ connectMongoDb(url)
 
 app.use(express.urlencoded({extended:false}))
 app.use(express.static(path.join(__dirname,'css')))
-app.use(express.static(path.join(__dirname,'script')))
-app.use(express.static(path.join(__dirname,'controllers')))
+app.use(express.static(path.join(__dirname,'redirect')))
 
 app.set('views', path.join(__dirname,'views'))
 app.set('view engine', 'ejs')

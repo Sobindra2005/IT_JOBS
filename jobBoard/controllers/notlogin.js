@@ -2,16 +2,21 @@ require('dotenv').config()
 const port = process.env.PORT
 const { User } = require("../models/register")
 const { setuser, getUser, setUser } = require("../services/authentication")
-const bcrypt=require('bcrypt')
+const bcrypt = require('bcrypt')
+const { jobData }=require('../jobdemo/demo.js')
+const{Set}=require('core-js')
+
 
 function landingPage(req, res) {
     try {
-        res.render('landingpage')
+        res.render('landingpage',{jobData , Set })
     }
     catch (err) {
         console.log("error occur ", err)
     }
+    {
 
+    }
 }
 function loginPage(req, res) {
     try {
@@ -25,32 +30,38 @@ function loginPage(req, res) {
 }
 async function loginPost(req, res) {
     try {
-        const { email, password } = await req.body
-        if (!email || !password) return res.redirect("/login")
-        const user = await User.findOne({ email })
-        if (!user) return res.status(401).redirect("/login")
-        const userPassword = await user.password
-        const passwordMatch = await bcrypt.compare(password, user.password)
-        if (!passwordMatch) return res.status(401).redirect("/login")
-        if (user && passwordMatch) {
-            const token = setUser(user)
-            res.redirect("/aflin/home")
+      
+        const { email, password } = req.body;
+        const userData = await User.findOne({ email })
+        const userPassword= await userData.password
+        const passwordMatch = await bcrypt.compare(password, userData.password)
+        if (!email || !password) {
+            res.status(400).send({ msg: "email and password is required" });
         }
-        else{
-            console.log('err occur')
+        if (!userData) {
+            res.status(404).send({ msg: "user not found!!" })
         }
+        if (passwordMatch) {
+            const token = setUser(userData)
+            res.status(200).redirect('/aflin/home')
+
+        }
+        else {
+            res.status(401).send({ msg: "incorrect password!!" })
+        }
+     
+
 
     }
-    catch (err) {
-console.log("login failed!!",err)
-    res.send(err)
+    catch(err){
 
+        console.log(`${err}`)
     }
 }
 
 function registerPage(req, res) {
     try {
-        res.render('register', { port })
+        return res.render('register', { port })
     }
     catch (err) {
         console.log(err)

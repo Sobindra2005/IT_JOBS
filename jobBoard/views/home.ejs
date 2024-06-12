@@ -24,15 +24,15 @@
           <div class="nav-bar">
             <div><i id="home" class="bi bi-house"></i></div>
             <div>
-              <i onclick="redirectMessage()" class="bi bi-chat-left-text"></i>
+              <i  class="bi bi-chat-left-text"></i>
             </div>
             <div>
-              <i onclick="redirectNotifications()" class="bi bi-bell"></i>
+              <i  class="bi bi-bell"></i>
             </div>
             <div>
-              <i onclick="redirectJobApplied()" class="bi bi-briefcase"></i>
+              <i  class="bi bi-briefcase"></i>
             </div>
-            <div><i onclick="redirectSearch()" class="bi bi-search"></i></div>
+            <div><i class="bi bi-search"></i></div>
           </div>
           <div class="profile">
             <div id="profile-button"><i class="bi bi-person"></i></div>
@@ -49,22 +49,15 @@
         <div class="recent-jobs-section">
           <h2>Recent Jobs</h2>
           <div class="job-grid">
-            <% function generateRandomIndex(arr) { return
-            Math.floor(Math.random()*arr.length); } function randomJob(jobdata)
-            { randomjobs=[]; const randomIndex=new Set();
-            while(randomIndex.size<8){
-            randomIndex.add(generateRandomIndex(jobdata)) }
-            randomIndex.forEach(index=> { randomjobs.push(jobdata[index]) });
-            return randomjobs; } %> <% const randomJobs=randomJob(jobData) %> <%
-            randomJobs.forEach(function(job) { %>
-            <div class="job-card">
-              <h3><%= job.title %></h3>
-              <p>
-                <%= job.company %><br />
-                <%= job.location %>
-              </p>
-            </div>
-            <% }); %>
+           <% jobData.forEach(function(job) { %>
+              <div class="job-card">
+                <h3><%= job.title %></h3>
+                <p>
+                  <%= job.company %><br />
+                  <%= job.location %>
+                </p>
+              </div>
+              <% }); %>
           </div>
           <div class="seeMore">
             <button type="submit">See More</button>
@@ -78,6 +71,7 @@
         <p>&copy; 2024 Job Board</p>
       </div>
     </footer>
-    <script src="/profileoption.js"></script>
+
+    <script src="/redirect.js"></script>
   </body>
 </html>

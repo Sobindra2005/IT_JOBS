@@ -12,7 +12,7 @@ function homePage(req,res){
   
 }
 
-function redirectMessage(){
+function messagePage(){
     try{  res.render('message')}
     catch(err)
     {
@@ -20,7 +20,7 @@ function redirectMessage(){
     }
 }
 
-function redirectNotifications(){
+function notificationsPage(){
     try{  res.render('notifications')}
     catch(err)
     {
@@ -28,14 +28,14 @@ function redirectNotifications(){
     }
 }
 
-function redirectJobApplied(){
+function jobAppliedPage(){
     try{  res.render('jobApplied')}
     catch(err)
     {
         console.log(` error is ${err}`)
     }
 }
-function redirectSearch(){
+function searchPage(){
     try{  res.render('search')}
     catch(err)
     {
@@ -43,7 +43,7 @@ function redirectSearch(){
     }
 }
 
-function redirectProfile(){
+function profilePage(){
     try{  res.render('profile')}
     catch(err)
     {
@@ -52,4 +52,4 @@ function redirectProfile(){
 }
 
 
-module.exports={homePage,redirectJobApplied,redirectMessage,redirectNotifications,redirectSearch,redirectProfile}
+module.exports={homePage,jobAppliedPage,messagePage,notificationsPage,searchPage,profilePage}

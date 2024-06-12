@@ -9,7 +9,7 @@
   <link href="/styles.css" rel="stylesheet">
 </head>
 
-<form action="/login" method="po" 
+
 <body>
   <div class="container">
     <header>
@@ -20,8 +20,8 @@
           </a>
         </div>
         <div class="nav-buttons">
-          <a href="register"><button class="btn">Register</button></a>
-          <a href="login"><button class="btn">Login</button></a>
+          <button class="btn">Register</button>
+          <button class="btn">Login</button>
         </div>
       </div>
     </header>
@@ -37,56 +37,17 @@
         <h2>Recent Jobs</h2>
 
         <div class="job-grid">
-          <div class="job-card">
-            <h3>web development </h3>
-            <p>codsoft<br>
-              kolkata,west bengal </p>
-
-          </div>
-
-          <div class="job-card">
-            <h3>web development </h3>
-            <p>codsoft<br>
-              kolkata,west bengal </p>
-
-          </div>
-
-          <div class="job-card">
-            <h3>web development </h3>
-            <p>codsoft<br>
-              kolkata,west bengal </p>
-
-          </div>
-          <div class="job-card">
-            <h3>web development </h3>
-            <p>codsoft<br>
-              kolkata,west bengal </p>
-
-          </div>
-          <div class="job-card">
-            <h3>web development </h3>
-            <p>codsoft<br>
-              kolkata,west bengal </p>
-          </div>
-
-          <div class="job-card">
-            <h3>web development </h3>
-            <p>codsoft<br>
-              kolkata,west bengal </p>
-          </div>
-          <div class="job-card">
-            <h3>web development </h3>
-            <p>codsoft<br>
-              kolkata,west bengal </p>
-
-          </div>
-          <div class="job-card">
-            <h3>web development </h3>
-            <p>codsoft<br>
-              kolkata,west bengal </p>
-
-          </div>
           
+          <% jobData.forEach(function(job) { %>
+            <div class="job-card">
+              <h3><%= job.title %></h3>
+              <p>
+                <%= job.company %><br />
+                <%= job.location %>
+              </p>
+            </div>
+            <% }); %>
+
         </div>
         <div class="seeMore">
           <button type="submit">See More</button>

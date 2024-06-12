@@ -43,19 +43,12 @@ const userSchema= new mongoose.Schema({
 //updating the hashpassword to the database 
 userSchema.pre('save',async function(next){ 
 const user =this
-if(!user.isModified('password')) return next()
-  try{
-const salt =await bcrypt.genSalt(20)
+if(user.isModified('password')) 
+{
+const salt =await bcrypt.genSalt(10)
 const hashPassword= await bcrypt.hash(user.password,salt)
 user.password=hashPassword
-
 next()
-
-}
-catch(err)
-{
-  console.log(`error occur while saving the hash password ${err}`)
-next(err)
 }
 })
 
