@@ -20,8 +20,8 @@
           </a>
         </div>
         <div class="nav-buttons">
-          <button class="btn">Register</button>
-          <button class="btn">Login</button>
+          <a href="register"> <button class=" btn">Register</button></a>
+          <a href="login"> <button class=" btn">Login</button></a>
         </div>
       </div>
     </header>
@@ -37,7 +37,7 @@
         <h2>Recent Jobs</h2>
 
         <div class="job-grid">
-          
+
           <% jobData.forEach(function(job) { %>
             <div class="job-card">
               <h3><%= job.title %></h3>
@@ -63,6 +63,8 @@
 
     </div>
   </footer>
+
+  <script src="/landingPage/script.js"></script>
 </body>
 
 

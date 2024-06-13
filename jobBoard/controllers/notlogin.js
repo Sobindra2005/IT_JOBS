@@ -18,7 +18,7 @@ function landingPage(req, res) {
 
     }
 }
-function loginPage(req, res) {
+function loginPage(req,res) {
     try {
         res.render('loginpage', { port })
 

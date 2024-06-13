@@ -12,7 +12,7 @@ function homePage(req,res){
   
 }
 
-function messagePage(){
+function messagePage(req,res){
     try{  res.render('message')}
     catch(err)
     {
@@ -20,7 +20,7 @@ function messagePage(){
     }
 }
 
-function notificationsPage(){
+function notificationsPage(req,res){
     try{  res.render('notifications')}
     catch(err)
     {
@@ -28,22 +28,24 @@ function notificationsPage(){
     }
 }
 
-function jobAppliedPage(){
+function jobAppliedPage(req,res){
     try{  res.render('jobApplied')}
     catch(err)
     {
         console.log(` error is ${err}`)
     }
 }
-function searchPage(){
-    try{  res.render('search')}
+function searchPage(req,res){
+    try{  
+        res.render('search',{ jobData })
+    }
     catch(err)
     {
         console.log(` error is ${err}`)
     }
 }
 
-function profilePage(){
+function profilePage(req,res){
     try{  res.render('profile')}
     catch(err)
     {
