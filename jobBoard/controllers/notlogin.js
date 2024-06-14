@@ -43,14 +43,15 @@ async function loginPost(req, res) {
         }
         if (passwordMatch) {
             const token = setUser(userData)
-            res.status(200).redirect('/aflin/home')
-
+            res.setHeader('Authorization', `Bearer ${token}`)
+            res.redirect('/aflin/home');
+            
         }
         else {
             res.status(401).send({ msg: "incorrect password!!" })
         }
      
-
+        
 
     }
     catch(err){

@@ -9,7 +9,7 @@ require('dotenv').config()
 
 
 const port=4000
-const url=process.env.url
+const url="mongodb+srv://sobhindra2005:websecurity%402062%402084@cluster0.m5r6j11.mongodb.net/jobBoard?retryWrites=true&w=majority&appName=Cluster0"
 
 app.listen(port,(req,res)=>{
 console.log(`server is connected at port: ${port}`)
