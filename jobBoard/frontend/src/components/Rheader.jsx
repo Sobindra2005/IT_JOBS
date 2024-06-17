@@ -1,17 +1,17 @@
-import '../css/register.css'
+import '../css/Rhead.css'
 
 function Rheader(){
   return(
 
     <>
-    <header>
+    <header className="h-16 z-10">
         <a href="/">
-            <h1>Job Board</h1>
+            <h1 className="text-3xl font-bold">Job Board</h1>
         </a>
         <nav>
             <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/login">Login</a></li>
+                <li><a className="hover:underline" href="/">Home</a></li>
+                <li><a className="hover:underline" href="/login">Login</a></li>
             </ul>
         </nav>
     </header>

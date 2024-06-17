@@ -2,7 +2,7 @@ import jobData from "../jobdemo/demo.js";
 import "../css/home.css";
 import "../css/styles.css";
 import { useEffect, useState } from "react";
-import { search } from "core-js/fn/symbol";
+
 
 function Search() {
   const [jobs, setJobs] = useState([]);
@@ -13,7 +13,7 @@ function Search() {
   
   return (
     <>
-      <section className="main-content">
+      <section className="main-content z-8">
         <div className="search-container">
           <h2>Find Your Dream Job</h2>
           <input type="text" placeholder="Search for jobs..." />
