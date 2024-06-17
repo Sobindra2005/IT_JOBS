@@ -6,17 +6,17 @@ import Register from "./components/Register.jsx";
 import Login from "./components/login.jsx";
 import Rheader from "./components/Rheader.jsx";
 import Notifications from "./components/Notifications.jsx";
-import Rightside from "./components/Rightside.jsx";
-import Leftside from "./components/Leftside.jsx";
+import Message from "./components/Message.jsx";
+import Messagebox from "./components/Messagebox.jsx";
 
 function App() {
   return (
     <div className="flex flex-col">
       <Afheader/>
       <div className="flex flex-row">
-        <Leftside/>
-      <Searchcontent/>
       <Notifications/>
+      <Searchcontent/>
+      <Messagebox/>
       </div>
 
 
