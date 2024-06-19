@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 
 function Homecontent() {
+  const [ExapandText, setExpandText] = useState(false);
+  const toggleContent = () => {
+    setExpandText(!ExapandText);
+  };
+
   return (
     <>
       <section className="main-content w-2/4  mt-3 text-center  h-auto m-auto pt-16">
@@ -45,7 +50,7 @@ function Homecontent() {
               <div className="flex flex-col pl-3 cursor-pointer ">
                 <p className="text-base font-medium "> John Doe</p>
                 <p className="text-xs text-left text-gray-500  font-medium ">
-                  
+                  1d
                 </p>
               </div>
             </div>
@@ -58,18 +63,29 @@ function Homecontent() {
           <div className=" shadow-inner border border-b-gray-200 w-full m-auto min-w-0 h-72 rounded-2xl object-cover object-center "></div>
 
           {/* Job overview section */}
-          <div className="">
+          <div
+            className="px-1 pt-2 text-left cursor-pointer "
+            onClick={toggleContent}
+          >
+            <p className={` text-base text-gray-900  ${ExapandText? 'hidden' : 'block line-clamp-2'} `}>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorem rerum debitis distinctio sit quo reprehenderit, ad ullam architecto! Ut, quam! Architecto amet tenetur eligendi alias sunt a non, perferendis excepturi deleniti magni aliquam corrupti aspernatur optio facilis delectus laudantium saepe dolor voluptates debitis.
+            </p>
+            <p className={` text-base text-gray-900 ${ExapandText? 'block' : 'hidden' }`}> 
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorem rerum debitis distinctio sit quo reprehenderit, ad ullam architecto! Ut, quam! Architecto amet tenetur eligendi alias sunt a non, perferendis excepturi deleniti magni aliquam corrupti aspernatur optio facilis delectus laudantium saepe dolor voluptates debitis.
+            </p>
           </div>
-         
+
 
           <div className="border border-b-1 w-full m-auto mt-4 border-gray-400 "></div>
 
           {/* joblist apply and react section */}
           <div className="flex flex-row justify-between px-6 pt-2 ">
             <div className=" space-x-2.5 text-2xl  ">
-            <i class="fas fa-thumbs-up text-2xl  "></i>
-            <span className="border-r-2 border-pink-500 text-sm pr-2 text-zinc-800 "> 100k Likes </span>
-            <i class="fas fa-thumbs-down  pl-2 text-2xl"></i>
+              <i class="fas fa-thumbs-up text-2xl  "></i>
+              <span className="border-r-2 border-pink-500 text-sm pr-2 text-zinc-800 ">
+                100k Likes
+              </span>
+              <i class="fas fa-thumbs-down  pl-2 text-2xl"></i>
             </div>
             <div>
               <button
