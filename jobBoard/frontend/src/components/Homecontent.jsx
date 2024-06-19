@@ -60,8 +60,9 @@ function Homecontent() {
             </div>
           </div>
           {/* joblist content section */}
-          <div className=" shadow-inner border border-b-gray-200 w-full m-auto min-w-0 h-72 rounded-2xl object-cover object-center "></div>
+          <img src="https://picsum.photos/800/400" alt="random" className=" shadow-inner border border-b-gray-200 w-full m-auto min-w-0 h-72 rounded-2xl object-cover object-center ">
 
+          </img>
           {/* Job overview section */}
           <div
             className="px-1 pt-2 text-left cursor-pointer "

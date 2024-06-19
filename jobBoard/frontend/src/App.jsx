@@ -8,7 +8,7 @@ import Rheader from "./components/Rheader.jsx";
 import Notifications from "./components/Notifications.jsx";
 import Message from "./components/Message.jsx";
 import Messagebox from "./components/Messagebox.jsx";
-import Jobapplied from "./components/Jobapplied.jsx";
+import Job from "./components/job.jsx";
 import Homecontent from "./components/Homecontent.jsx";
 
 function App() {
@@ -16,9 +16,9 @@ function App() {
     <div className="flex flex-col">
       <Afheader/>
       <div className="flex flex-row">
-      <Notifications/>
-      <Homecontent/>
-      <Message/>
+
+     <Job/>
+
       </div>
 
 
