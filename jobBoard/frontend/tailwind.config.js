@@ -8,7 +8,10 @@ colors:{
   'custom-search':'#3f3f3f',
   'notification':'#003566',
   'line':'#C3BDAB'
-}
+},
+width: {
+  'custom-width': '37%',
+},
     },
   },
   plugins: [],
