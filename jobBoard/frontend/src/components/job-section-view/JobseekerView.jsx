@@ -11,6 +11,7 @@ const title=["Company ","Job Title","Location ", "Status"]
 
   return (
     <>
+  
       <section className="main-content w-3/5 z-8 mt-16 p-8 text-center  border-t-2 border-gray-300  shadow-xl h-auto m-auto pt-16">
         {/* main content for the job section */}
         <div className=" grid  grid-cols-4 shadow text-left ">

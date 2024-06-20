@@ -10,15 +10,14 @@ import Message from "./components/Message.jsx";
 import Messagebox from "./components/Messagebox.jsx";
 import Job from "./components/job.jsx";
 import Homecontent from "./components/Homecontent.jsx";
+import Profile from "./components/profile.jsx";
 
 function App() {
   return (
     <div className="flex flex-col">
       <Afheader/>
       <div className="flex flex-row">
-
-     <Job/>
-
+     <Profile/>
       </div>
 
 

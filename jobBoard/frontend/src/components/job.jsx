@@ -6,7 +6,8 @@ function Job() {
 
   return (
     <>
-<Applicant/>
+ 
+
     </>
   );
 }

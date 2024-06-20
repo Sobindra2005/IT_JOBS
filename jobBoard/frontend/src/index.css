@@ -12,3 +12,11 @@
 html {
     scroll-behavior: smooth;
   }
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display:flex;
+    background-color: rgb(238, 238, 238);
+    flex-direction: column;
+  }
+  

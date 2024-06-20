@@ -10,14 +10,7 @@
     font-style: normal;
   }
 }
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    display:flex;
-    background-color: rgb(241, 241, 241);
-    flex-direction: column;
-  }
-  
+
   .container{
    flex: 1; 
     display: flex;
