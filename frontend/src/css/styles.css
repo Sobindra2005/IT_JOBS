@@ -1,0 +1,96 @@
+/* public/css/styles.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+
+*{
+  .roboto-thin {
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+  }
+}
+
+  .container{
+   flex: 1; 
+    display: flex;
+    flex-direction: column;
+  }
+
+  .Notification{
+    box-shadow:  0px 0px 2px 3px rgb(145, 135, 135);
+  }
+  .top-bar {
+    justify-content:space-between;
+  }
+
+
+   .nav-buttons .btn {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .nav-buttons .btn:hover {
+    background-color: #3f3f3f;
+    color:white;
+  }
+  
+ 
+  
+  .search-container input { 
+    border: 1px solid #ccc;
+    border-radius: 4px 0 0 4px;
+      }
+  
+  .search-container .search-btn {
+    border: 1px solid #3f3f3f;
+    border-radius: 0 4px 4px 0;
+   
+  }
+  
+  .search-container .search-btn:hover {
+    background-color: #252525;
+  }
+ 
+  .recent-jobs-section {
+    padding: 20px;
+    display: grid;
+    flex:1;
+}
+
+.job-grid {
+    display: grid;
+    grid-template-columns: repeat(3,200px);
+    gap: 20px;
+    padding: 20px;
+    margin:auto;
+    
+}
+
+.job-card {
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  
+}
+.seeMore button{
+  padding: 10px 20px;
+  font-size: 16px;
+  border: 1px solid #333;
+  background-color: #333;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  margin:auto;
+}
+
+.seeMore button:hover{
+  background-color: #2b2b2b;
+}
+
