@@ -1,4 +1,5 @@
 import "../css/styles.css";
+import { Link } from 'react-router-dom';
 
 function Blheader() {
   return (
@@ -6,18 +7,18 @@ function Blheader() {
       <header className="bg-custom-head z-10 p-3 w-screen fixed top-0">
         <div className="top-bar text-white w-screen flex flex-row items-center">
           <div className=" logo text-3xl font-bold ">
-            <a href="">
+            <Link to="">
               <h1>Job Board</h1>
-            </a>
+            </Link>
           </div>
           <div className="nav-buttons">
-            <a href="register">
+            <Link to="register">
               <button className=" btn">Register</button>
-            </a>
-            <a href="login">
+            </Link>
+            <Link to="login">
         
               <button className=" btn">Login</button>
-            </a>
+            </Link>
           </div>
         </div>
       </header>

@@ -1,13 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../css/register.css'
+import axios from 'axios';
+import {useNavigate} from 'react-router-dom'
+
 
 function Register() {
+
+    const[firstName,setfirstName]=useState('')
+    const[lastName,setlastName]=useState('')
+    const[email,setemail]=useState('')
+    const[password,setpassword]=useState('')
+    const[gender,setgender]=useState('')
+    const[roles,setroles]=useState('')
+    const histroy=useNavigate()
+
+const handleregister=async (e)=>{
+    e.preventDefault();
+    await axios.post('/register',{firstName,lastName,email,password,gender,roles})
+}
     return (
         <>
             <main className="mt-20 z-8">
                 <section className="register-form">
                     <h2 className="text-lg font-bold text-center">------- Create An Account --------</h2>
-                    <form action="/register" method="post">
+                    <form action="/register" onSubmit={handleregister} method="post">
 
                         <label htmlFor="firstName">First name:</label>
                         <input type="text" id="firstName" name="firstName" placeholder="john" required />

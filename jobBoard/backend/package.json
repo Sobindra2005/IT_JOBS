@@ -2,6 +2,7 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "core-js": "^3.37.1",
+    "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
@@ -15,9 +16,9 @@
   "name": "codsoft",
   "description": "Repository for all the task that is given by the codsoft during the internship period .",
   "version": "1.0.0",
-  "main": "jobBoard/main.js",
+  "main": "main.js",
   "scripts": {
-    "start": "nodemon jobBoard/main.js"
+    "start": "nodemon main.js"
   },
   "author": "sobhindra budhathoki",
   "license": "ISC"

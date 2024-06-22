@@ -12,7 +12,7 @@ function Center() {
   return (
     <>
       {/* section for the center */}
-      <div className="w-2/4 p-10 pt-16 h-screen  ">
+      <div className="w-2/4  p-10 pt-16 h-screen  ">
         {/* profile overview section(first section) */}
         <div className=" p-4 shadow-md shadow-gray-300 border-l-2  bg-white border-t-2 border-sky-200 rounded-xl h-auto ">
           {/* top colored component along with profile head   */}

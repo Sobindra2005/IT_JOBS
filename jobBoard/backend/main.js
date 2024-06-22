@@ -6,6 +6,7 @@ const{tokenAuthentication}=require('./middlewares/authenticate.js')
 const afterloginRoutes=require("./routes/afterLogin.js")
 const path=require('path')
 require('dotenv').config()
+const cors =require('cors')
 
 
 const port=4000
@@ -14,6 +15,14 @@ const url="mongodb+srv://sobhindra2005:websecurity%402062%402084@cluster0.m5r6j1
 app.listen(port,(req,res)=>{
 console.log(`server is connected at port: ${port}`)
 })
+
+
+app.use(cors({
+  origin: 'http://localhost:5173', 
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+}));
 
 connectMongoDb(url)
 
@@ -26,4 +35,4 @@ app.set('view engine', 'ejs')
 
 
 app.use("/",landingPageRoutes)
-app.use("/aflin",afterloginRoutes)
+app.use("/afli",tokenAuthentication,afterloginRoutes)
