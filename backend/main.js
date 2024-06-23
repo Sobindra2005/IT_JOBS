@@ -16,6 +16,7 @@ app.listen(port,(req,res)=>{
 console.log(`server is connected at port: ${port}`)
 })
 
+app.use(express.json({}))
 
 app.use(cors({
   origin: 'http://localhost:5173', 

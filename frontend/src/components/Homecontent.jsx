@@ -82,11 +82,11 @@ function Homecontent() {
           {/* joblist apply and react section */}
           <div className="flex flex-row justify-between px-6 pt-2 ">
             <div className=" space-x-2.5 text-2xl  ">
-              <i class="fas fa-thumbs-up text-2xl  "></i>
+              <i className="fas fa-thumbs-up text-2xl  "></i>
               <span className="border-r-2 border-pink-500 text-sm pr-2 text-zinc-800 ">
                 100k Likes
               </span>
-              <i class="fas fa-thumbs-down  pl-2 text-2xl"></i>
+              <i className="fas fa-thumbs-down  pl-2 text-2xl"></i>
             </div>
             <div>
               <button

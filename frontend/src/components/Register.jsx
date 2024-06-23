@@ -12,11 +12,17 @@ function Register() {
     const[password,setpassword]=useState('')
     const[gender,setgender]=useState('')
     const[roles,setroles]=useState('')
-    const histroy=useNavigate()
+    const navigate=useNavigate()
 
 const handleregister=async (e)=>{
     e.preventDefault();
-    await axios.post('/register',{firstName,lastName,email,password,gender,roles})
+   const response = await axios.post('http://localhost:4000/register',{firstName,lastName,email,password,gender,roles})
+   if(response.status === 200){
+   navigate('/login')
+   }
+   else{
+    console.error('Registration failed:', response.data);
+   }
 }
     return (
         <>
@@ -26,19 +32,19 @@ const handleregister=async (e)=>{
                     <form action="/register" onSubmit={handleregister} method="post">
 
                         <label htmlFor="firstName">First name:</label>
-                        <input type="text" id="firstName" name="firstName" placeholder="john" required />
+                        <input type="text" id="firstName" value={firstName} onChange={(e)=>setfirstName(e.target.value)} placeholder="john" required />
 
                         <label htmlFor="lastName">Last name:</label>
-                        <input type="text" id="lastName" name="lastName" placeholder="Doe" required />
+                        <input type="text" id="lastName" value={lastName} onChange={(e)=>setlastName(e.target.value)} placeholder="Doe" required />
 
                         <label htmlFor="email">Email:</label>
-                        <input type="email" id="email" name="email" placeholder="example@gmail.com" required />
+                        <input type="email" id="email" value={email} onChange={(e)=>setemail(e.target.value)} placeholder="example@gmail.com" required />
 
                         <label htmlFor="password">Password:</label>
-                        <input type="password" id="password" name="password" placeholder="example123" required />
+                        <input type="password" id="password" value={password} onChange={(e)=>setpassword(e.target.value)} placeholder="example123" required />
 
                         <label htmlFor="gender">Gender:</label>
-                        <select id="gender" name="gender" className="form-select" required defaultValue="">
+                        <select id="gender" value={gender} onChange={(e)=>setgender(e.target.value)} className="form-select" required >
                             <option value="" disabled>Select gender</option>
                             <option value="male">Male</option>
                             <option value="female">Female</option>
@@ -46,7 +52,7 @@ const handleregister=async (e)=>{
                         </select>
 
                         <label htmlFor="roles">Role:</label>
-                        <select id="roles" name="roles" className="form-select" required defaultValue="">
+                        <select id="roles" value={roles} onChange={(e)=>setroles(e.target.value)} className="form-select" required >
                             <option value="" disabled>Select Role</option>
                             <option value="job-seeker">Job Seeker</option>
                             <option value="job-creator">Job Creator</option>

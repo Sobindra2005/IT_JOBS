@@ -12,18 +12,21 @@ import Job from "./components/job.jsx";
 import Homecontent from "./components/Homecontent.jsx";
 import Profile from "./components/profile.jsx";
 import Lheader from "./components/Lheader.jsx";
-import React from "react";
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
+import React, { useState } from "react";
+import { BrowserRouter, Routes, Route ,Navigate } from 'react-router-dom';
+import ProtectedRoute from "./components/protectedRoute/protectedRoute.jsx"
 
 
 function App() {
+const[isAuthenticated,setisAuthenticated]=useState(!!localStorage.getItem('token'))
+
   return (
 <BrowserRouter>
 <Routes>
-        <Route path="/" element={<><Blheader /><Searchcontent /><Footer /></>} />
-        <Route path="/register" element={<><Rheader /><Register /><Footer /></>} />
-        <Route path="/login" element={<><Lheader /><Login /><Footer /></>} />
+        <Route path="/" element={isAuthenticated?<Navigate to="/home"/>:<><Blheader /><Searchcontent /><Footer /></>} />
+        <Route path="/register" element={isAuthenticated?<Navigate to="/home"/>:<><Rheader /><Register /><Footer /></>} />
+        <Route path="/login" element={isAuthenticated?<Navigate to="/home"/> :<><Lheader /><Login /></>} />
+        <Route path="/home" element={<ProtectedRoute component={<><Afheader /><Homecontent /></>} isAuthenticated={isAuthenticated}/>} />
  </Routes>
  </BrowserRouter>
   );
