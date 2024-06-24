@@ -32,7 +32,7 @@ function Center() {
                     Talking Tom
                   </h1>
                   <p className=" text-base text-gray-500 font-medium ">
-                    Nasa Hecker{" "}
+                    Nasa Hecker
                   </p>
                 </div>
               </div>

@@ -26,7 +26,10 @@ const[isAuthenticated,setisAuthenticated]=useState(!!localStorage.getItem('token
         <Route path="/" element={isAuthenticated?<Navigate to="/home"/>:<><Blheader /><Searchcontent /><Footer /></>} />
         <Route path="/register" element={isAuthenticated?<Navigate to="/home"/>:<><Rheader /><Register /><Footer /></>} />
         <Route path="/login" element={isAuthenticated?<Navigate to="/home"/> :<><Lheader /><Login /></>} />
-        <Route path="/home" element={<ProtectedRoute component={<><Afheader /><Homecontent /></>} isAuthenticated={isAuthenticated}/>} />
+        <Route path="/home" element={<ProtectedRoute element={<><Afheader /><Homecontent /></>} isAuthenticated={isAuthenticated}/>} />
+        <Route path="/profile" element={<ProtectedRoute element={<><Afheader /><Profile /></>} isAuthenticated={isAuthenticated}/>} />
+        <Route path="/search" element={<ProtectedRoute element={<><Afheader /><Searchcontent /></>} isAuthenticated={isAuthenticated}/>} />
+
  </Routes>
  </BrowserRouter>
   );

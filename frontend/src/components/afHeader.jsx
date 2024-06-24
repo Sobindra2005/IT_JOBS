@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom';
 import '../css/styles.css'
 
 function Afheader() {
@@ -12,25 +13,25 @@ function Afheader() {
           </div>
           <div className="nav-bar m-0 p-0 flex items-center w-96  cursor-pointer">
             <div>
-              <i id="home" className="bi bi-house"></i>
+             <NavLink to="/home" activeClassName="" > <i id="home" className="bi bi-house"></i></NavLink> 
             </div>
            
             <div>
-              <i className="bi bi-briefcase"></i>
+            <NavLink to="/job">  <i className="bi bi-briefcase"></i></NavLink> 
             </div>
             <div>
-              <i className="bi bi-search"></i>
+            <NavLink to="/search">  <i className="bi bi-search"></i></NavLink> 
             </div>
           </div>
           <div className="profile flex flex-row justify-between w-44 ">
           <div>
-              <i className="bi bi-chat-left-text"></i>
+         <i className="bi bi-chat-left-text"></i>
             </div>
             <div>
-              <i className="bi bi-bell"></i>
+          <i className="bi bi-bell"></i>
             </div>
             <div id="profile-button">
-              <i className="bi bi-person"></i>
+            <NavLink to="/profile">     <i className="bi bi-person"></i></NavLink> 
             </div>
           </div>
         </div>

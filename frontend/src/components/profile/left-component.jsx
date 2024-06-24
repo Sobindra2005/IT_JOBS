@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 function Left() {
+  const navigate=useNavigate()
+const logout=()=>{
+localStorage.removeItem('token')
+navigate('/')
+window.location.reload();
+}
+
   return (
     <>
       <div className="w-1/4 p-5 h-3/4   ">
@@ -15,7 +24,7 @@ function Left() {
             <i className="bi bi-gear  mr-1 hover:bg-gray-400 bg-gray-300  text-2xl text-black rounded-lg p-1  "></i>  Settings
           </div>
           <div className="text-base  pt-7  ">
-            <i className="bi bi-box-arrow-right  mr-1 hover:bg-gray-400 bg-gray-300  text-2xl text-black rounded-lg p-1 "></i>  Logout
+            <i onClick={logout} className="bi bi-box-arrow-right  mr-1 hover:bg-gray-400 bg-gray-300  text-2xl text-black rounded-lg p-1 "></i>  Logout
           </div>
         </div>
       </div>

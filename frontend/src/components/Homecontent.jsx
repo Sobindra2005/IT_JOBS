@@ -16,11 +16,11 @@ function Homecontent() {
             <div className="flex cursor-pointer">
               <img
                 className="h-12 w-12 flex-none rounded-full object-cover object-center "
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtnx7EbbrFw1MSD9hRLmySprvKEBYFBMFS1g&s"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTH6_3LEQ3Mt1Or0Zx53Yoyi-5qzZ55DdxVng&s"
                 alt=""
               />
               <p className=" flex items-center font-medium pl-3 text-xl ">
-                John Doe
+             Talking Tom
               </p>
             </div>
             <div className="  mt-2  ">
@@ -44,11 +44,11 @@ function Homecontent() {
             <div className="flex flex-row cursor-pointer ">
               <img
                 className="h-11  w-11 flex-none rounded-full object-cover object-center "
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtnx7EbbrFw1MSD9hRLmySprvKEBYFBMFS1g&s"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTH6_3LEQ3Mt1Or0Zx53Yoyi-5qzZ55DdxVng&s"
                 alt=""
               />
               <div className="flex flex-col pl-3 cursor-pointer ">
-                <p className="text-base font-medium "> John Doe</p>
+                <p className="text-base font-medium "> Talking Tom</p>
                 <p className="text-xs text-left text-gray-500  font-medium ">
                   1d
                 </p>

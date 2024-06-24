@@ -15,7 +15,8 @@ function Login() {
       if (loginData.status === 200) {
         const token = loginData.data.token;
         localStorage.setItem('token', token);  
-        navigate('/home');  
+        navigate('/home');
+        window.location.reload();  
       }
     } catch (error) {
       console.error('Login failed:', error);
