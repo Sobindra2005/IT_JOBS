@@ -21,7 +21,7 @@ async function loginPost(req, res) {
         if (passwordMatch) {
             const token = setUser(userData)
             res.json({token,msg:'Login Succesfully '})    
-              res.json({token,msg:'Login Succesfully '})
+        
             
         }
         else {
