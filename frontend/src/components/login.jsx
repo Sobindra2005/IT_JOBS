@@ -13,8 +13,9 @@ function Login() {
     try {
       const loginData = await axios.post('http://localhost:4000/login', { email, password });
       if (loginData.status === 200) {
-        const token = loginData.data.token;
-        localStorage.setItem('token', token);  
+       const token =  await loginData.data.token;
+        await localStorage.setItem('token', token);  
+        axios.defaults.headers.common['Authorization'] =  await 'Bearer ' + localStorage.getItem('token')
         navigate('/home');
         window.location.reload();  
       }

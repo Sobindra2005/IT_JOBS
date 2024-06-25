@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 
 function Left() {
   const navigate=useNavigate()
-const logout=()=>{
-localStorage.removeItem('token')
-navigate('/')
+const logout=async ()=> {
+await localStorage.removeItem('token')
+await delete axios.defaults.headers.common['Authorization'];
+await navigate('/')
 window.location.reload();
 }
 

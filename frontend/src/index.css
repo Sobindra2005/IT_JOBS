@@ -3,20 +3,24 @@
 @tailwind utilities;
 
 .line-clamp-2 {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 html {
-    scroll-behavior: smooth;
-  }
-  body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    display:flex;
-    background-color: rgb(238, 238, 238);
-    flex-direction: column;
-  }
-  
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  background-color: rgb(238, 238, 238);
+  flex-direction: column;
+}
+
+.active #active{
+  color: rgb(99, 95, 95);
+  border-color: rgb(99, 95, 95);
+}

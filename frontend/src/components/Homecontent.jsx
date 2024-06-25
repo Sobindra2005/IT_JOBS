@@ -38,7 +38,7 @@ function Homecontent() {
         <div className="border border-b-1 w-11/12 m-auto mt-4 border-gray-400 "></div>
 
         {/* jobList section */}
-        <div className=" bg-white mt-4 Job-list-section  flex-1 h-auto w-9/12 m-auto rounded-3xl flex flex-col p-4 border border-t-purple-200 shadow-xl ">
+        <div className=" bg-white mt-4 Job-list-section  flex-1 h-auto w-post-width m-auto rounded-3xl flex flex-col p-4 border border-t-purple-200 shadow-xl ">
           {/* jobList top section */}
           <div className=" pb-3 flex flex-row justify-between ">
             <div className="flex flex-row cursor-pointer ">
@@ -60,7 +60,7 @@ function Homecontent() {
             </div>
           </div>
           {/* joblist content section */}
-          <img src="https://picsum.photos/800/400" alt="random" className=" shadow-inner border border-b-gray-200 w-full m-auto min-w-0 h-72 rounded-2xl object-cover object-center ">
+          <img src="https://picsum.photos/800/400" alt="random" className=" shadow-inner border border-b-gray-200 w-full m-auto min-w-0 h-96 rounded-2xl object-cover object-center ">
 
           </img>
           {/* Job overview section */}

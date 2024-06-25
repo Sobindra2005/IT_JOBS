@@ -13,25 +13,132 @@ import Homecontent from "./components/Homecontent.jsx";
 import Profile from "./components/profile.jsx";
 import Lheader from "./components/Lheader.jsx";
 import React, { useState } from "react";
-import { BrowserRouter, Routes, Route ,Navigate } from 'react-router-dom';
-import ProtectedRoute from "./components/protectedRoute/protectedRoute.jsx"
-
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import ProtectedRoute from "./components/protectedRoute/protectedRoute.jsx";
 
 function App() {
-const[isAuthenticated,setisAuthenticated]=useState(!!localStorage.getItem('token'))
+  const [isAuthenticated, setisAuthenticated] = useState(
+    !!localStorage.getItem("token")
+  );
+  const [message, setmessage] = useState(false);
+  const [notification, setnotification] = useState(false);
 
+  const Messagehandle = () => {
+    setmessage(!message);
+  };
+
+  const Notificationhandle = () => {
+    setnotification(!notification);
+  };
   return (
-<BrowserRouter>
-<Routes>
-        <Route path="/" element={isAuthenticated?<Navigate to="/home"/>:<><Blheader /><Searchcontent /><Footer /></>} />
-        <Route path="/register" element={isAuthenticated?<Navigate to="/home"/>:<><Rheader /><Register /><Footer /></>} />
-        <Route path="/login" element={isAuthenticated?<Navigate to="/home"/> :<><Lheader /><Login /></>} />
-        <Route path="/home" element={<ProtectedRoute element={<><Afheader /><Homecontent /></>} isAuthenticated={isAuthenticated}/>} />
-        <Route path="/profile" element={<ProtectedRoute element={<><Afheader /><Profile /></>} isAuthenticated={isAuthenticated}/>} />
-        <Route path="/search" element={<ProtectedRoute element={<><Afheader /><Searchcontent /></>} isAuthenticated={isAuthenticated}/>} />
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              isAuthenticated ? (
+                <Navigate to="/home" />
+              ) : (
+                <>
+                  <Blheader />
+                  <Searchcontent />
+                  <Footer />
+                </>
+              )
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              isAuthenticated ? (
+                <Navigate to="/home" />
+              ) : (
+                <>
+                  <Rheader />
+                  <Register />
+                  <Footer />
+                </>
+              )
+            }
+          />
 
- </Routes>
- </BrowserRouter>
+          <Route
+            path="/login"
+            element={
+              isAuthenticated ? (
+                <Navigate to="/home" />
+              ) : (
+                <>
+                  <Lheader />
+                  <Login />
+                </>
+              )
+            }
+          />
+
+          <Route
+            path="/home"
+            element={
+              <ProtectedRoute
+                element={
+                  <>
+                    <Afheader
+                      Messagehandle={Messagehandle}
+                      Notificationhandle={Notificationhandle}
+                    />
+                     {message && <Message/>}
+                     {notification && <Notifications/>}
+                    <Homecontent />
+                  </>
+                }
+                isAuthenticated={isAuthenticated}
+              />
+            }
+          />
+
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute
+                element={
+                  <>
+                    <Afheader
+                      Messagehandle={Messagehandle}
+                      Notificationhandle={Notificationhandle}
+                    />
+                      {message && <Message/>}
+                      {notification && <Notifications/>}
+                    <Profile />
+                  </>
+                }
+                isAuthenticated={isAuthenticated}
+              />
+            }
+          />
+
+          <Route
+            path="/search"
+            element={
+              <ProtectedRoute
+                element={
+                  <>
+                    <Afheader
+                      Messagehandle={Messagehandle}
+                      Notificationhandle={Notificationhandle}
+                    />
+                    {message && <Message/>}
+                    {notification && <Notifications/>}
+                    <Searchcontent />
+                  </>
+                }
+                isAuthenticated={isAuthenticated}
+              />
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 

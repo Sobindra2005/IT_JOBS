@@ -11,6 +11,7 @@ colors:{
 },
 width: {
   'custom-width': '37%',
+  'post-width':'86%'
 },
     },
   },
