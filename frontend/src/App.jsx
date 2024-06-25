@@ -15,6 +15,8 @@ import Lheader from "./components/Lheader.jsx";
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "./components/protectedRoute/protectedRoute.jsx";
+import Jobposting from "./components/jobPosting/Jobposting.jsx";
+
 
 function App() {
   const [isAuthenticated, setisAuthenticated] = useState(
@@ -22,10 +24,20 @@ function App() {
   );
   const [message, setmessage] = useState(false);
   const [notification, setnotification] = useState(false);
+  const [jobpost, setjobpost] = useState(false);
 
   const Messagehandle = () => {
     setmessage(!message);
   };
+
+  const showJobposthandle =()=>{
+   return  setjobpost(true)
+  };
+
+  const removeJobposthandle =()=>{
+    return setjobpost(false)
+  };
+
 
   const Notificationhandle = () => {
     setnotification(!notification);
@@ -87,9 +99,10 @@ function App() {
                       Messagehandle={Messagehandle}
                       Notificationhandle={Notificationhandle}
                     />
+                    {jobpost && <Jobposting removeJobposthandle={removeJobposthandle}/>}
                      {message && <Message/>}
                      {notification && <Notifications/>}
-                    <Homecontent />
+                    <Homecontent   showJobposthandle={showJobposthandle}  />
                   </>
                 }
                 isAuthenticated={isAuthenticated}

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Notifications from './Notifications.jsx';
 import Message from './Message.jsx';
 
-function Afheader({Messagehandle,Notificationhandle}) {
+function Afheader({Messagehandle,Notificationhandle }) {
 const[message,setmessage]=useState(false)
 const[notification,setnotification]=useState(false)
 

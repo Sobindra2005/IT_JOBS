@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Homecontent() {
+function Homecontent(props) {
   const [ExapandText, setExpandText] = useState(false);
   const toggleContent = () => {
     setExpandText(!ExapandText);
@@ -24,10 +24,12 @@ function Homecontent() {
               </p>
             </div>
             <div className="  mt-2  ">
-              <button
-                type="submit"
+              <button 
+                type="button"
+                onClick={props.showJobposthandle}
                 className="ml-12 shadow-md rounded-md h-8 px-2   text-white items-center  bg-purple-900  hover:bg-purple-800  font-semibold "
               >
+              
                 Post Job
               </button>
             </div>
