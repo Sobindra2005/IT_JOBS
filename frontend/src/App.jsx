@@ -16,7 +16,7 @@ import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "./components/protectedRoute/protectedRoute.jsx";
 import Jobposting from "./components/jobPosting/Jobposting.jsx";
-
+import Jobapply from "./components/job-apply/jobapply.jsx";
 
 function App() {
   const [isAuthenticated, setisAuthenticated] = useState(
@@ -25,7 +25,14 @@ function App() {
   const [message, setmessage] = useState(false);
   const [notification, setnotification] = useState(false);
   const [jobpost, setjobpost] = useState(false);
+  const [jobapply, setjobapply] =useState(false)
 
+  const jobapplyhandle=()=>{
+    setjobapply(true)
+  }
+  const removejobapplyhandle=()=>{
+    setjobapply(false)
+  }
   const Messagehandle = () => {
     setmessage(!message);
   };
@@ -99,10 +106,11 @@ function App() {
                       Messagehandle={Messagehandle}
                       Notificationhandle={Notificationhandle}
                     />
+                    {jobapply && <Jobapply removejobapplyhandle={removejobapplyhandle} />}
                     {jobpost && <Jobposting removeJobposthandle={removeJobposthandle}/>}
                      {message && <Message/>}
                      {notification && <Notifications/>}
-                    <Homecontent   showJobposthandle={showJobposthandle}  />
+                    <Homecontent jobapplyhandle={jobapplyhandle}  showJobposthandle={showJobposthandle}  />
                   </>
                 }
                 isAuthenticated={isAuthenticated}

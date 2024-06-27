@@ -92,6 +92,7 @@ function Homecontent(props) {
             </div>
             <div>
               <button
+              onClick={props.jobapplyhandle}
                 type="submit"
                 className="border  py-1 px-3 rounded-md bg-notification hover:bg-pink-700 text-white "
               >
