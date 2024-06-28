@@ -26,3 +26,6 @@ This project aims to create a platform specifically for IT roles, where users ca
     Git and GitHub for version control and collaboration
     react.js
     tailwind css
+    jason web token 
+    multer
+    
