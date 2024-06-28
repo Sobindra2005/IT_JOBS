@@ -30,6 +30,7 @@ function App() {
   const jobapplyhandle=()=>{
     setjobapply(true)
   }
+  
   const removejobapplyhandle=()=>{
     setjobapply(false)
   }
