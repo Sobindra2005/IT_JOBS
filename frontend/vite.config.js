@@ -5,6 +5,9 @@ import tailwindcss from 'tailwindcss'
 import autoprefixer from 'autoprefixer';
 
 export default defineConfig({
+  build: {
+    sourcemap: true,
+  },
   plugins: [react()],
   css: {
     postcss: {

@@ -1,18 +1,19 @@
 import "../css/styles.css";
 import React, { useState, useEffect } from "react";
 import message from "../demodata/chats";
+import axios from 'axios'
 
 function Message() {
-
-
   const [datas, finalData] = useState([]);
+  const token =localStorage.getItem("token");
+  
     useEffect(() => {
-    finalData(message);
+      finalData(message);
   }, []);
 
   return (
     <>
-      <div className="Message z-9 bg-white fixed right-0 mt-16 border rounded-3xl  cursor-pointer h-screen  w-1/4 overflow-y-scroll">
+      <div  className="Message z-9 bg-white fixed right-0 mt-16 border rounded-3xl  cursor-pointer h-screen  w-1/4 overflow-y-scroll">
         <h1 className=" p-3 pl-6 text-white fixed font-bold w-screen bg-notification rounded-tl-3xl text-2xl">Chats</h1>
         <div className=" bg-white mt-16 ">
         <input

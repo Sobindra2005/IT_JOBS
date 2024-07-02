@@ -12,40 +12,50 @@ import Job from "./components/job.jsx";
 import Homecontent from "./components/Homecontent.jsx";
 import Profile from "./components/profile.jsx";
 import Lheader from "./components/Lheader.jsx";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "./components/protectedRoute/protectedRoute.jsx";
 import Jobposting from "./components/jobPosting/Jobposting.jsx";
 import Jobapply from "./components/job-apply/jobapply.jsx";
+import axios from "axios";
+
+//api
+import messageList from "./api/messageHanlde.js";
 
 function App() {
   const [isAuthenticated, setisAuthenticated] = useState(
     !!localStorage.getItem("token")
   );
+
   const [message, setmessage] = useState(false);
   const [notification, setnotification] = useState(false);
   const [jobpost, setjobpost] = useState(false);
-  const [jobapply, setjobapply] =useState(false)
+  const [jobapply, setjobapply] = useState(false);
+  const [MessageList,setMessageList] =useState([])
 
-  const jobapplyhandle=()=>{
-    setjobapply(true)
+  const jobapplyhandle = () => {
+    setjobapply(true);
+  };
+
+  const removejobapplyhandle = () => {
+    setjobapply(false);
+  };
+  const Messagehandle = async () => {
+    await setmessage(!message);
+    await  console.log(message)
+    if(!message){
+    const responce =await messageList()
+    setMessageList(responce.data)
   }
-  
-  const removejobapplyhandle=()=>{
-    setjobapply(false)
-  }
-  const Messagehandle = () => {
-    setmessage(!message);
   };
 
-  const showJobposthandle =()=>{
-   return  setjobpost(true)
+  const showJobposthandle = () => {
+    return setjobpost(true);
   };
 
-  const removeJobposthandle =()=>{
-    return setjobpost(false)
+  const removeJobposthandle = () => {
+    return setjobpost(false);
   };
-
 
   const Notificationhandle = () => {
     setnotification(!notification);
@@ -107,11 +117,18 @@ function App() {
                       Messagehandle={Messagehandle}
                       Notificationhandle={Notificationhandle}
                     />
-                    {jobapply && <Jobapply removejobapplyhandle={removejobapplyhandle} />}
-                    {jobpost && <Jobposting removeJobposthandle={removeJobposthandle}/>}
-                     {message && <Message/>}
-                     {notification && <Notifications/>}
-                    <Homecontent jobapplyhandle={jobapplyhandle}  showJobposthandle={showJobposthandle}  />
+                    {jobapply && (
+                      <Jobapply removejobapplyhandle={removejobapplyhandle} />
+                    )}
+                    {jobpost && (
+                      <Jobposting removeJobposthandle={removeJobposthandle} />
+                    )}
+                    {message && <Message />}
+                    {notification && <Notifications />}
+                    <Homecontent
+                      jobapplyhandle={jobapplyhandle}
+                      showJobposthandle={showJobposthandle}
+                    />
                   </>
                 }
                 isAuthenticated={isAuthenticated}
@@ -129,8 +146,8 @@ function App() {
                       Messagehandle={Messagehandle}
                       Notificationhandle={Notificationhandle}
                     />
-                      {message && <Message/>}
-                      {notification && <Notifications/>}
+                    {message && <Message />}
+                    {notification && <Notifications />}
                     <Profile />
                   </>
                 }
@@ -149,8 +166,8 @@ function App() {
                       Messagehandle={Messagehandle}
                       Notificationhandle={Notificationhandle}
                     />
-                    {message && <Message/>}
-                    {notification && <Notifications/>}
+                    {message && <Message />}
+                    {notification && <Notifications />}
                     <Searchcontent />
                   </>
                 }

@@ -8,8 +8,8 @@ function Left() {
 const logout=async ()=> {
 await localStorage.removeItem('token')
 await delete axios.defaults.headers.common['Authorization'];
-await navigate('/')
 window.location.reload();
+
 }
 
   return (
