@@ -16,7 +16,7 @@ function Register() {
 
 const handleregister=async (e)=>{
     e.preventDefault();
-   const response = await axios.post('http://localhost:4000/register',{firstName,lastName,email,password,gender,roles})
+   const response = await axios.post('http://localhost:3000/register',{firstName,lastName,email,password,gender,roles})
    if(response.status === 200){
    navigate('/login')
    }

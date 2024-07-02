@@ -32,7 +32,7 @@ function App() {
   const [jobpost, setjobpost] = useState(false);
   const [jobapply, setjobapply] = useState(false);
   const [MessageList,setMessageList] =useState([])
-
+console.log(MessageList)
   const jobapplyhandle = () => {
     setjobapply(true);
   };
