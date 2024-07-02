@@ -21,18 +21,28 @@ import axios from "axios";
 
 //api
 import messageList from "./api/messageHanlde.js";
+import AuthenticatedUser from "./api/authenticatedUserDetails.js";
 
 function App() {
   const [isAuthenticated, setisAuthenticated] = useState(
     !!localStorage.getItem("token")
   );
-
+  const [authenticatedUserDetails, setAuthenticatedUserDetails] = useState([]);
   const [message, setmessage] = useState(false);
   const [notification, setnotification] = useState(false);
   const [jobpost, setjobpost] = useState(false);
   const [jobapply, setjobapply] = useState(false);
   const [MessageList,setMessageList] =useState([])
-console.log(MessageList)
+console.log(authenticatedUserDetails)
+
+  const DataAuthenticated=async ()=>{
+   const data= await AuthenticatedUser()
+  return   setAuthenticatedUserDetails(data.data)
+  }
+useEffect(()=>{
+  DataAuthenticated()
+},[isAuthenticated])
+
   const jobapplyhandle = () => {
     setjobapply(true);
   };
@@ -123,7 +133,7 @@ console.log(MessageList)
                     {jobpost && (
                       <Jobposting removeJobposthandle={removeJobposthandle} />
                     )}
-                    {message && <Message />}
+                    {message && <Message MessageList={MessageList} />}
                     {notification && <Notifications />}
                     <Homecontent
                       jobapplyhandle={jobapplyhandle}
@@ -146,7 +156,7 @@ console.log(MessageList)
                       Messagehandle={Messagehandle}
                       Notificationhandle={Notificationhandle}
                     />
-                    {message && <Message />}
+                    {message && <Message MessageList={MessageList} />}
                     {notification && <Notifications />}
                     <Profile />
                   </>
@@ -166,7 +176,7 @@ console.log(MessageList)
                       Messagehandle={Messagehandle}
                       Notificationhandle={Notificationhandle}
                     />
-                    {message && <Message />}
+                    {message && <Message MessageList={MessageList} />}
                     {notification && <Notifications />}
                     <Searchcontent />
                   </>

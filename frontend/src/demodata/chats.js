@@ -2,13 +2,13 @@ const message = [
     {
       id: 1,
       name: "John Doe",
-      profilePic: "https://randomuser.me/api/portraits/men/1.jpg",
+      profilePic: "https://cdn.vectorstock.com/i/500p/16/05/male-avatar-profile-picture-silhouette-light-vector-5351605.jpg",
       action: "Hello! How are you?"
     },
     {
       id: 2,
       name: "Jane Smith",
-      profilePic: "https://randomuser.me/api/portraits/women/1.jpg",
+      profilePic: "https://cdn.vectorstock.com/i/500p/16/05/male-avatar-profile-picture-silhouette-light-vector-5351605.jpg",
       action: "Can we meet tomorrow?"
     },
     {

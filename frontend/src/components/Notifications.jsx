@@ -17,7 +17,7 @@ useEffect(()=>{
                   <div className="flex min-w-0 gap-x-2">
                     <img
                       className="h-12 w-12 object-center object-cover flex-none rounded-full bg-gray-50"
-                      src={data.profilePic}
+                      src="https://cdn.vectorstock.com/i/500p/16/05/male-avatar-profile-picture-silhouette-light-vector-5351605.jpg"
                       alt=""
                     />
                     <div className="min-w-0 pt-1 flex-auto">
