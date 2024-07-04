@@ -4,12 +4,12 @@ import Left from "./profile/left-component";
 import Center from "./profile/center-component";
 import Right from "./profile/right-component";
 
-function Profile (){
+function Profile (props){
   return (
    <div className=" w-screen mt-16 flex felx-row h-screen ">
    <Left/>
-   <Center/>
-   <Right/>
+   <Center authenticatedUserDetails={props.authenticatedUserDetails}/>
+   <Right authenticatedUserDetails={props.authenticatedUserDetails}/>
     </div>
   )
 }

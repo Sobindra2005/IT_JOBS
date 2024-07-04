@@ -4,6 +4,11 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios'
 
 function Message(props) {
+function showmsgBox(data){
+return props.showMessageBox(data)
+}
+
+  
   const token =localStorage.getItem("token");
   return (
     <>
@@ -17,7 +22,7 @@ function Message(props) {
         >    </input>
         <ul className="pt-4 ">
           {props.MessageList.map((data) => (
-            <li className="flex shadow-md hover:bg-gray-200 transition duration-300 pb-2 pl-2  py-2 ">
+            <li onClick={()=> showmsgBox(data) } key={data._id} className="flex shadow-md hover:bg-gray-200 transition duration-300 pb-2 pl-2  py-2 ">
               <div className="flex min-w-0 gap-x-2">
                 <img
                   className="h-14 object-center object-cover w-14 flex-none border border-gray-200 rounded-full bg-gray-50"
@@ -26,7 +31,7 @@ function Message(props) {
                 />
                 <div className="min-w-0 flex-auto">
                   <p className="text-base font text-black pt-1 font-medium">
-                    {data.firstName} {data.lastName}  
+                 {data.firstName} {data.lastName}  
                   </p>
                   <p className="mt-0 truncate text-sm  text-gray-500">
                     Here appear the latest msg
@@ -34,7 +39,7 @@ function Message(props) {
                 </div>
               </div>
             </li>
-          ))}
+          ))} 
         </ul>
         </div>
       </div>

@@ -10,7 +10,7 @@ require('dotenv').config()
 const cors =require('cors')
 
 
-const port=3000
+const port=4000
 const url=process.env.url
 
 app.listen(port,(req,res)=>{
@@ -21,7 +21,7 @@ const { Server } = require('socket.io');
 app.use(express.json({}))
 
 app.use(cors({
-  origin: 'http://localhost:5174', 
+  origin: 'http://localhost:5173', 
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,

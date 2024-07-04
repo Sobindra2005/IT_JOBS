@@ -16,7 +16,7 @@ function Register() {
 
 const handleregister=async (e)=>{
     e.preventDefault();
-   const response = await axios.post('http://localhost:3000/register',{firstName,lastName,email,password,gender,roles})
+   const response = await axios.post('http://localhost:4000/register',{firstName,lastName,email,password,gender,roles})
    if(response.status === 200){
    navigate('/login')
    }
@@ -38,10 +38,10 @@ const handleregister=async (e)=>{
                         <input type="text" id="lastName" value={lastName} onChange={(e)=>setlastName(e.target.value)} placeholder="Doe" required />
 
                         <label htmlFor="email">Email:</label>
-                        <input type="email" id="email" value={email} onChange={(e)=>setemail(e.target.value)} placeholder="example@gmail.com" required />
+                        <input className="lowercase "type="email" id="email" value={email} onChange={(e)=>setemail(e.target.value)} placeholder="example@gmail.com" required />
 
                         <label htmlFor="password">Password:</label>
-                        <input type="password" id="password" value={password} onChange={(e)=>setpassword(e.target.value)} placeholder="example123" required />
+                        <input className='normal ' type="password" id="password" value={password} onChange={(e)=>setpassword(e.target.value)} placeholder="example123" required />
 
                         <label htmlFor="gender">Gender:</label>
                         <select id="gender" value={gender} onChange={(e)=>setgender(e.target.value)} className="form-select" required >

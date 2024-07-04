@@ -12,7 +12,7 @@ function Login() {
     e.preventDefault();
     try {
       console.log(email, password);
-      const loginData = await axios.post("http://localhost:3000/login", {
+      const loginData = await axios.post("http://localhost:4000/login", {
         email,
         password,
       });
@@ -47,6 +47,7 @@ function Login() {
             <input
               type="email"
               id="email"
+              className="lowercase "
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="example@gmail.com"
@@ -58,6 +59,7 @@ function Login() {
               Password:
             </label>
             <input
+            className="normal "
               type="password"
               id="password"
               value={password}

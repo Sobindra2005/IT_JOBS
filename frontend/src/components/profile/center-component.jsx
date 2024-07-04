@@ -2,7 +2,7 @@ import { FaGithub, FaLinkedin, FaFacebook } from "react-icons/fa";
 import projects from "../../demodata/project";
 import { useEffect, useState } from "react";
 
-function Center() {
+function Center(props) {
   const [Projects, setprojects] = useState([]);
 
   useEffect(() => {
@@ -27,12 +27,12 @@ function Center() {
                   alt=""
                 ></img>
                 {/* name and title */}
-                <div className="ml-4 flex flex-col justify-center ">
+                <div className="ml-2 flex flex-col justify-center ">
                   <h1 className="text-xl font-semibold text-gray-700   ">
-                    Talking Tom
+                   {props.authenticatedUserDetails.firstName} {props.authenticatedUserDetails.lastName}
                   </h1>
                   <p className=" text-base text-gray-500 font-medium ">
-                    Nasa Hecker
+                    {props.authenticatedUserDetails.roles}
                   </p>
                 </div>
               </div>
@@ -93,7 +93,7 @@ function Center() {
 
               <tbody>
                 {Projects.map((project, index) => (
-                       <tr className="border-t-2 border-gray-300">
+                       <tr key={index} className="border-t-2 border-gray-300">
                        <td className=" p-2 "> {project.name} </td>
                        <td className={`p-2 ${ project.status==="In Progress"?'text-green-700': project.status==='Pending'?'text-red-900':'text-yellow-400' }`} >{project.status} </td>
                        <td className="text-blue-600  p-2 pr-2  underline ">

@@ -15,15 +15,15 @@ function Homecontent(props) {
         {/* job post component */}
         <div className="new-job-post bg-white rounded-full  border border-t-gray-200 shadow-xl w-11/12 m-auto  flex flex-row">
           {/* top first componnet  */}
-          <div className="p-2 px-8 justify-between  w-screen flex flex-row ">
+          <div className="p-2 px-5 justify-between  w-screen flex flex-row ">
             <div className="flex cursor-pointer">
               <img
-                className="h-12 w-12 flex-none rounded-full object-cover object-center "
+                className="h-12 w-12 flex-none border border-gray-300 rounded-full object-cover object-center "
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTH6_3LEQ3Mt1Or0Zx53Yoyi-5qzZ55DdxVng&s"
                 alt=""
               />
               <p className=" flex items-center font-medium pl-3 text-xl ">
-             Talking Tom
+              {props.authenticatedUserDetails.firstName}  {props.authenticatedUserDetails.lastName}
               </p>
             </div>
             <div className="  mt-2  ">
@@ -49,11 +49,11 @@ function Homecontent(props) {
             <div className="flex flex-row cursor-pointer ">
               <img
                 className="h-11  w-11 flex-none rounded-full object-cover object-center "
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTH6_3LEQ3Mt1Or0Zx53Yoyi-5qzZ55DdxVng&s"
+                src="https://cdn.vectorstock.com/i/500p/16/05/male-avatar-profile-picture-silhouette-light-vector-5351605.jpg"
                 alt=""
               />
               <div className="flex flex-col pl-3 cursor-pointer ">
-                <p className="text-base font-medium "> Talking Tom</p>
+                <p className="text-base font-medium "> Author's Name </p>
                 <p className="text-xs text-left text-gray-500  font-medium ">
                   1d
                 </p>

@@ -1,4 +1,4 @@
-function Right() {
+function Right(props) {
   return (
     <>
       <div className="w-1/4 p-5 h-3/4   ">
@@ -8,7 +8,7 @@ function Right() {
             <i className="bi bi-envelope  mr-4 text-2xl text-gray-700  "></i>
             <div>
               <h2 className="leading-tight text-base text-gray-900 ">Email</h2>
-              <p className="text-sm leading-tight text-blue-900 ">abcd@gmail.com</p>
+              <p className="text-sm leading-tight text-blue-900 lowercase ">{props.authenticatedUserDetails.email}</p>
             </div>
           </div>
 

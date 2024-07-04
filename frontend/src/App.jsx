@@ -23,25 +23,30 @@ import axios from "axios";
 import messageList from "./api/messageHanlde.js";
 import AuthenticatedUser from "./api/authenticatedUserDetails.js";
 
+axios.defaults.timeout = 10000; 
+
 function App() {
   const [isAuthenticated, setisAuthenticated] = useState(
     !!localStorage.getItem("token")
   );
+
+  const [selectUserMsg, setSelectUserMsg] = useState("");
   const [authenticatedUserDetails, setAuthenticatedUserDetails] = useState([]);
   const [message, setmessage] = useState(false);
+  const [messagebox, setmessagebox] = useState(false);
   const [notification, setnotification] = useState(false);
   const [jobpost, setjobpost] = useState(false);
   const [jobapply, setjobapply] = useState(false);
-  const [MessageList,setMessageList] =useState([])
-console.log(authenticatedUserDetails)
+  const [MessageList, setMessageList] = useState([]);
 
-  const DataAuthenticated=async ()=>{
-   const data= await AuthenticatedUser()
-  return   setAuthenticatedUserDetails(data.data)
-  }
-useEffect(()=>{
-  DataAuthenticated()
-},[isAuthenticated])
+  console.log(selectUserMsg)
+  const DataAuthenticated = async () => {
+    const data = await AuthenticatedUser();
+    return setAuthenticatedUserDetails(data.data);
+  };
+  useEffect(() => {
+    DataAuthenticated();
+  }, [isAuthenticated]);
 
   const jobapplyhandle = () => {
     setjobapply(true);
@@ -52,11 +57,21 @@ useEffect(()=>{
   };
   const Messagehandle = async () => {
     await setmessage(!message);
-    await  console.log(message)
-    if(!message){
-    const responce =await messageList()
-    setMessageList(responce.data)
-  }
+    await console.log(message);
+    if (!message) {
+      const responce = await messageList();
+      setMessageList(responce.data);
+    }
+  };
+
+  const showMessageBox = (data) => {
+    setSelectUserMsg(data);
+    setmessagebox(true);
+  };
+
+  const removeMessageBox = () => {
+    setmessagebox(false);
+    setSelectUserMsg("");
   };
 
   const showJobposthandle = () => {
@@ -133,9 +148,20 @@ useEffect(()=>{
                     {jobpost && (
                       <Jobposting removeJobposthandle={removeJobposthandle} />
                     )}
-                    {message && <Message MessageList={MessageList} />}
+                    {messagebox && (
+                      <Messagebox selectUserMsg={selectUserMsg} removeMessageBox={removeMessageBox} />
+                    )}
+
+                    {message && (
+                      <Message
+                        showMessageBox={showMessageBox}
+                        MessageList={MessageList}
+                      />
+                    )}
                     {notification && <Notifications />}
+
                     <Homecontent
+                      authenticatedUserDetails={authenticatedUserDetails}
                       jobapplyhandle={jobapplyhandle}
                       showJobposthandle={showJobposthandle}
                     />
@@ -156,9 +182,20 @@ useEffect(()=>{
                       Messagehandle={Messagehandle}
                       Notificationhandle={Notificationhandle}
                     />
-                    {message && <Message MessageList={MessageList} />}
+                    {messagebox && (
+                      <Messagebox selectUserMsg={selectUserMsg} removeMessageBox={removeMessageBox} />
+                    )}
+
+                    {message && (
+                      <Message
+                        showMessageBox={showMessageBox}
+                        MessageList={MessageList}
+                      />
+                    )}
                     {notification && <Notifications />}
-                    <Profile />
+                    <Profile
+                      authenticatedUserDetails={authenticatedUserDetails}
+                    />
                   </>
                 }
                 isAuthenticated={isAuthenticated}
@@ -176,7 +213,16 @@ useEffect(()=>{
                       Messagehandle={Messagehandle}
                       Notificationhandle={Notificationhandle}
                     />
-                    {message && <Message MessageList={MessageList} />}
+                    {messagebox && (
+                      <Messagebox selectUserMsg={selectUserMsg} removeMessageBox={removeMessageBox} />
+                    )}
+
+                    {message && (
+                      <Message
+                        showMessageBox={showMessageBox}
+                        MessageList={MessageList}
+                      />
+                    )}
                     {notification && <Notifications />}
                     <Searchcontent />
                   </>

@@ -7,7 +7,7 @@ function Left() {
   const navigate=useNavigate()
 const logout=async ()=> {
 await localStorage.removeItem('token')
-await delete axios.defaults.headers.common['Authorization'];
+axios.defaults.headers.common['Authorization'] = null;
 window.location.reload();
 
 }
