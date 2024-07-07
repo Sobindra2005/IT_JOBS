@@ -20,7 +20,7 @@ import Jobapply from "./components/job-apply/jobapply.jsx";
 import axios from "axios";
 
 //api
-import messageList from "./api/messageHanlde.js";
+import { messageList } from "./api/messageHanlde.js";
 import AuthenticatedUser from "./api/authenticatedUserDetails.js";
 
 axios.defaults.timeout = 10000; 
@@ -39,7 +39,7 @@ function App() {
   const [jobapply, setjobapply] = useState(false);
   const [MessageList, setMessageList] = useState([]);
 
-  console.log(selectUserMsg)
+
   const DataAuthenticated = async () => {
     const data = await AuthenticatedUser();
     return setAuthenticatedUserDetails(data.data);
@@ -154,6 +154,7 @@ function App() {
 
                     {message && (
                       <Message
+                      authenticatedUserDetails={authenticatedUserDetails}
                         showMessageBox={showMessageBox}
                         MessageList={MessageList}
                       />
@@ -188,6 +189,7 @@ function App() {
 
                     {message && (
                       <Message
+                      authenticatedUserDetails={authenticatedUserDetails}
                         showMessageBox={showMessageBox}
                         MessageList={MessageList}
                       />
@@ -219,6 +221,7 @@ function App() {
 
                     {message && (
                       <Message
+                      authenticatedUserDetails={authenticatedUserDetails}
                         showMessageBox={showMessageBox}
                         MessageList={MessageList}
                       />

@@ -11,7 +11,6 @@ function Login() {
   const loginhandle = async (e) => {
     e.preventDefault();
     try {
-      console.log(email, password);
       const loginData = await axios.post("http://localhost:4000/login", {
         email,
         password,

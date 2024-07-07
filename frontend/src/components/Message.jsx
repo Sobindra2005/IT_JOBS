@@ -2,10 +2,14 @@ import "../css/styles.css";
 import React, { useState, useEffect } from "react";
 
 import axios from 'axios'
-
+import {getorcreateMsg} from '../api/messageHanlde'
 function Message(props) {
-function showmsgBox(data){
-return props.showMessageBox(data)
+const[senderId,setsenderId]=useState(props.authenticatedUserDetails._id)
+
+function showmsgBox(data,senderId,receiverId){
+  const createMsgResponce=getorcreateMsg(senderId,receiverId)
+  console.log(createMsgResponce)
+ props.showMessageBox(data)
 }
 
   
@@ -22,7 +26,7 @@ return props.showMessageBox(data)
         >    </input>
         <ul className="pt-4 ">
           {props.MessageList.map((data) => (
-            <li onClick={()=> showmsgBox(data) } key={data._id} className="flex shadow-md hover:bg-gray-200 transition duration-300 pb-2 pl-2  py-2 ">
+          <li onClick={()=> showmsgBox(data,senderId,data._id) } key={data._id} className="flex shadow-md hover:bg-gray-200 transition duration-300 pb-2 pl-2  py-2 ">
               <div className="flex min-w-0 gap-x-2">
                 <img
                   className="h-14 object-center object-cover w-14 flex-none border border-gray-200 rounded-full bg-gray-50"

@@ -1,5 +1,24 @@
 const mongoose = require('mongoose')
 
+
+const recordSchema = new mongoose.Schema(
+    {
+        senderId: {
+            type: String,
+            required: true
+        },
+        receiverId: {
+            type: String,
+            required: true
+        },
+        chatId: {
+            type: String,
+            required: true
+        },
+
+    },
+    { timestamps: true }
+)
 const messageSchema = new mongoose.Schema(
     {
         chatId: {
@@ -7,25 +26,27 @@ const messageSchema = new mongoose.Schema(
             required: true
         },
         senderId: {
-            type: Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'applicants',
             required: true
 
         },
-        recieverId:{
-            type:Schema.Types.ObjectId,
-            ref:'applicants',
-            required:true
+        recieverId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'applicants',
+            required: true
         },
-        Text: {
+        message: {
             type: String,
             required: true,
             trim: true
         }
 
-    }
+    },
+    { timestamps: true }
 )
 
-const message=mongoose.model('message',messageSchema)
+const Message = mongoose.model('Message', messageSchema)
+const MsgRecord= mongoose.model('MsgRecord',recordSchema)
 
-module.exports=message
+module.exports = {MsgRecord,Message}

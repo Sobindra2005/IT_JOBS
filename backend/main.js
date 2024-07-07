@@ -1,22 +1,26 @@
 const express=require("express")
-const app =express()
 const{connectMongoDb}=require("./databaseConnect.js")
 const landingPageRoutes=require("./routes/notlogin.js")
 const{tokenAuthentication}=require('./middlewares/authenticate.js')
 const afterloginRoutes=require("./routes/afterLogin.js")
 const authenticatedUserDetails =require("./routes/authenticated.js")
+const http=require('http')
 const path=require('path')
 require('dotenv').config()
 const cors =require('cors')
+const {Server}=require('socket.io')
 
+const app =express()
+const server=http.createServer(app)
+const socket=new Server(server)
 
 const port=4000
 const url=process.env.url
 
-app.listen(port,(req,res)=>{
+server.listen(port,(req,res)=>{
 console.log(`server is connected at port: ${port}`)
 })
-const { Server } = require('socket.io');
+
 
 app.use(express.json({}))
 
@@ -40,3 +44,5 @@ app.set('view engine', 'ejs')
 app.use("/",landingPageRoutes)
 app.use("/",tokenAuthentication,afterloginRoutes)
 app.use("/",tokenAuthentication,authenticatedUserDetails)
+
+
