@@ -18,18 +18,20 @@ import ProtectedRoute from "./components/protectedRoute/protectedRoute.jsx";
 import Jobposting from "./components/jobPosting/Jobposting.jsx";
 import Jobapply from "./components/job-apply/jobapply.jsx";
 import axios from "axios";
+import io from "socket.io-client";
 
 //api
 import { messageList } from "./api/messageHanlde.js";
 import AuthenticatedUser from "./api/authenticatedUserDetails.js";
 
-axios.defaults.timeout = 10000; 
+axios.defaults.timeout = 10000;
 
 function App() {
   const [isAuthenticated, setisAuthenticated] = useState(
     !!localStorage.getItem("token")
   );
 
+  const [socket, setSocket] = useState(null);
   const [selectUserMsg, setSelectUserMsg] = useState("");
   const [authenticatedUserDetails, setAuthenticatedUserDetails] = useState([]);
   const [message, setmessage] = useState(false);
@@ -38,14 +40,24 @@ function App() {
   const [jobpost, setjobpost] = useState(false);
   const [jobapply, setjobapply] = useState(false);
   const [MessageList, setMessageList] = useState([]);
+  const [chatId, setchatId] = useState("");
+  const [allmsg, setAllmsg] = useState("");
 
-
+  console.log(allmsg);
   const DataAuthenticated = async () => {
     const data = await AuthenticatedUser();
     return setAuthenticatedUserDetails(data.data);
   };
+
   useEffect(() => {
     DataAuthenticated();
+    if (isAuthenticated) {
+      const newSocket = io("http://localhost:4000", {
+        withCredentials: true,
+      });
+      console.log(newSocket);
+      return () => newSocket.disconnect();
+    }
   }, [isAuthenticated]);
 
   const jobapplyhandle = () => {
@@ -64,11 +76,16 @@ function App() {
     }
   };
 
-  const showMessageBox = (data) => {
+  const showMessageBox = (data, chatId, msg) => {
     setSelectUserMsg(data);
     setmessagebox(true);
+    setchatId(chatId);
+    setAllmsg(msg);
   };
 
+  const updateMsg = (msg) => {
+    setAllmsg(msg);
+  };
   const removeMessageBox = () => {
     setmessagebox(false);
     setSelectUserMsg("");
@@ -149,12 +166,21 @@ function App() {
                       <Jobposting removeJobposthandle={removeJobposthandle} />
                     )}
                     {messagebox && (
-                      <Messagebox selectUserMsg={selectUserMsg} removeMessageBox={removeMessageBox} />
+                      <Messagebox
+                        updateMsg={updateMsg}
+                        setAllmsg={setAllmsg}
+                        allmsg={allmsg}
+                        authenticatedUserDetails={authenticatedUserDetails}
+                        chatId={chatId}
+                        selectUserMsg={selectUserMsg}
+                        removeMessageBox={removeMessageBox}
+                      />
                     )}
 
                     {message && (
                       <Message
-                      authenticatedUserDetails={authenticatedUserDetails}
+                        allmsg={allmsg}
+                        authenticatedUserDetails={authenticatedUserDetails}
                         showMessageBox={showMessageBox}
                         MessageList={MessageList}
                       />
@@ -184,12 +210,21 @@ function App() {
                       Notificationhandle={Notificationhandle}
                     />
                     {messagebox && (
-                      <Messagebox selectUserMsg={selectUserMsg} removeMessageBox={removeMessageBox} />
+                      <Messagebox
+                        updateMsg={updateMsg}
+                        setAllmsg={setAllmsg}
+                        allmsg={allmsg}
+                        authenticatedUserDetails={authenticatedUserDetails}
+                        chatId={chatId}
+                        selectUserMsg={selectUserMsg}
+                        removeMessageBox={removeMessageBox}
+                      />
                     )}
 
                     {message && (
                       <Message
-                      authenticatedUserDetails={authenticatedUserDetails}
+                        allmsg={allmsg}
+                        authenticatedUserDetails={authenticatedUserDetails}
                         showMessageBox={showMessageBox}
                         MessageList={MessageList}
                       />
@@ -216,12 +251,21 @@ function App() {
                       Notificationhandle={Notificationhandle}
                     />
                     {messagebox && (
-                      <Messagebox selectUserMsg={selectUserMsg} removeMessageBox={removeMessageBox} />
+                      <Messagebox
+                        updateMsg={updateMsg}
+                        setAllmsg={setAllmsg}
+                        allmsg={allmsg}
+                        authenticatedUserDetails={authenticatedUserDetails}
+                        chatId={chatId}
+                        selectUserMsg={selectUserMsg}
+                        removeMessageBox={removeMessageBox}
+                      />
                     )}
 
                     {message && (
                       <Message
-                      authenticatedUserDetails={authenticatedUserDetails}
+                        allmsg={allmsg}
+                        authenticatedUserDetails={authenticatedUserDetails}
                         showMessageBox={showMessageBox}
                         MessageList={MessageList}
                       />

@@ -56,7 +56,7 @@ const startOrGetMsg = async (req, res) => {
             })
             await newchatSession.save()
             console.log('!chatsesssion', newchatSession)
-            return res, json({ chatId, message: [] })
+            return res.status(200).json({ chatId, message: [] })
         }
         else {
             const allMessage = await Message.find({ chatId }).sort({ timestamp: 1 });
@@ -70,8 +70,11 @@ const startOrGetMsg = async (req, res) => {
 }
 
 async function postMsg(req, res) {
-    const { senderId, receiverId, message } = await req.body
-    const chatId = await generateId(senderId, receiverId)
+    const { senderId, receiverId,chatId, message } = await req.body
+    const chatid = await generateId(senderId, receiverId)
+    if(chatid != chatId){
+        console.log('unexpected ')
+    }
     const newMsg = new Message({
         chatId: chatId,
         senderId: senderId,

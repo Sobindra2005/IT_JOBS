@@ -21,3 +21,14 @@ export const getorcreateMsg=(senderId,receiverId)=> api.post('http://localhost:4
 
 )
 
+export const postMessage =(senderId,receiverId,chatId,message)=> api.post(`http://localhost:4000/msg/${chatId}`,
+    {
+        senderId,receiverId,chatId,message
+    },
+    {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+
+)

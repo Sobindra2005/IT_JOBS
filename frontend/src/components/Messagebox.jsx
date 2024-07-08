@@ -1,8 +1,27 @@
 import "../css/styles.css";
 import React, { useState, useEffect } from "react";
 import message from "../demodata/chats";
+import { useParams } from "react-router-dom";
+import { postMessage,getorcreateMsg } from "../api/messageHanlde";
 
 function Messagebox(props) {
+
+  const [message, setMessage] = useState("");
+
+  const sendMessage = async () => {
+    
+    const responceSendMsg = await postMessage(
+      props.authenticatedUserDetails._id,
+      props.selectUserMsg._id,
+      props.chatId,
+      `${message}`
+    );
+    props.updateMsg(responceSendMsg.data.allMessage)
+    setMessage("");
+  };
+
+
+
   return (
     <>
       <div className="  Message z-10 bg-white fixed right-80 bottom-6 mt-16 border rounded-3xl  cursor-pointer h-2/3  w-1/4  shadow-lg shadow-blue-500/50 ">
@@ -19,7 +38,7 @@ function Messagebox(props) {
               />
               <div className="pl-2 pt-1">
                 <p className=" text-base text-black leading-tight  ">
-                 {props.selectUserMsg.firstName} {props.selectUserMsg.lastName}
+                  {props.selectUserMsg.firstName} {props.selectUserMsg.lastName}
                 </p>
                 <p className="text-sm text-gray-600 leading-tight">
                   active 1hr ago
@@ -27,28 +46,46 @@ function Messagebox(props) {
               </div>
             </div>
             {/* Top right component */}
-            <i onClick={props.removeMessageBox} className="bi bi-x text-3xl hover:bg-gray-300 rounded-full h-auto px-1.5  flex items-center text-gray-700"></i>
+            <i
+              onClick={props.removeMessageBox}
+              className="bi bi-x text-3xl hover:bg-gray-300 rounded-full h-auto px-1.5  flex items-center text-gray-700"
+            ></i>
           </div>
         </div>
 
         {/* text message component */}
-     <div className=" overflow-y-auto w-full text-gray-900 h-72 p-2   flex flex-col space-y-1">
-  <div className="flex justify-start">
-    <p className="px-2 normal-case py-1 w-auto max-w-[50%]  rounded-r-xl rounded-t-xl bg-cyan-400">hello</p>
-  </div>
-  <div className="flex justify-end">
-    <p className="px-2 normal-case py-1 w-auto max-w-[50%]  rounded-t-xl  rounded-l-xl bg-cyan-400">hello bro whats u</p>
-  </div>
-</div>
 
+        <div className=" overflow-y-auto w-full text-gray-900 h-72 p-2   flex flex-col space-y-1">
+          {props.allmsg.map((msg) => (
+            <div key={msg._id}
+              className={`flex ${
+                props.authenticatedUserDetails._id == msg.senderId
+                  ? "justify-end"
+                  : "justify-start"
+              } `}
+            >
+              <p className="px-2 normal-case py-1 w-auto max-w-[50%]  rounded-r-xl rounded-t-xl bg-cyan-400">
+                {msg.message}
+              </p>
+            </div>
+          ))}
+        </div>
 
         {/* bottom component */}
         <div className=" absolute  bottom-0 w-full pt-3 mb-0 flex pb-2 flex-row justify-center  h-3/12  rounded-3xl">
-         
-            <textarea spellCheck="false" className=" normal-case rounded-md p-2 resize-none outline-none  h-auto  w-10/12 text-base px-2 text-slate-800 bg-slate-200 " type="text" placeholder="write messages.."></textarea>
+          <textarea
+            value={message}
+            spellCheck="false"
+            onChange={(e) => setMessage(e.target.value)}
+            className=" normal-case rounded-md p-2 resize-none outline-none  h-auto  w-10/12 text-base px-2 text-slate-800 bg-slate-200 "
+            type="text"
+            placeholder="write messages.."
+          ></textarea>
 
-            <i className="bi bi-caret-right-fill flex items-center text-2xl ml-2 text-violet-900 "></i>
-
+          <i
+            onClick={sendMessage}
+            className="bi bi-caret-right-fill flex items-center text-2xl ml-2 text-violet-900 "
+          ></i>
         </div>
       </div>
     </>
