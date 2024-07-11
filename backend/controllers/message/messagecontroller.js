@@ -41,13 +41,11 @@ const startOrGetMsg = async (req, res) => {
 
     try {
         const { senderId, receiverId } = await req.body
-        console.log(senderId, receiverId)
+      
         const chatId = await generateId(senderId, receiverId)
-        console.log(chatId)
+     
         const chatSession = await MsgRecord.find({ chatId })
-        console.log(chatSession)
-        console.log(!!chatSession)
-        console.log(chatSession.length)
+     
         if (chatSession.length == 0) {
             newchatSession = new MsgRecord({
                 senderId: senderId,
@@ -55,12 +53,12 @@ const startOrGetMsg = async (req, res) => {
                 chatId: chatId,
             })
             await newchatSession.save()
-            console.log('!chatsesssion', newchatSession)
+     
             return res.status(200).json({ chatId, message: [] })
         }
         else {
             const allMessage = await Message.find({ chatId }).sort({ timestamp: 1 });
-            console.log('chatsession', allMessage)
+         
             return res.status(200).json({ allMessage, chatId })
         }
     }

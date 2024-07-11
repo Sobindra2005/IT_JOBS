@@ -11,7 +11,8 @@ function Message(props) {
     const createMsgResponce = await getorcreateMsg(senderId, receiverId);
     const allmsg = createMsgResponce.data.allMessage;
     const chatId = createMsgResponce.data.chatId;
-    props.showMessageBox(data, chatId, allmsg);
+    props.showMessageBox(data , chatId, allmsg);
+    
   }
 
 

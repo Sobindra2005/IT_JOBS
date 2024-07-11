@@ -9,11 +9,13 @@ const path = require('path');
 require('dotenv').config();
 const cors = require('cors');
 const { Server } = require('socket.io');
+const {Message} = require('./models/message');
 
 const app = express();
 const server = http.createServer(app);
 
-const socket = new Server(server, {
+const io = new Server(server, {
+  pingTimeout: 60000,
   cors: {
     origin: 'http://localhost:5173',
     methods: ['GET', 'POST'],
@@ -21,11 +23,27 @@ const socket = new Server(server, {
   }
 });
 
-socket.on('connection', (socket) => {
-  console.log('user is connected !!!');
+io.on('connection', (socket) => {
+    console.log(`socket ${socket.id} is connected !!!`);
+  socket.on("join chat", (room) => {
+    console.log("Join chat room:", room);
+    if (room) {
+      socket.join(room);
+    }
+  });
+
+  socket.on("send message", async (chatId) => {
+    try {
+      console.log("Chat ID received:", chatId);
+      const allMsg = await Message.find({ chatId: chatId })
+      io.to(chatId).emit("message received", allMsg);
+    } catch (error) {
+      console.error("Error finding message:", error);
+    }
+  });
 
   socket.on("disconnect", () => {
-    console.log("user is disconnected ");
+    console.log(`socket ${socket.id} is disconnected `);
   });
 });
 
@@ -56,4 +74,3 @@ app.set('view engine', 'ejs');
 
 app.use("/", landingPageRoutes);
 app.use("/", tokenAuthentication, afterloginRoutes);
-
