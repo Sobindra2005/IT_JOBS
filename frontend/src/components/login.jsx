@@ -2,8 +2,9 @@ import { useState } from "react";
 import "../css/login.css";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import API_BASE_URL from "../../portConfig";
 
-function Login() {
+function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -11,19 +12,27 @@ function Login() {
   const loginhandle = async (e) => {
     e.preventDefault();
     try {
-      const loginData = await axios.post("http://localhost:4000/login", {
+      const loginData = await axios.post(`${API_BASE_URL}/login`, {
         email,
         password,
       });
-  
+
+      console.log(loginData);
       if (loginData.status === 200) {
         const token = await loginData.data;
+        props.setshowSuccess(true);
+        props.setpopupmessage("Login Successfully");
+        props.setshowpopup(true);
         await localStorage.setItem("token", `${token}`);
         window.location.reload();
       }
-     
+
     } catch (error) {
-      console.error("Login failed:", error);
+      if (error.response && error.response.status === 401) {
+        props.setshowError(true);
+        props.setpopupmessage("Invalid Email/Password");
+        props.setshowpopup(true);
+      } 
     }
   };
 
@@ -58,7 +67,7 @@ function Login() {
               Password:
             </label>
             <input
-            className="normal "
+              className="normal "
               type="password"
               id="password"
               value={password}

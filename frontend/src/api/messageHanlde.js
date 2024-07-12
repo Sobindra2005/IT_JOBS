@@ -1,15 +1,16 @@
 import axios from 'axios'
+import API_BASE_URL from '../../portConfig'
 
-const api = axios.create({ baseURL: 'http://localhost:4000'});
+const api = axios.create({ baseURL: `${API_BASE_URL}`});
 const token = localStorage.getItem("token")
 
-export const messageList=()=> api.get('http://localhost:4000/msg',{
+export const messageList=()=> api.get(`${API_BASE_URL}/msg`,{
     headers: {
         Authorization: `Bearer ${token}`,
     },
 })
 
-export const getorcreateMsg=(senderId,receiverId)=> api.post('http://localhost:4000/msg',
+export const getorcreateMsg=(senderId,receiverId)=> api.post(`${API_BASE_URL}/msg`,
     {
       senderId,receiverId  
     },
@@ -21,7 +22,7 @@ export const getorcreateMsg=(senderId,receiverId)=> api.post('http://localhost:4
 
 )
 
-export const postMessage =(senderId,receiverId,chatId,message)=> api.post(`http://localhost:4000/msg/${chatId}`,
+export const postMessage =(senderId,receiverId,chatId,message)=> api.post(`${API_BASE_URL}/msg/${chatId}`,
     {
         senderId,receiverId,chatId,message
     },

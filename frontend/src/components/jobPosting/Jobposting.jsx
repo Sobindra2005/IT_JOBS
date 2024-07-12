@@ -1,9 +1,59 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
+import JobForm from "../create-job components/main";
+import Jobpost from "../../api/jobpost";
+import {Success,Error} from '../popup/popup'
+
+
 
 function Jobposting(props) {
+ async function jobpost(e){
+ e.preventDefault()
+    const responce= await Jobpost(props.authenticatedUserDetails._id, jobTitle,
+      companyName,
+      companyDescription,
+      jobOverview,
+      responsibilities,
+      skills,
+      qualifications,
+      location,
+      employmentType,
+      salary,
+      workingTime,
+      startDate,
+      applicationDeadline,
+      applyProcess,
+      contactNumber,
+      email,
+      additionalInformation)
+  if(responce.status==200){
+    props.removeJobposthandle()
+    props.setshowSuccess(true)
+    props.setpopupmessage('Job posted ')
+    props.setshowpopup(true)
+  }
+  }
+
+
   const [showDropzone, setShowDropzone] = useState(false);
-  const [files, setFiles] = useState([]);
+const [files, setFiles] = useState([]);
+const [jobTitle,setjobTitle ] = useState('');
+const [companyName,setcompanyName ] = useState('');
+const [companyDescription,setcompanyDescription ] = useState('');
+const [jobOverview,setjobOverview]=useState('')
+const [responsibilities,setresponsibilities]=useState('')
+const [skills,setskills]=useState('')
+const [qualifications,setqualifications]=useState('')
+const [location,setlocation]=useState('')
+const [employmentType,setemploymentType]=useState('')
+const [salary,setsalary]=useState('')
+const [workingTime,setworkingTime]=useState('')
+const [startDate,setstartDate]=useState('')
+const [applyProcess,setapplyProcess]=useState('')
+const [contactNumber,setcontactNumber]=useState('')
+const [email,setemail]=useState('')
+const [additionalInformation,setadditionalInformation]=useState('')
+const [applicationDeadline,setapplicationDeadline]=useState('')
 
   const onDrop = useCallback((acceptedFiles) => {
     const filteredFiles = acceptedFiles.filter((file) =>
@@ -51,6 +101,7 @@ function Jobposting(props) {
 
   return (
     <>
+ 
       {/* job posting main section */}
       <div className="jobposting-section w-screen h-auto overflow-scroll fixed inset-0 bg-gray-800 bg-opacity-60 z-50 flex justify-center items-center ">
         <div className="bg-white w-5/12 h-auto p-2 rounded-2xl shadow shadow-gray-600">
@@ -79,10 +130,51 @@ function Jobposting(props) {
               </p>
             </div>
           </div>
-          <textarea
-            className="resize-none w-full p-3 text-lg block text-gray-700 h-32 py-3 outline-none rounded-xl border border-gray-300 mt-2"
-            placeholder="Write Something about job ???"
-          />
+<form onSubmit={ jobpost} >
+<div spellCheck="false" className=" my-5 overflow-scroll w-full p-3 h-96 block text-gray-700 py-3 ">
+
+<JobForm 
+setjobTitle={setjobTitle}
+setcompanyName={setcompanyName}
+setcompanyDescription={setcompanyDescription}
+setjobOverview={setjobOverview}
+setresponsibilities={setresponsibilities}
+setskills={setskills}
+setqualifications={setqualifications}
+setlocation={setlocation}
+setemploymentType={setemploymentType}
+setsalary={setsalary}
+setworkingTime={setworkingTime}
+setstartDate={setstartDate}
+setapplyProcess={setapplyProcess}
+setcontactNumber={setcontactNumber}
+setemail={setemail}
+setadditionalInformation={setadditionalInformation}
+setapplicationDeadline={setapplicationDeadline}
+
+applicationDeadline={applicationDeadline}
+jobTitle={jobTitle}
+companyName={companyName}
+companyDescription={companyDescription}
+jobOverview={jobOverview}
+responsibilities={responsibilities}
+skills={skills}
+qualifications={qualifications}
+location={location}
+employmentType={employmentType}
+salary={salary}
+workingTime={workingTime}
+startDate={startDate}
+applyProcess={applyProcess}
+contactNumber={contactNumber}
+email={email}
+additionalInformation={additionalInformation}
+/>
+
+</div>
+
+
+
           {showDropzone && (
             <>
               <div
@@ -113,9 +205,12 @@ function Jobposting(props) {
             >
               Post
             </button>
+            
           </div>
+          </form>
         </div>
       </div>
+      
     </>
   );
 }

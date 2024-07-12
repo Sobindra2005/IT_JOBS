@@ -1,11 +1,12 @@
 import "../css/styles.css";
-import React, { useState, useEffect } from "react";
+import React , {useState, useEffect ,useRef} from "react";
 import { useParams } from "react-router-dom";
 import { postMessage, getorcreateMsg } from "../api/messageHanlde";
 
-function Messagebox(props) {
+const Messagebox=(props) => {
   const [message, setMessage] = useState("");
   const [allmessage, setallmessage] = useState('');
+  const ScrollRef=useRef(null)
 
   const sendMessage = async () => {
     const responseSendMsg = await postMessage(
@@ -29,7 +30,10 @@ function Messagebox(props) {
 
   useEffect(() => {
     getMsg
-   
+
+    if(ScrollRef.current){
+      ScrollRef.current.scrollTop=ScrollRef.current.scrollHeight
+    }
 
   }, [props.allmsg.length]);
 
@@ -65,17 +69,17 @@ function Messagebox(props) {
         </div>
 
         {/* text message component */}
-        <div className="overflow-y-auto w-full text-gray-900 h-72 p-2 flex flex-col space-y-1">
+        <div className="overflow-y-auto w-full text-gray-900 h-72 p-2 flex flex-col space-y-1" ref={ScrollRef}>
           {props.allmsg.map((msg) => (
             <div
               key={msg._id}
-              className={`flex ${
+              className={`flex  ${
                 props.authenticatedUserDetails._id == msg.senderId
                   ? "justify-end"
                   : "justify-start"
               }`}
             >
-              <p className="px-2 normal-case py-1 w-auto max-w-[50%] rounded-r-xl rounded-t-xl bg-cyan-400">
+              <p className="px-2 break-words break-all block normal-case py-1 w-auto max-w-[50%] rounded-r-xl rounded-t-xl bg-cyan-400">
                 {msg.message}
               </p>
             </div>

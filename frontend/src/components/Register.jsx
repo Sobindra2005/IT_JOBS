@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import '../css/register.css'
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom'
+import API_BASE_URL from '../../portConfig'
 
-
-function Register() {
+function Register(props) {
 
     const[firstName,setfirstName]=useState('')
     const[lastName,setlastName]=useState('')
@@ -16,9 +16,12 @@ function Register() {
 
 const handleregister=async (e)=>{
     e.preventDefault();
-   const response = await axios.post('http://localhost:4000/register',{firstName,lastName,email,password,gender,roles})
+   const response = await axios.post(`${API_BASE_URL}/register`,{firstName,lastName,email,password,gender,roles})
    if(response.status === 200){
-   navigate('/login')
+    props.setshowSuccess(true);
+    props.setpopupmessage("Register Successfully");
+    props.setshowpopup(true)
+    navigate('/login')
    }
    else{
     console.error('Registration failed:', response.data);
@@ -38,14 +41,14 @@ const handleregister=async (e)=>{
                         <input type="text" id="lastName" value={lastName} onChange={(e)=>setlastName(e.target.value)} placeholder="Doe" required />
 
                         <label htmlFor="email">Email:</label>
-                        <input className="lowercase "type="email" id="email" value={email} onChange={(e)=>setemail(e.target.value)} placeholder="example@gmail.com" required />
+                        <input className="lowercase " type="email" id="email" value={email} onChange={(e)=>setemail(e.target.value)} placeholder="example@gmail.com" required />
 
                         <label htmlFor="password">Password:</label>
                         <input className='normal ' type="password" id="password" value={password} onChange={(e)=>setpassword(e.target.value)} placeholder="example123" required />
 
                         <label htmlFor="gender">Gender:</label>
                         <select id="gender" value={gender} onChange={(e)=>setgender(e.target.value)} className="form-select" required >
-                            <option value="" disabled>Select gender</option>
+                            <option value="" disabled>Select type</option>
                             <option value="male">Male</option>
                             <option value="female">Female</option>
                             <option value="prefer-not-to-say">Prefer not to say</option>

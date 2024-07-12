@@ -6,39 +6,30 @@ const bcrypt = require('bcrypt')
 
 
 async function loginPost(req, res) {
-    try {
+   
 
         const { email, password } = await req.body;
         const userData = await User.findOne({ email })
         const userPassword = await userData.password
-
         const passwordMatch = await bcrypt.compare(password, userData.password)
 
         if (!email || !password) {
-            res.status(400).json({ msg: "email and password is required" });
+          return res.status(400).json({ msg: "email and password is required" });
         }
         if (!userData) {
-            res.status(404).json({ msg: "user not found!!" })
+          return  res.status(404).json({ msg: "user not found!!" })
             console.log('err')
+        }
+        if (!passwordMatch) {
+          return  res.status(401).json({ msg: 'invalid credentials' })
         }
         if (passwordMatch) {
             const token = setUser(userData)
-
-            res.json(token)
-
-
-        }
-        else {
-            res.status(401).json({ msg: "incorrect password!!" })
+           return res.status(200).json(token)
         }
 
-
-
-    }
-    catch (err) {
-
-        console.log(`${err}`)
-    }
+ 
+   
 }
 
 

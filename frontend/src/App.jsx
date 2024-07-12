@@ -19,10 +19,9 @@ import Lheader from "./components/Lheader.jsx";
 import ProtectedRoute from "./components/protectedRoute/protectedRoute.jsx";
 import Jobposting from "./components/jobPosting/Jobposting.jsx";
 import Jobapply from "./components/job-apply/jobapply.jsx";
-
 import { messageList } from "./api/messageHanlde.js";
 import AuthenticatedUser from "./api/authenticatedUserDetails.js";
-
+import { Success, Error } from "./components/popup/popup.jsx";
 
 axios.defaults.timeout = 10000;
 
@@ -43,14 +42,15 @@ function App() {
   const [chatId, setChatId] = useState("");
   const [allmsg, setAllmsg] = useState([]);
   const [socketConnected, setSocketConnected] = useState(false);
+  const [showpopup, setshowpopup] = useState(false);
+  const [popupmessage, setpopupmessage] = useState("");
+  const [showSuccess, setshowSuccess] = useState(false);
+  const [showError, setshowError] = useState(false);
 
   const DataAuthenticated = async () => {
     const data = await AuthenticatedUser();
     setAuthenticatedUserDetails(data.data);
   };
-
-
-
 
   useEffect(() => {
     DataAuthenticated();
@@ -80,10 +80,6 @@ function App() {
       };
     }
   }, [isAuthenticated]);
-
-
-
-
 
   const jobapplyhandle = () => {
     setJobapply(true);
@@ -164,8 +160,29 @@ function App() {
             ) : (
               <>
                 <Rheader />
-                <Register />
+                <Register
+                  setshowError={setshowError}
+                  setshowSuccess={setshowSuccess}
+                  setpopupmessage={setpopupmessage}
+                  setshowpopup={setshowpopup}
+                />
                 <Footer />
+                {showSuccess && (
+                  <Success
+                    showpopup={showpopup}
+                    setshowSuccess={setshowSuccess}
+                    setshowpopup={setshowpopup}
+                    popupmessage={popupmessage}
+                  />
+                )}
+                {showError && (
+                  <Error
+                    showpopup={showpopup}
+                    setshowError={setshowError}
+                    setshowpopup={setshowpopup}
+                    popupmessage={popupmessage}
+                  />
+                )}
               </>
             )
           }
@@ -178,7 +195,28 @@ function App() {
             ) : (
               <>
                 <Lheader />
-                <Login />
+                <Login
+                  setshowError={setshowError}
+                  setshowSuccess={setshowSuccess}
+                  setpopupmessage={setpopupmessage}
+                  setshowpopup={setshowpopup}
+                />
+                {showSuccess && (
+                  <Success
+                    showpopup={showpopup}
+                    setshowSuccess={setshowSuccess}
+                    setshowpopup={setshowpopup}
+                    popupmessage={popupmessage}
+                  />
+                )}
+                {showError && (
+                  <Error
+                    showpopup={showpopup}
+                    setshowError={setshowError}
+                    setshowpopup={setshowpopup}
+                    popupmessage={popupmessage}
+                  />
+                )}
               </>
             )
           }
@@ -197,7 +235,14 @@ function App() {
                     <Jobapply removejobapplyhandle={removejobapplyhandle} />
                   )}
                   {jobpost && (
-                    <Jobposting removeJobposthandle={removeJobposthandle} />
+                    <Jobposting
+                      setshowError={setshowError}
+                      setshowSuccess={setshowSuccess}
+                      setpopupmessage={setpopupmessage}
+                      setshowpopup={setshowpopup}
+                      authenticatedUserDetails={authenticatedUserDetails}
+                      removeJobposthandle={removeJobposthandle}
+                    />
                   )}
                   {messagebox && (
                     <Messagebox
@@ -225,6 +270,22 @@ function App() {
                     jobapplyhandle={jobapplyhandle}
                     showJobposthandle={showJobposthandle}
                   />
+                  {showSuccess && (
+                    <Success
+                      showpopup={showpopup}
+                      setshowSuccess={setshowSuccess}
+                      setshowpopup={setshowpopup}
+                      popupmessage={popupmessage}
+                    />
+                  )}
+                  {showError && (
+                    <Error
+                      showpopup={showpopup}
+                      setshowError={setshowError}
+                      setshowpopup={setshowpopup}
+                      popupmessage={popupmessage}
+                    />
+                  )}
                 </>
               }
               isAuthenticated={isAuthenticated}
@@ -263,8 +324,25 @@ function App() {
                   )}
                   {notification && <Notifications />}
                   <Profile
+                   setshowSuccess={setshowSuccess}
+                   setpopupmessage={setpopupmessage}
+                   setshowpopup={setshowpopup}
                     authenticatedUserDetails={authenticatedUserDetails}
                   />
+                  {showSuccess && (
+                    <Success
+                      showpopup={showpopup}
+                      setshowpopup={setshowpopup}
+                      popupmessage={popupmessage}
+                    />
+                  )}
+                  {showError && (
+                    <Error
+                      showpopup={showpopup}
+                      setshowpopup={setshowpopup}
+                      popupmessage={popupmessage}
+                    />
+                  )}
                 </>
               }
               isAuthenticated={isAuthenticated}
@@ -303,6 +381,20 @@ function App() {
                   )}
                   {notification && <Notifications />}
                   <Searchcontent />
+                  {showSuccess && (
+                    <Success
+                      showpopup={showpopup}
+                      setshowpopup={setshowpopup}
+                      popupmessage={popupmessage}
+                    />
+                  )}
+                  {showError && (
+                    <Error
+                      showpopup={showpopup}
+                      setshowpopup={setshowpopup}
+                      popupmessage={popupmessage}
+                    />
+                  )}
                 </>
               }
               isAuthenticated={isAuthenticated}

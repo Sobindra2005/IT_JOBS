@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import axios from 'axios'
+import axios from "axios";
+import { Success, Error } from "./popup/popup";
 
 function Homecontent(props) {
   const [ExapandText, setExpandText] = useState(false);
+
   const toggleContent = () => {
     setExpandText(!ExapandText);
   };
-
-
 
   return (
     <>
@@ -23,17 +23,17 @@ function Homecontent(props) {
                 alt=""
               />
               <p className=" flex items-center font-medium pl-3 text-xl ">
-              {props.authenticatedUserDetails.firstName}  {props.authenticatedUserDetails.lastName}
+                {props.authenticatedUserDetails.firstName}{" "}
+                {props.authenticatedUserDetails.lastName}
               </p>
             </div>
             <div className="  mt-2  ">
-              <button 
+              <button
                 type="button"
                 onClick={props.showJobposthandle}
                 className="ml-12 shadow-md rounded-md h-8 px-2   text-white items-center  bg-purple-900  hover:bg-purple-800  font-semibold "
               >
-              
-                Post Job
+                Create Job
               </button>
             </div>
           </div>
@@ -65,22 +65,41 @@ function Homecontent(props) {
             </div>
           </div>
           {/* joblist content section */}
-          <img src="https://picsum.photos/800/400" alt="random" className=" shadow-inner border border-b-gray-200 w-full m-auto min-w-0 h-96 rounded-2xl object-cover object-center ">
-
-          </img>
+          <img
+            src="https://picsum.photos/800/400"
+            alt="random"
+            className=" shadow-inner border border-b-gray-200 w-full m-auto min-w-0 h-96 rounded-2xl object-cover object-center "
+          ></img>
           {/* Job overview section */}
           <div
             className="px-1 pt-2 text-left cursor-pointer "
             onClick={toggleContent}
           >
-            <p className={` text-base text-gray-900  ${ExapandText? 'hidden' : 'block line-clamp-2'} `}>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorem rerum debitis distinctio sit quo reprehenderit, ad ullam architecto! Ut, quam! Architecto amet tenetur eligendi alias sunt a non, perferendis excepturi deleniti magni aliquam corrupti aspernatur optio facilis delectus laudantium saepe dolor voluptates debitis.
+            <p
+              className={` text-base text-gray-900  ${
+                ExapandText ? "hidden" : "block line-clamp-2"
+              } `}
+            >
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorem
+              rerum debitis distinctio sit quo reprehenderit, ad ullam
+              architecto! Ut, quam! Architecto amet tenetur eligendi alias sunt
+              a non, perferendis excepturi deleniti magni aliquam corrupti
+              aspernatur optio facilis delectus laudantium saepe dolor
+              voluptates debitis.
             </p>
-            <p className={` text-base text-gray-900 ${ExapandText? 'block' : 'hidden' }`}> 
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorem rerum debitis distinctio sit quo reprehenderit, ad ullam architecto! Ut, quam! Architecto amet tenetur eligendi alias sunt a non, perferendis excepturi deleniti magni aliquam corrupti aspernatur optio facilis delectus laudantium saepe dolor voluptates debitis.
+            <p
+              className={` text-base text-gray-900 ${
+                ExapandText ? "block" : "hidden"
+              }`}
+            >
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorem
+              rerum debitis distinctio sit quo reprehenderit, ad ullam
+              architecto! Ut, quam! Architecto amet tenetur eligendi alias sunt
+              a non, perferendis excepturi deleniti magni aliquam corrupti
+              aspernatur optio facilis delectus laudantium saepe dolor
+              voluptates debitis.
             </p>
           </div>
-
 
           <div className="border border-b-1 w-full m-auto mt-4 border-gray-400 "></div>
 
@@ -95,7 +114,7 @@ function Homecontent(props) {
             </div>
             <div>
               <button
-              onClick={props.jobapplyhandle}
+                onClick={props.jobapplyhandle}
                 type="submit"
                 className="border  py-1 px-3 rounded-md bg-notification hover:bg-pink-700 text-white "
               >
@@ -105,6 +124,7 @@ function Homecontent(props) {
           </div>
         </div>
       </section>
+  
     </>
   );
 }

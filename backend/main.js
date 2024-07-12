@@ -47,7 +47,7 @@ io.on('connection', (socket) => {
   });
 });
 
-const port = 4000;
+const port = 3000;
 const url = process.env.url;
 
 server.listen(port, (req, res) => {

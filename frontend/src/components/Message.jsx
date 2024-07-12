@@ -50,7 +50,7 @@ function Message(props) {
                       {data.firstName} {data.lastName}
                     </p>
                     <p className="mt-0 truncate text-sm  text-gray-500">
-                  latest message
+                   {/* {"latest message"} */}
                     </p>
                   </div>
                 </div>

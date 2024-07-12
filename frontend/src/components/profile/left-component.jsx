@@ -3,11 +3,14 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 
-function Left() {
+function Left(props) {
   const navigate=useNavigate()
 const logout=async ()=> {
 await localStorage.removeItem('token')
 axios.defaults.headers.common['Authorization'] = null;
+props.setshowSuccess(true);
+props.setpopupmessage("Logout Successfully");
+props.setshowpopup(true);
 window.location.reload();
 
 }
