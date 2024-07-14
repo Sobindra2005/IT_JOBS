@@ -48,7 +48,7 @@ io.on('connection', (socket) => {
 });
 
 const port = 4000;
-const url = process.env.mongo-url;
+const url = process.env.mongourl;
 
 server.listen(port, (req, res) => {
   console.log(`server is connected at port: ${port}`);
