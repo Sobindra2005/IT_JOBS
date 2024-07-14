@@ -9,7 +9,7 @@ export const Success =(props)=>{
              props.setshowpopup(false)
              props.setshowSuccess(false)
 
-            },5000)
+            },9000)
         }
     }
     return (
@@ -31,7 +31,7 @@ export const Success =(props)=>{
                  props.setshowpopup(false)
                  props.setshowError(false)
     
-                },5000)
+                },9000)
             }
         }
         return (

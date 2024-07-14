@@ -11,6 +11,7 @@ This project aims to create a platform specifically for IT roles, where users ca
     CRUD operations for job post 
     Commenting system
     Basic admin functionalities
+    Real-time communication
 
 # My contributions:
 
@@ -28,4 +29,6 @@ This project aims to create a platform specifically for IT roles, where users ca
     tailwind css
     jason web token 
     multer
+    socket.io
+    postman
     

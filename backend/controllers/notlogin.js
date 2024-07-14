@@ -9,17 +9,17 @@ async function loginPost(req, res) {
    
 
         const { email, password } = await req.body;
+        if (!email || !password) {
+            return res.status(400).json({ msg: "email and password is required" });
+          }
         const userData = await User.findOne({ email })
+        if (!userData) {
+            return  res.status(404).json({ msg: "user not found!!" })
+              
+          }
         const userPassword = await userData.password
         const passwordMatch = await bcrypt.compare(password, userData.password)
-
-        if (!email || !password) {
-          return res.status(400).json({ msg: "email and password is required" });
-        }
-        if (!userData) {
-          return  res.status(404).json({ msg: "user not found!!" })
-            console.log('err')
-        }
+      
         if (!passwordMatch) {
           return  res.status(401).json({ msg: 'invalid credentials' })
         }

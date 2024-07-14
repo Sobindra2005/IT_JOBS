@@ -28,7 +28,7 @@ function Login(props) {
       }
 
     } catch (error) {
-      if (error.response && error.response.status === 401) {
+      if (error.response && error.response.status === 401 ||error.response.status === 404 ) {
         props.setshowError(true);
         props.setpopupmessage("Invalid Email/Password");
         props.setshowpopup(true);
