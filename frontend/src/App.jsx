@@ -57,7 +57,7 @@ function App() {
 
     if (isAuthenticated) {
       console.log("Establishing socket connection...");
-      socket = io("http://localhost:4000", {
+      socket = io("https://it-jobs-two.vercel.app", {
         withCredentials: true,
       });
       socket.on("connect", () => {
