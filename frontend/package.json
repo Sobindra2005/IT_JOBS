@@ -9,7 +9,7 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
-  "proxy": "https://it-jobs-two.vercel.app/",
+  "proxy": "https://it-jobs-two.vercel.app",
   "dependencies": {
     "axios": "^1.7.2",
     "react": "^18.2.0",
