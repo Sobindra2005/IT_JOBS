@@ -1,13 +1,13 @@
 import { useState } from "react";
 import "../css/login.css";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import API_BASE_URL from "../../portConfig";
 
 function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const loginhandle = async (e) => {
     e.preventDefault();
@@ -17,36 +17,22 @@ function Login(props) {
         password,
       });
 
-      console.log("Login Data:", loginData);
-
+      console.log(loginData);
       if (loginData.status === 200) {
-        const token = loginData.data.token; // Assuming token is returned in data
+        const token = await loginData.data;
         props.setshowSuccess(true);
         props.setpopupmessage("Login Successfully");
         props.setshowpopup(true);
-        localStorage.setItem("token", token);
-        history.push("/dashboard"); // Redirect to dashboard after successful login
+        await localStorage.setItem("token", `${token}`);
+        window.location.reload();
       }
-    } catch (error) {
-      if (error.response) {
-      
-        if (error.response.status === 401 || error.response.status === 404) {
-          props.setshowError(true);
-          props.setpopupmessage("Invalid Email/Password");
-          props.setshowpopup(true);
-        } else {
-          console.error("Server Error:", error.response.data);
-       
-        }
-      } else if (error.request) {
-      
-        console.error("No response received:", error.request);
-      
-      } else {
 
-        console.error("Error message:", error.message);
-  
-      }
+    } catch (error) {
+      if (error.response && error.response.status === 401 ||error.response.status === 404 ) {
+        props.setshowError(true);
+        props.setpopupmessage("Invalid Email/Password");
+        props.setshowpopup(true);
+      } 
     }
   };
 
