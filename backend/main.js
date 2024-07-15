@@ -57,7 +57,7 @@ server.listen(port, (req, res) => {
 app.use(express.json({}));
 
 app.use(cors({
-  origin: 'https://it-jobs-45q7.vercel.app/',
+  origin: 'https://it-jobs-45q7.vercel.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
