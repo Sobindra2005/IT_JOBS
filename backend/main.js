@@ -15,9 +15,10 @@ const app = express();
 const server = http.createServer(app);
 
 const port = 4000;
+
 const url = process.env.mongourl;
 
-server.listen(port, (req, res) => {
+server.listen(port,(req, res) => {
   console.log(`server is connected at port: ${port}`);
 });
 
@@ -25,7 +26,7 @@ server.listen(port, (req, res) => {
 app.use(express.json({}));
 
 app.use(cors({
-  origin: 'https://it-job-zeta.vercel.app',
+  origin: 'http://localhost:5173',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
@@ -34,7 +35,7 @@ app.use(cors({
 const io = new Server(server, {
   pingTimeout: 60000,
   cors: {
-    origin: 'https://it-job-zeta.vercel.app',
+    origin: 'http://localhost:5173',
     methods: ['GET', 'POST'],
     credentials: true,
   }

@@ -7,6 +7,16 @@ const createJobSchema =new mongoose.Schema(
             type:mongoose.Schema.Types.ObjectId,
             required:true,
         },
+        firstName:{
+            type:String,
+            required:true,
+            trim:true
+        },
+        lastName:{
+            type:String,
+            required:true,
+            trim:true
+        },
         jobTitle:{
             type:String,
             required:true,

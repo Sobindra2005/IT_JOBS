@@ -16,7 +16,7 @@ function Login(props) {
         email,
         password,
       });
-
+console.log(loginData)
       console.log(loginData);
       if (loginData.status === 200) {
         const token = await loginData.data;
@@ -28,13 +28,34 @@ function Login(props) {
       }
 
     } catch (error) {
-      if (error.response && error.response.status === 401 ||error.response.status === 404 ) {
+      if (error.response) {
+
+        if (error.response.status === 401 || error.response.status === 404) {
+          props.setshowError(true);
+          props.setpopupmessage("Invalid Email/Password");
+          props.setshowpopup(true);
+        } else {
+          props.setshowError(true);
+          props.setpopupmessage("An error occurred. Please try again later.");
+          props.setshowpopup(true);
+        }
+      } else if (error.request) {
+        
+        console.error("No response received:", error.request);
         props.setshowError(true);
-        props.setpopupmessage("Invalid Email/Password");
+        props.setpopupmessage("No response from server. Please try again later.");
         props.setshowpopup(true);
-      } 
+      } else {
+     
+        console.error("Error message:", error.message);
+        props.setshowError(true);
+        props.setpopupmessage("An error occurred. Please try again later.");
+        props.setshowpopup(true);
+      }
     }
   };
+  
+
 
   return (
     <>

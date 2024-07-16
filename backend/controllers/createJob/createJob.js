@@ -1,4 +1,6 @@
 const { Jobs } = require('../../models/createJob');
+const { User } =require('../../models/register')
+
 
 const createJob = async (req, res) => {
   try {
@@ -21,12 +23,14 @@ const createJob = async (req, res) => {
       email,
       additionalInformation
     } = req.body;
-
-    console.log(req.body)
     const AuthorId = req.params.authorId;
-
+    const Author= await User.findOne({_id:AuthorId})
+    const firstName=Author.firstName
+    const lastName=Author.lastName
     const newJob = new Jobs({
       AuthorId,
+      firstName,
+      lastName,
       jobTitle,
       companyName,
       companyDescription,
@@ -37,7 +41,6 @@ const createJob = async (req, res) => {
       location,
       employmentType,
       salary,
-    
       workingTime,
       startDate,
       applicationDeadline,
