@@ -12,11 +12,12 @@ function RandomOrder(array) {
 
 function shuffledpost(array) {
     shuffled = [...array]
-   return RandomOrder(shuffled)
+    return RandomOrder(shuffled)
 }
 const getpost = async (req, res) => {
+
     const allJobs = await Jobs.find({})
-    const orderedJobs=shuffledpost(allJobs)
+    const orderedJobs = shuffledpost(allJobs)
     return res.status(200).json(orderedJobs)
 }
 

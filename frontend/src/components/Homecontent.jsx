@@ -7,6 +7,34 @@ function Homecontent(props) {
   const [responses, setResponses] = useState([]);
   const [expandedPosts, setExpandedPosts] = useState({});
 
+  const timeCalculate = (timestamps) => {
+    const now = new Date();
+    const upload = new Date(timestamps);
+    const diff = now - upload;
+    
+    const second = Math.floor(diff / 1000);
+    const minute = Math.floor(second / 60);
+    const hour = Math.floor(minute / 60);
+    const day = Math.floor(hour / 24);
+
+    if (day > 0) {
+      const msg=`${day} days ago`
+      return msg
+    }
+    if (day < 1 && hour > 0) {
+      const msg=`${hour} hours ago`
+     return msg
+    }
+    if (day < 1 && hour < 1 && minute > 0) {
+      const msg=`${minute} minutes ago`
+      return msg
+    }
+    if (day < 1 && hour < 1 && minute < 1 && second > 1) {
+      const msg=`${second} seconds ago`
+      return msg
+    }
+  };
+
   async function getpost() {
     const response = await Getpost();
     console.log(response);
@@ -15,6 +43,7 @@ function Homecontent(props) {
 
   useEffect(() => {
     getpost();
+    timeCalculate()
   }, []);
 
   const toggleContent = (id) => {
@@ -59,6 +88,7 @@ function Homecontent(props) {
 
         {responses.length > 0 ? (
           responses.map((response) => (
+          
             <div
               key={response._id}
               className="bg-white mb-10 mt-4 Job-list-section flex-1 h-auto w-post-width m-auto rounded-3xl flex flex-col p-4 border border-t-purple-200 shadow-xl"
@@ -69,10 +99,13 @@ function Homecontent(props) {
                   <img
                     className="h-11 w-11 flex-none rounded-full object-cover object-center"
                     src={
-                      response.AuthorImgSrc ? `${response.AuthorImgSrc}` : "https://cdn.vectorstock.com/i/500p/16/05/male-avatar-profile-picture-silhouette-light-vector-5351605.jpg"
+                      response.AuthorImgSrc
+                        ? `${response.AuthorImgSrc}`
+                        : "https://cdn.vectorstock.com/i/500p/16/05/male-avatar-profile-picture-silhouette-light-vector-5351605.jpg"
                     }
                     alt=""
                   />
+
                   <div className="flex flex-col pl-3 cursor-pointer">
                     <p className="text-base font-medium">
                       {response.firstName
@@ -80,7 +113,7 @@ function Homecontent(props) {
                         : "Unknown User"}
                     </p>
                     <p className="text-xs text-left text-gray-500 font-medium">
-                      1d
+                    {`${timeCalculate(response?.createdAt)}`}
                     </p>
                   </div>
                 </div>
@@ -147,19 +180,31 @@ function Homecontent(props) {
               <div className="border border-b-1 w-full m-auto mt-4 border-gray-400"></div>
 
               {/* joblist apply and react section */}
-              <div className="flex flex-row justify-between px-6 pt-2">
-                <div className="space-x-2.5 text-2xl">
-                  <i className="fas fa-thumbs-up text-2xl"></i>
-                  <span className="border-r-2 border-pink-500 text-sm pr-2 text-zinc-800">
-                    100k Likes
-                  </span>
-                  <i className="fas fa-thumbs-down pl-2 text-2xl"></i>
+              <div className="p-1 border-t border-gray-400 flex items-center justify-between">
+                <div className="flex items-center space-x-6 text-lg">
+                  {/* Like Button */}
+                  <button className="flex items-center text-gray-500 hover:text-purple-700 focus:outline-none">
+                    <i className="fas fa-thumbs-up mr-1"></i>
+                    <span>{response.likes} Likes</span>
+                  </button>
+
+                  {/* Dislike Button */}
+                  <button className="flex items-center text-gray-500 hover:text-purple-700 focus:outline-none">
+                    <i className="fas fa-thumbs-down mr-1"></i>
+                    <span>{response.dislikes} Dislikes</span>
+                  </button>
                 </div>
+
+                {/* comment button */}
+                <button className="  flex  items-center text-gray-500 hover:text-purple-700 focus:outline-none">
+                  <i class="bi bi-chat-dots text-xl comment-icon"> </i>{" "}
+                  <span className="pl-1"> Comments</span>
+                </button>
+
                 <div>
                   <button
                     onClick={props.jobapplyhandle}
-                    type="submit"
-                    className="border py-1 px-3 rounded-md bg-notification hover:bg-pink-700 text-white"
+                    className="border py-1 px-3 rounded-md bg-notification hover:bg-pink-700 text-white focus:outline-none"
                   >
                     Apply
                   </button>

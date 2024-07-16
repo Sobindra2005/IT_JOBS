@@ -13,7 +13,9 @@ const followingSchema = new mongoose.Schema(
             required:true
     }]
     }
-
+,{
+    timestamps:true
+}
 )
 
 const Following = mongoose.model('Following', followingSchema)
