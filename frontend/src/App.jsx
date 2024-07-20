@@ -36,6 +36,7 @@ function App() {
   const [message, setMessage] = useState(false);
   const [messagebox, setMessagebox] = useState(false);
   const [notification, setNotification] = useState(false);
+  authenticatedUserDetails;
   const [jobpost, setJobpost] = useState(false);
   const [jobapply, setJobapply] = useState(false);
   const [MessageList, setMessageList] = useState([]);
@@ -46,7 +47,9 @@ function App() {
   const [popupmessage, setpopupmessage] = useState("");
   const [showSuccess, setshowSuccess] = useState(false);
   const [showError, setshowError] = useState(false);
+  const [jobAuthorId, setjobAuthorId] = useState("");
 
+  console.log(jobapply);
   const DataAuthenticated = async () => {
     const data = await AuthenticatedUser();
     setAuthenticatedUserDetails(data.data);
@@ -81,8 +84,10 @@ function App() {
     }
   }, [isAuthenticated]);
 
-  const jobapplyhandle = () => {
+  const jobapplyhandle = (AuthorId) => {
     setJobapply(true);
+
+    setjobAuthorId(AuthorId);
   };
 
   const removejobapplyhandle = () => {
@@ -232,8 +237,33 @@ function App() {
                     Notificationhandle={Notificationhandle}
                   />
                   {jobapply && (
-                    <Jobapply removejobapplyhandle={removejobapplyhandle} />
+                    <Jobapply
+                      setshowError={setshowError}
+                      setshowSuccess={setshowSuccess}
+                      setpopupmessage={setpopupmessage}
+                      setshowpopup={setshowpopup}
+                      jobAuthorId={jobAuthorId}
+                      authenticatedUserDetails={authenticatedUserDetails}
+                      removejobapplyhandle={removejobapplyhandle}
+                    />
                   )}
+                  {showSuccess && (
+                  <Success
+                    showpopup={showpopup}
+                    setshowSuccess={setshowSuccess}
+                    setshowpopup={setshowpopup}
+                    popupmessage={popupmessage}
+                  />
+                )}
+                {showError && (
+                  <Error
+                    showpopup={showpopup}
+                    setshowError={setshowError}
+                    setshowpopup={setshowpopup}
+                    popupmessage={popupmessage}
+                  />
+                )}
+                
                   {jobpost && (
                     <Jobposting
                       setshowError={setshowError}
@@ -324,9 +354,9 @@ function App() {
                   )}
                   {notification && <Notifications />}
                   <Profile
-                   setshowSuccess={setshowSuccess}
-                   setpopupmessage={setpopupmessage}
-                   setshowpopup={setshowpopup}
+                    setshowSuccess={setshowSuccess}
+                    setpopupmessage={setpopupmessage}
+                    setshowpopup={setshowpopup}
                     authenticatedUserDetails={authenticatedUserDetails}
                   />
                   {showSuccess && (

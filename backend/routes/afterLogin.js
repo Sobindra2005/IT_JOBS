@@ -4,6 +4,7 @@ const{ messageList,postMsg,startOrGetMsg } =require('../controllers/message/mess
 const { authenticatedUserDetails } = require("../controllers/authenticateduser")
 const {createJob}=require('../controllers/createJob/createJob')
 const { getpost} = require("../controllers/home/home")
+const { jobapply } = require("../controllers/jobapply/jobapply")
 
 router.get('/',)
 router.get('/msg',messageList)
@@ -12,5 +13,5 @@ router.post('/msg/:chatId',postMsg)
 router.get('/authenticated',authenticatedUserDetails)
 router.post('/createJob/:authorId',createJob)
 router.get('/home',getpost)
-
+router.post('/jobapply',jobapply)
 module.exports=router

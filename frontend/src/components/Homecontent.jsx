@@ -37,7 +37,6 @@ function Homecontent(props) {
 
   async function getpost() {
     const response = await Getpost();
-    console.log(response);
     setResponses(response.data);
   }
 
@@ -87,10 +86,10 @@ function Homecontent(props) {
         <div className="border border-b-1 w-11/12 m-auto mt-4 border-gray-400"></div>
 
         {responses.length > 0 ? (
-          responses.map((response) => (
+          responses.map((response,index) => (
           
             <div
-              key={response._id}
+              key={index}
               className="bg-white mb-10 mt-4 Job-list-section flex-1 h-auto w-post-width m-auto rounded-3xl flex flex-col p-4 border border-t-purple-200 shadow-xl"
             >
               {/* jobList top section */}
@@ -197,13 +196,13 @@ function Homecontent(props) {
 
                 {/* comment button */}
                 <button className="  flex  items-center text-gray-500 hover:text-purple-700 focus:outline-none">
-                  <i class="bi bi-chat-dots text-xl comment-icon"> </i>{" "}
+                  <i className="bi bi-chat-dots text-xl comment-icon"> </i>{" "}
                   <span className="pl-1"> Comments</span>
                 </button>
 
                 <div>
                   <button
-                    onClick={props.jobapplyhandle}
+                    onClick={()=> props.jobapplyhandle(response.AuthorId)}
                     className="border py-1 px-3 rounded-md bg-notification hover:bg-pink-700 text-white focus:outline-none"
                   >
                     Apply

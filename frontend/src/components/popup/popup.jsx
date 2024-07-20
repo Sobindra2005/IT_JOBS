@@ -9,12 +9,12 @@ export const Success =(props)=>{
              props.setshowpopup(false)
              props.setshowSuccess(false)
 
-            },9000)
+            },7000)
         }
     }
     return (
         <div
-          className={` z-999 fixed bottom-4 right-4 bg-green-600 text-white text-lg py-1 px-4   flex items-center `}
+          className={` animate-popup z-999 fixed bottom-4 right-4 bg-yellow-400 text-white text-lg py-1 px-4   flex items-center `}
         >
           <i className="bi bi-check-circle-fill mr-2"></i>
           <span>{`${props.popupmessage}`}</span>
@@ -31,7 +31,7 @@ export const Success =(props)=>{
                  props.setshowpopup(false)
                  props.setshowError(false)
     
-                },9000)
+                },7000)
             }
         }
         return (

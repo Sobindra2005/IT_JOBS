@@ -1,6 +1,17 @@
 const mongoose = require('mongoose')
 
 const apllicantschema = new mongoose.Schema({
+    applicantId:{
+        type:mongoose.Schema.Types.ObjectId,
+        required:true,
+        trim:true
+    }
+    ,
+    recruiterId:{
+        type:mongoose.Schema.Types.ObjectId,
+        required:true,
+        trim:true
+    },
     firstName: {
         type: String,
         required: true,
