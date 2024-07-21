@@ -1,49 +1,96 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { Success, Error } from "./popup/popup";
 import { Getpost } from "../api/home";
+import {useNavigate} from 'react-router-dom'
 
 function Homecontent(props) {
   const [responses, setResponses] = useState([]);
   const [expandedPosts, setExpandedPosts] = useState({});
+  const [like, setlike] = useState([]);
+  const [dislike, setdislike] = useState([]);
+  const navigate= useNavigate()
+
+  const getCurrentTime = useCallback(() => {
+    const now = new Date();
+    const hours = now.getHours();
+    const seconds = now.getSeconds();
+    return { hours, seconds };
+  }, []);
+
+
 
   const timeCalculate = (timestamps) => {
     const now = new Date();
     const upload = new Date(timestamps);
     const diff = now - upload;
-    
     const second = Math.floor(diff / 1000);
     const minute = Math.floor(second / 60);
     const hour = Math.floor(minute / 60);
     const day = Math.floor(hour / 24);
 
     if (day > 0) {
-      const msg=`${day} days ago`
-      return msg
+      const msg = `${day} days ago`;
+      return msg;
     }
     if (day < 1 && hour > 0) {
-      const msg=`${hour} hours ago`
-     return msg
+      const msg = `${hour} hours ago`;
+      return msg;
     }
     if (day < 1 && hour < 1 && minute > 0) {
-      const msg=`${minute} minutes ago`
-      return msg
+      const msg = `${minute} minutes ago`;
+      return msg;
     }
     if (day < 1 && hour < 1 && minute < 1 && second > 1) {
-      const msg=`${second} seconds ago`
-      return msg
+      const msg = `${second} seconds ago`;
+      return msg;
     }
   };
 
+
+
   async function getpost() {
     const response = await Getpost();
+    console.log("hello world");
     setResponses(response.data);
+  }
+
+  const handleLike = (id) => {
+    setlike((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id],
+    }));
+    setdislike((prevState) => ({
+      ...prevState,
+      [id]: false,
+    }));
+  };
+
+  function handledislike(id) {
+    setdislike((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id],
+    }));
+    setlike((prevState) => ({
+      ...prevState,
+      [id]: false,
+    }));
   }
 
   useEffect(() => {
     getpost();
-    timeCalculate()
+
   }, []);
+
+  useEffect(() => {
+
+    const interval = setInterval(() => {
+      timeCalculate()
+      getCurrentTime
+    }, 1000); 
+
+    return () => clearInterval(interval); 
+  }, [getCurrentTime]);
 
   const toggleContent = (id) => {
     setExpandedPosts((prevState) => ({
@@ -51,6 +98,11 @@ function Homecontent(props) {
       [id]: !prevState[id],
     }));
   };
+
+
+  const commentHandle=(post)=>{
+   props.commenthandle(post)
+  }
 
   return (
     <>
@@ -86,8 +138,7 @@ function Homecontent(props) {
         <div className="border border-b-1 w-11/12 m-auto mt-4 border-gray-400"></div>
 
         {responses.length > 0 ? (
-          responses.map((response,index) => (
-          
+          responses.map((response, index) => (
             <div
               key={index}
               className="bg-white mb-10 mt-4 Job-list-section flex-1 h-auto w-post-width m-auto rounded-3xl flex flex-col p-4 border border-t-purple-200 shadow-xl"
@@ -112,7 +163,7 @@ function Homecontent(props) {
                         : "Unknown User"}
                     </p>
                     <p className="text-xs text-left text-gray-500 font-medium">
-                    {`${timeCalculate(response?.createdAt)}`}
+                      {`${timeCalculate(response?.createdAt)}`}
                     </p>
                   </div>
                 </div>
@@ -180,29 +231,53 @@ function Homecontent(props) {
 
               {/* joblist apply and react section */}
               <div className="p-1 border-t border-gray-400 flex items-center justify-between">
-                <div className="flex items-center space-x-6 text-lg">
+                <div className="flex w-2/4 items-center space-x-6 text-lg">
                   {/* Like Button */}
-                  <button className="flex items-center text-gray-500 hover:text-purple-700 focus:outline-none">
-                    <i className="fas fa-thumbs-up mr-1"></i>
-                    <span>{response.likes} Likes</span>
+                  <button
+                    onClick={() => handleLike(response._id)}
+                    className={`w-5/11  flex items-center ${
+                      like[response._id] ? `text-gray-800` : `text-gray-500 `
+                    }  focus:outline-none`}
+                  >
+                    <i
+                      className={`fas fa-thumbs-up ${
+                        like[response._id] ? "scale-125  " : ""
+                      } mr-1.5`}
+                    ></i>
+                    <span className={` ${like[response._id] ? " text-gray-800" : ""}
+                      } mr-1.5`}>{response.likes} Likes</span>
                   </button>
 
                   {/* Dislike Button */}
-                  <button className="flex items-center text-gray-500 hover:text-purple-700 focus:outline-none">
-                    <i className="fas fa-thumbs-down mr-1"></i>
-                    <span>{response.dislikes} Dislikes</span>
+                  <button
+                    onClick={() => handledislike(response._id)}
+                    className={` w-5/11 flex items-center ${
+                      dislike[response._id]
+                        ? `text-gray-800`
+                        : `text-gray-500 `
+                    }  focus:outline-none`}
+                  >
+                    <i
+                      className={`fas fa-thumbs-down ${
+                        dislike[response._id] ? "scale-125  " : ""
+                      } mr-1.5`}
+                    ></i>
+                    <span className={` ${dislike[response._id] ? " text-gray-800" : ""}
+                      } mr-1.5`}>{response.dislikes} Dislikes</span>
                   </button>
                 </div>
 
                 {/* comment button */}
-                <button className="  flex  items-center text-gray-500 hover:text-purple-700 focus:outline-none">
+                <button onClick={()=> commentHandle(response)} className=" w-1/4 flex  items-center text-gray-500 hover:text-gray-800 focus:outline-none">
                   <i className="bi bi-chat-dots text-xl comment-icon"> </i>{" "}
                   <span className="pl-1"> Comments</span>
                 </button>
 
-                <div>
+                <div className="w-1/4 ">
                   <button
-                    onClick={()=> props.jobapplyhandle(response.AuthorId)}
+                    onClick={() => {
+                      props.jobapplyhandle(response.AuthorId);
+                    }}
                     className="border py-1 px-3 rounded-md bg-notification hover:bg-pink-700 text-white focus:outline-none"
                   >
                     Apply

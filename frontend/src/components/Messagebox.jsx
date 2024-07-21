@@ -1,23 +1,25 @@
 import "../css/styles.css";
-import React , {useState, useEffect ,useRef} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { postMessage, getorcreateMsg } from "../api/messageHanlde";
 
-const Messagebox=(props) => {
+const Messagebox = (props) => {
   const [message, setMessage] = useState("");
-  const [allmessage, setallmessage] = useState('');
-  const ScrollRef=useRef(null)
+  const [allmessage, setallmessage] = useState("");
+  const ScrollRef = useRef(null);
 
   const sendMessage = async () => {
-    const responseSendMsg = await postMessage(
-      props.authenticatedUserDetails._id,
-      props.selectUserMsg._id,
-      props.chatId,
-      `${message}`
-    );
-    props.updateMsg(responseSendMsg.data.allMessage);
-    setMessage("");
-    props.sendMessage(props.chatId);
+    if (!!message) {
+      const responseSendMsg = await postMessage(
+        props.authenticatedUserDetails._id,
+        props.selectUserMsg._id,
+        props.chatId,
+        `${message}`
+      );
+      props.updateMsg(responseSendMsg.data.allMessage);
+      setMessage("");
+      props.sendMessage(props.chatId);
+    }
   };
 
   async function getMsg() {
@@ -25,16 +27,15 @@ const Messagebox=(props) => {
       props.authenticatedUserDetails._id,
       props.selectUserMsg._id
     );
-  return response
+    return response;
   }
 
   useEffect(() => {
-    getMsg
+    getMsg;
 
-    if(ScrollRef.current){
-      ScrollRef.current.scrollTop=ScrollRef.current.scrollHeight
+    if (ScrollRef.current) {
+      ScrollRef.current.scrollTop = ScrollRef.current.scrollHeight;
     }
-
   }, [props.allmsg.length]);
 
   return (
@@ -69,7 +70,10 @@ const Messagebox=(props) => {
         </div>
 
         {/* text message component */}
-        <div className="overflow-y-auto w-full text-gray-900 h-72 p-2 flex flex-col space-y-1" ref={ScrollRef}>
+        <div
+          className="overflow-y-auto w-full text-gray-900 h-72 p-2 flex flex-col space-y-1"
+          ref={ScrollRef}
+        >
           {props.allmsg.map((msg) => (
             <div
               key={msg._id}
@@ -99,12 +103,12 @@ const Messagebox=(props) => {
 
           <i
             onClick={sendMessage}
-            className="bi bi-caret-right-fill flex items-center text-2xl ml-2 text-violet-900"
+            className="bi bi-send flex items-center text-lg rotate-45 ml-2 "
           ></i>
         </div>
       </div>
     </>
   );
-}
+};
 
 export default Messagebox;

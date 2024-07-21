@@ -128,7 +128,7 @@ function Jobapply(props) {
                   spellCheck="false"
                   value={phonenumber}
                   onChange={(e) => setphonenumber(e.target.value)}
-                  type="text"
+                  type="tel"
                   id="phone"
                   placeholder="phone*"
                   className=" h-7 w-full  outline-none rounded-l-lg px-1text-xl text-gray-600"

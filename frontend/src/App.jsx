@@ -22,6 +22,7 @@ import Jobapply from "./components/job-apply/jobapply.jsx";
 import { messageList } from "./api/messageHanlde.js";
 import AuthenticatedUser from "./api/authenticatedUserDetails.js";
 import { Success, Error } from "./components/popup/popup.jsx";
+import Comment from "./components/comment /comment.jsx";
 
 axios.defaults.timeout = 10000;
 
@@ -36,7 +37,7 @@ function App() {
   const [message, setMessage] = useState(false);
   const [messagebox, setMessagebox] = useState(false);
   const [notification, setNotification] = useState(false);
-  authenticatedUserDetails;
+
   const [jobpost, setJobpost] = useState(false);
   const [jobapply, setJobapply] = useState(false);
   const [MessageList, setMessageList] = useState([]);
@@ -48,8 +49,10 @@ function App() {
   const [showSuccess, setshowSuccess] = useState(false);
   const [showError, setshowError] = useState(false);
   const [jobAuthorId, setjobAuthorId] = useState("");
+  const [comment, setcomment] = useState(false);
+  const [commentPost, setcommentPost] = useState([]);
 
-  console.log(jobapply);
+
   const DataAuthenticated = async () => {
     const data = await AuthenticatedUser();
     setAuthenticatedUserDetails(data.data);
@@ -86,7 +89,6 @@ function App() {
 
   const jobapplyhandle = (AuthorId) => {
     setJobapply(true);
-
     setjobAuthorId(AuthorId);
   };
 
@@ -138,6 +140,11 @@ function App() {
 
   const Notificationhandle = () => {
     setNotification(!notification);
+  };
+
+  const commenthandle = (responce) => {
+    setcomment(true);
+    setcommentPost(responce)
   };
 
   return (
@@ -206,6 +213,7 @@ function App() {
                   setpopupmessage={setpopupmessage}
                   setshowpopup={setshowpopup}
                 />
+
                 {showSuccess && (
                   <Success
                     showpopup={showpopup}
@@ -236,6 +244,15 @@ function App() {
                     Messagehandle={Messagehandle}
                     Notificationhandle={Notificationhandle}
                   />
+                  {comment && (
+                    <Comment
+                      jobapplyhandle={jobapplyhandle}
+                      showJobposthandle={showJobposthandle}
+                      authenticatedUserDetails={authenticatedUserDetails}
+                      setcomment={setcomment}
+                      commentPost={commentPost}
+                    />
+                  )}
                   {jobapply && (
                     <Jobapply
                       setshowError={setshowError}
@@ -248,22 +265,22 @@ function App() {
                     />
                   )}
                   {showSuccess && (
-                  <Success
-                    showpopup={showpopup}
-                    setshowSuccess={setshowSuccess}
-                    setshowpopup={setshowpopup}
-                    popupmessage={popupmessage}
-                  />
-                )}
-                {showError && (
-                  <Error
-                    showpopup={showpopup}
-                    setshowError={setshowError}
-                    setshowpopup={setshowpopup}
-                    popupmessage={popupmessage}
-                  />
-                )}
-                
+                    <Success
+                      showpopup={showpopup}
+                      setshowSuccess={setshowSuccess}
+                      setshowpopup={setshowpopup}
+                      popupmessage={popupmessage}
+                    />
+                  )}
+                  {showError && (
+                    <Error
+                      showpopup={showpopup}
+                      setshowError={setshowError}
+                      setshowpopup={setshowpopup}
+                      popupmessage={popupmessage}
+                    />
+                  )}
+
                   {jobpost && (
                     <Jobposting
                       setshowError={setshowError}
@@ -296,6 +313,7 @@ function App() {
                   )}
                   {notification && <Notifications />}
                   <Homecontent
+                    commenthandle={commenthandle}
                     authenticatedUserDetails={authenticatedUserDetails}
                     jobapplyhandle={jobapplyhandle}
                     showJobposthandle={showJobposthandle}
@@ -322,6 +340,7 @@ function App() {
             />
           }
         />
+
         <Route
           path="/profile"
           element={
