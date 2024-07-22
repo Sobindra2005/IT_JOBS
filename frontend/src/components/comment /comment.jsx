@@ -3,6 +3,10 @@ import axios from "axios";
 import { Success, Error } from "../popup/popup";
 import { Getpost } from "../../api/home";
 import { useNavigate } from "react-router-dom";
+import { postComment } from "../../api/comment";
+import { socket } from "../../socket";
+import { timeCalculate } from "../functions/function";
+import { GetUserById } from "../../api/getuser";
 
 function Comment(props) {
   const [like, setLike] = useState([]);
@@ -10,13 +14,35 @@ function Comment(props) {
   const [commentLike, setCommentLike] = useState([]);
   const [commentDislike, setCommentDislike] = useState([]);
   const [comment, setComment] = useState("");
+  const [allcomment, setallcomment] = useState([]);
   const textareaRef = useRef(null);
   const navigate = useNavigate();
 
   const backhandle = () => {
-   props.setcomment(false)
+    props.setcomment(false);
   };
 
+  const getuser = async (id) => {
+    console.log(id);
+    const getUserresponce = await GetUserById(id);
+
+    return getUserresponce.data
+  };
+
+  const postcomment = async (id) => {
+    if (!!comment) {
+      const responce = await postComment(
+        id,
+        comment,
+        props.authenticatedUserDetails._id
+      );
+      socket.emit("send comment", {
+        postId: props.commentPost._id,
+        userId: props.authenticatedUserDetails._id,
+      });
+      setComment("");
+    }
+  };
   const getCurrentTime = useCallback(() => {
     const now = new Date();
     const hours = now.getHours();
@@ -27,23 +53,7 @@ function Comment(props) {
   const handleInput = () => {
     const textarea = textareaRef.current;
     textarea.style.height = "auto";
-
     textarea.style.height = `${textarea.scrollHeight}px`;
-  };
-
-  const timeCalculate = (timestamps) => {
-    const now = new Date();
-    const upload = new Date(timestamps);
-    const diff = now - upload;
-    const second = Math.floor(diff / 1000);
-    const minute = Math.floor(second / 60);
-    const hour = Math.floor(minute / 60);
-    const day = Math.floor(hour / 24);
-
-    if (day > 0) return `${day} days ago`;
-    if (hour > 0) return `${hour} hours ago`;
-    if (minute > 0) return `${minute} minutes ago`;
-    return `${second} seconds ago`;
   };
 
   const handleCommentLike = (id) => {
@@ -90,9 +100,33 @@ function Comment(props) {
     }));
   };
 
+// const fetchuserName= ()=>{
+//     const username=allcomment.map(async(comment)=>{
+//       const name= await getuser(comment.userId)
+
+//     })
+//   }
+
   useEffect(() => {
-    handleInput(); // Auto-resize on component mount
-  }, [comment]);
+    socket.emit("send comment", {
+      postId: props.commentPost._id,
+      userId: props.authenticatedUserDetails._id,
+    });
+    socket.emit("join comment", props.commentPost._id);
+
+    socket.on("receive comment", async(data) => {
+    setallcomment(data);
+      
+    });
+   
+
+    return () => {
+      socket.off("receive comment");
+    };
+     
+
+
+  }, [props.commentPost._id]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -102,15 +136,19 @@ function Comment(props) {
     return () => clearInterval(interval);
   }, [getCurrentTime]);
 
+  useEffect(() => {
+    handleInput();
+  }, [comment]);
+
   return (
     <>
-   
-      <section className="  fixed border border-black w-[100%] bg-gray-400 m-auto  mt-2 text-center h-auto  pt-16">
-        <div className=" overflow-y-auto overflow-x-hidden  bg-white mb-10 mt-1 Job-list-section flex-1 h-[82vh] w-[40%] m-auto flex flex-col px-4 border border-t-purple-200 shadow-xl">
+      <section className="  fixed border  w-[100%] bg-gray-400 m-auto  mt-2 text-center h-auto  pt-16">
+        <div className="   overflow-y-auto overflow-x-hidden  bg-white mb-10 mt-1 Job-list-section flex-1 h-[82vh] w-[40%] m-auto flex flex-col px-4 border border-t-purple-200 shadow-xl">
           <div className="sticky top-0 mb-4 pb-1 py-1 flex justify-end w-full bg-white">
-            <div className="flex w-[66.66%] justify-between cursor-pointer">
-              <span className="font-semibold text-gray-800 text-lg">
-                {props.commentPost.firstName} {props.commentPost.lastName}'s post
+            <div className="flex w-screen  justify-between items-center cursor-pointer">
+              <span className="  relative text-black text-xl flex-1 text-center">
+                {props.commentPost.firstName} {props.commentPost.lastName}'s
+                post
               </span>
               <i
                 onClick={() => backhandle()}
@@ -125,15 +163,17 @@ function Comment(props) {
               <img
                 className="h-11 w-11 flex-none rounded-full object-cover object-center"
                 src={
-               props.commentPost.AuthorImgSrc
-                    ? `${  props.commentPost.AuthorImgSrc}`
+                  props.commentPost.AuthorImgSrc
+                    ? `${props.commentPost.AuthorImgSrc}`
                     : "https://cdn.vectorstock.com/i/500p/16/05/male-avatar-profile-picture-silhouette-light-vector-5351605.jpg"
                 }
                 alt=""
               />
               <div className="flex flex-col pl-3 cursor-pointer">
                 <p className="text-base font-medium">
-                  { props.commentPost.firstName || props.commentPost.lastName  ? `${props.commentPost.firstName} ${props.commentPost.lastName} ` : "Unknown User"}
+                  {props.commentPost.firstName || props.commentPost.lastName
+                    ? `${props.commentPost.firstName} ${props.commentPost.lastName} `
+                    : "Unknown User"}
                 </p>
                 <p className="text-xs text-left text-gray-500 font-medium">
                   {`${timeCalculate(props.commentPost?.createdAt)}`}
@@ -162,20 +202,24 @@ function Comment(props) {
             >
               <p
                 className={`text-base text-gray-900 ${
-                  expandedPosts[props.commentPost._id] ? "hidden" : "block line-clamp-2"
+                  expandedPosts[props.commentPost._id]
+                    ? "hidden"
+                    : "block line-clamp-2"
                 }`}
               >
                 <b>Job Title:</b> {props.commentPost.jobTitle} <br />
                 <b>Company Name:</b> {props.commentPost.companyName} <br />
                 <b>Salary:</b> {props.commentPost.salary} <br />
-                <b>Employment Type:</b> {props.commentPost.employmentType} <br />
+                <b>Employment Type:</b> {props.commentPost.employmentType}{" "}
+                <br />
                 <b>Location:</b> {props.commentPost.location} <br />
               </p>
               <p className="text-base text-gray-900 block">
                 <b>Job Title:</b> {props.commentPost.jobTitle} <br />
                 <b>Company Name:</b> {props.commentPost.companyName} <br />
                 <b>Salary:</b> {props.commentPost.salary} <br />
-                <b>Employment Type:</b> {props.commentPost.employmentType} <br />
+                <b>Employment Type:</b> {props.commentPost.employmentType}{" "}
+                <br />
                 <b>Location:</b> {props.commentPost.location} <br />
               </p>
             </div>
@@ -185,7 +229,8 @@ function Comment(props) {
                 <b>Job Title:</b> {props.commentPost.jobTitle} <br />
                 <b>Company Name:</b> {props.commentPost.companyName} <br />
                 <b>Salary:</b> {props.commentPost.salary} <br />
-                <b>Employment Type:</b> {props.commentPost.employmentType} <br />
+                <b>Employment Type:</b> {props.commentPost.employmentType}{" "}
+                <br />
                 <b>Location:</b> {props.commentPost.location} <br />
               </p>
             </div>
@@ -193,52 +238,68 @@ function Comment(props) {
 
           {/* Joblist Apply and React Section */}
           <div className="p-1 border-y border-gray-500 flex items-center justify-between">
-            <div className="flex w-3/4 items-center text-lg">
+            <div className="flex w-1/4 justify-between items-center text-lg">
               {/* Like Button */}
               <button
                 onClick={() => handleLike(props.commentPost._id)}
-                className={`w-2/5 flex items-center ${
-                  like[props.commentPost._id] ? "text-gray-800" : "text-gray-500"
+                className={` rounded-xl ${
+                  like[props.commentPost._id] ? "scale-110" : ""
+                }  justify-center px-2 py-1 shadow-sm shadow-slate-600 pl-3 flex items-center ${
+                  like[props.commentPost._id]
+                    ? "text-gray-800"
+                    : "text-gray-500"
                 } focus:outline-none`}
               >
                 <i
                   className={`fas fa-thumbs-up ${
-                    like[props.commentPost._id] ? "scale-125" : ""
+                    like[props.commentPost._id] ? "scale-110" : ""
                   } mr-1.5`}
                 ></i>
-                <span className={`${like[props.commentPost._id] ? "text-gray-800" : ""}`}>
-                  Likes
+                <span
+                  className={`${
+                    like[props.commentPost._id] ? "text-gray-800" : ""
+                  }`}
+                >
+         
                 </span>
               </button>
 
               {/* Dislike Button */}
               <button
                 onClick={() => handleDislike(props.commentPost._id)}
-                className={`w-2/5 flex items-center ${
-                  dislike[props.commentPost._id] ? "text-gray-800" : "text-gray-500"
+                className={`rounded-xl ${
+                  dislike[props.commentPost._id] ? "scale-110" : ""
+                } justify-center px-2 py-1 shadow-sm shadow-slate-600 w-2/5 flex items-center ${
+                  dislike[props.commentPost._id]
+                    ? "text-gray-800"
+                    : "text-gray-500"
                 } focus:outline-none`}
               >
                 <i
                   className={`fas fa-thumbs-down ${
-                    dislike[props.commentPost._id] ? "scale-125" : ""
+                    dislike[props.commentPost._id] ? "scale-110" : ""
                   } mr-1.5`}
                 ></i>
-                <span className={`${dislike[props.commentPost._id] ? "text-gray-800" : ""}`}>
-                  Dislikes
+                <span
+                  className={`${
+                    dislike[props.commentPost._id] ? "text-gray-800" : ""
+                  }`}
+                >
+                 
                 </span>
               </button>
             </div>
 
             {/* Comment Button */}
-            <button className="w-2/5 flex text-gray-800 mr-2 items-center focus:outline-none">
-              <i className="bi bi-chat-dots-fill scale-125 text-xl comment-icon"></i>
-              <span className="pl-1 text-gray-800">Comments</span>
+            <button className="rounded-xl justify-center px-2 py-1 shadow-sm shadow-slate-600 w-2/5 flex text-gray-800 mr-2 items-center focus:outline-none">
+              <i className="bi bi-chat-dots-fill scale-110 text-xl comment-icon"></i>
+              <span className="pl-1 text-gray-800"></span>
             </button>
 
             <div className="w-1/4">
               <button
                 onClick={() => props.jobapplyhandle(props.commentPost.AuthorId)}
-                className="border py-1 px-3 rounded-md bg-notification hover:bg-blue-900 text-white focus:outline-none"
+                className="rounded-xl justify-center px-2 py-1 shadow-sm text-gray-700 shadow-gray-500 font-semibold focus:outline-none"
               >
                 Apply
               </button>
@@ -246,48 +307,54 @@ function Comment(props) {
           </div>
 
           {/* Comment Section */}
-          <div className="flex flex-col items-start w-full">
-            <div className="flex h-auto py-4 max-w-[80%]">
-              <img
-                className="h-11 w-11 flex-none rounded-full object-cover object-center"
-                src="https://cdn.vectorstock.com/i/500p/16/05/male-avatar-profile-picture-silhouette-light-vector-5351605.jpg"
-                alt="Avatar"
-              />
-              <div className="flex leading-none flex-col text-left">
-                <div className="w-full border border-gray-300 rounded-xl pl-1.5 py-2 leading-tight text-gray-800 text-left ml-2">
-                  <h2 className="font-semibold text-gray-900">John Doe</h2>
-                  hlo Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  Eum ducimus corrupti amet officia, odit nam minima assumenda
-                  veritatis molestias fuga.
-                </div>
-                <div className="p-1 ml-2 flex justify-between w-[60%]">
-                  <span
-                    onClick={() => handleCommentLike(4545)}
-                    className={`cursor-pointer ${
-                      commentLike[4545]
-                        ? "bi bi-hand-thumbs-up-fill"
-                        : "bi bi-hand-thumbs-up"
-                    } text-sm`}
-                  >
-                    Like
-                  </span>
-                  <span
-                    onClick={() => handleCommentDislike(4545)}
-                    className={`cursor-pointer ${
-                      commentDislike[4545]
-                        ? "bi bi-hand-thumbs-down-fill"
-                        : "bi bi-hand-thumbs-down"
-                    } text-sm`}
-                  >
-                    Dislike
-                  </span>
-                  <span className="cursor-pointer text-sm">Reply</span>
+          {allcomment.length > 0 ? (
+            allcomment.map((newcomment) => (
+              <div className="flex flex-col items-start w-full">
+                <div className="flex h-auto py-4 max-w-[80%]">
+                  <img
+                    className="h-11 w-11 flex-none rounded-full object-cover object-center"
+                    src="https://cdn.vectorstock.com/i/500p/16/05/male-avatar-profile-picture-silhouette-light-vector-5351605.jpg"
+                    alt="Avatar"
+                  />
+                  <div className="flex leading-none flex-col text-left">
+                    <div className="w-full border leading-none border-gray-300 rounded-xl pl-4 px-4 py-2  text-gray-800 text-left ml-2">
+                      <h2 className=" text-base text-black ">
+                        <span className="normal-case bi bi-dot text-sm text-gray-400">
+                          {timeCalculate(newcomment.createdAt)}
+                        </span>
+                      </h2>
+                      <span className="text-gray-700 ">
+                        {newcomment.comment}
+                      </span>
+                    </div>
+                    <div className="p-1 ml-2 flex justify-between w-[full]">
+                      <span
+                        onClick={() => handleCommentLike(newcomment._id)}
+                        className={`cursor-pointer ${
+                          commentLike[newcomment._id]
+                            ? "bi bi-hand-thumbs-up-fill"
+                            : "bi bi-hand-thumbs-up"
+                        } text-sm`}
+                      ></span>
+                      <span
+                        onClick={() => handleCommentDislike(newcomment._id)}
+                        className={`cursor-pointer ${
+                          commentDislike[newcomment._id]
+                            ? "bi bi-hand-thumbs-down-fill"
+                            : "bi bi-hand-thumbs-down"
+                        } text-sm`}
+                      ></span>
+                      <span className="cursor-pointer text-sm">Reply</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
+            ))
+          ) : (
+            <div className="text-gray-700 my-14 "> No comments to show </div>
+          )}
 
-          <div className="flex w-full sticky bottom-0 h-auto">
+          <div className="flex w-full sticky bottom-0  h-auto border ">
             <textarea
               type="text"
               value={comment}
@@ -299,10 +366,12 @@ function Comment(props) {
               id="comment"
               ref={textareaRef}
             />
-            <i className="bi bi-send-fill rotate-45 flex items-center cursor-pointer ml-2"></i>
+            <i
+              onClick={() => postcomment(props.commentPost._id)}
+              className="bi bi-send-fill rotate-45 flex items-center cursor-pointer ml-2"
+            ></i>
           </div>
         </div>
-       
       </section>
     </>
   );

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import axios from "axios";
-import io from "socket.io-client";
 
 import Searchcontent from "./components/Searchcontent.jsx";
 import Blheader from "./components/blHeader.jsx";
@@ -23,10 +22,9 @@ import { messageList } from "./api/messageHanlde.js";
 import AuthenticatedUser from "./api/authenticatedUserDetails.js";
 import { Success, Error } from "./components/popup/popup.jsx";
 import Comment from "./components/comment /comment.jsx";
+import { socket } from "./socket.js";
 
 axios.defaults.timeout = 10000;
-
-let socket;
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -62,10 +60,7 @@ function App() {
     DataAuthenticated();
 
     if (isAuthenticated) {
-      console.log("Establishing socket connection...");
-      socket = io("http://localhost:4000", {
-        withCredentials: true,
-      });
+ 
       socket.on("connect", () => {
         console.log("Socket connected:", socket.id);
       });
@@ -78,12 +73,6 @@ function App() {
       socket.on("disconnect", () => {
         console.log("Socket disconnected:", socket.id);
       });
-
-      return () => {
-        console.log("Cleaning up socket listeners and disconnecting...");
-        socket.off("message received");
-        socket.disconnect();
-      };
     }
   }, [isAuthenticated]);
 

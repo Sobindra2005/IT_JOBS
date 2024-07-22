@@ -102,10 +102,19 @@ const createJobSchema = new mongoose.Schema(
         additionalInformation: {
             type: String,
             trim: true
-        }
-    },{
-        timestamps:true
-    }
+        },
+        likes: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        }],
+
+        dislikes: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        }],
+    }, {
+    timestamps: true
+}
 )
 
 const Jobs = mongoose.model('Jobs', createJobSchema)

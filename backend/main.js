@@ -9,8 +9,8 @@ const path = require('path');
 require('dotenv').config();
 const cors = require('cors');
 const { Server } = require('socket.io');
-const {Message} = require('./models/message');
-
+const { Message } = require('./models/message');
+const { Comment } = require('./models/comment.js')
 const app = express();
 const server = http.createServer(app);
 
@@ -18,7 +18,7 @@ const port = 4000;
 
 const url = process.env.mongourl;
 
-server.listen(port,(req, res) => {
+server.listen(port, (req, res) => {
   console.log(`server is connected at port: ${port}`);
 });
 
@@ -41,13 +41,34 @@ const io = new Server(server, {
   }
 });
 io.on('connection', (socket) => {
-    console.log(`socket ${socket.id} is connected !!!`);
+
+  console.log(`socket ${socket.id} is connected !!!`);
+
   socket.on("join chat", (room) => {
     console.log("Join chat room:", room);
     if (room) {
       socket.join(room);
     }
-  });
+  }
+  );
+
+  socket.on('join comment', (id) => {
+    console.log('joined comment room:', id);
+    if (id) {
+      socket.join(id)
+    }
+  })
+
+  socket.on('send comment',async (data) => {
+    try {
+      const allcomments= await  Comment.find({postId:data.postId}).sort({ createdAt: -1 });
+      io.to(data.postId).emit('receive comment',allcomments);
+    }
+    catch (err) {
+      console.log('error ', err)
+    }
+  })
+
 
   socket.on("send message", async (chatId) => {
     try {
