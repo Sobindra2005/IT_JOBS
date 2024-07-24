@@ -21,7 +21,7 @@ router.post('/jobapply', jobapply)
 router.patch('/adddislike/:postId', addDisLike)
 router.patch('/addlike/:postId', addlike)
 router.delete('/removedislike/:postId', removeDisLike)
-router.delete('/removelike/:postId', removeDisLike)
+router.delete('/removelike/:postId', removelike)
 router.post('/comment/:postId', postComment)
 
 module.exports = router

@@ -2,17 +2,23 @@ import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { Success, Error } from "./popup/popup";
 import { Getpost } from "../api/home";
-import {useNavigate} from 'react-router-dom'
-import {timeCalculate} from './functions/function'
-
+import { useNavigate } from "react-router-dom";
+import { timeCalculate } from "./functions/function";
+import { socket } from "../socket";
+import {
+  Addlike,
+  Removelike,
+  AddDislike,
+  removeDislike,
+} from "../api/likeandDislike";
 
 function Homecontent(props) {
   const [responses, setResponses] = useState([]);
   const [expandedPosts, setExpandedPosts] = useState({});
   const [like, setlike] = useState([]);
   const [dislike, setdislike] = useState([]);
-  const navigate= useNavigate()
-
+  const navigate = useNavigate();
+console.log(responses)
   const getCurrentTime = useCallback(() => {
     const now = new Date();
     const hours = now.getHours();
@@ -20,48 +26,130 @@ function Homecontent(props) {
     return { hours, seconds };
   }, []);
 
+  const addlike = async (postId) => {
+    const responce = await Addlike(postId, props.authenticatedUserDetails._id);
+  };
+
+  const removelike = async (postId) => {
+    const responce = await Removelike(
+      postId,
+      props.authenticatedUserDetails._id
+    );
+  };
+
+  const addDislike = async (postId) => {
+    const responce = await AddDislike(
+      postId,
+      props.authenticatedUserDetails._id
+    );
+
+    
+  };
+
+  const removedislike = async (postId) => {
+    const responce = await removeDislike(
+      postId,
+      props.authenticatedUserDetails._id
+    );
+   
+  };
 
   async function getpost() {
     const response = await Getpost();
-    console.log("hello world");
     setResponses(response.data);
   }
 
   const handleLike = (id) => {
-    setlike((prevState) => ({
-      ...prevState,
-      [id]: !prevState[id],
-    }));
-    setdislike((prevState) => ({
-      ...prevState,
-      [id]: false,
-    }));
+    setlike((prevState) => {
+      const isLiked = !prevState[id];
+
+      if (isLiked) {
+       
+        addlike(id);
+        removedislike(id);
+
+        setdislike((prevState) => {
+          const updatedDislike = {
+            ...prevState,
+            [id]: false,
+          };
+          return updatedDislike;
+        });
+
+        const updatedLike = {
+          ...prevState,
+          [id]: true,
+        };
+
+        return updatedLike;
+      } else {
+        
+        removelike(id);
+        const updatedLike = {
+          ...prevState,
+          [id]: false,
+        };
+
+        return updatedLike;
+      }
+    });
   };
 
   function handledislike(id) {
-    setdislike((prevState) => ({
-      ...prevState,
-      [id]: !prevState[id],
-    }));
-    setlike((prevState) => ({
-      ...prevState,
-      [id]: false,
-    }));
+    setdislike((prevState) => {
+      const isdisLiked = !prevState[id];
+
+      if (isdisLiked) {
+        addDislike(id);
+        removelike(id);
+    
+        setlike((prevState) => {
+          const updatedlike = {
+            ...prevState,
+            [id]: false,
+          };
+          return updatedlike;
+        });
+
+        const updatedisLike = {
+          ...prevState,
+          [id]: true,
+        };
+
+        return updatedisLike;
+      } else {
+      
+        removedislike(id);
+        const updatedisLike = {
+          ...prevState,
+          [id]: false,
+        };
+        return updatedisLike;
+      }
+    });
   }
 
   useEffect(() => {
     getpost();
 
+    socket.on("post data", (updatedpost) => {
+     setResponses(prevPost =>
+     prevPost.map(post=>
+     post._id == updatedpost._id ? updatedpost : post
+     )
+     )
+    });
+
+
   }, []);
 
   useEffect(() => {
-
     const interval = setInterval(() => {
-      timeCalculate()
-      getCurrentTime
-    }, 1000); 
+      timeCalculate();
+      getCurrentTime;
+    }, 1000);
 
-    return () => clearInterval(interval); 
+    return () => clearInterval(interval);
   }, [getCurrentTime]);
 
   const toggleContent = (id) => {
@@ -71,10 +159,9 @@ function Homecontent(props) {
     }));
   };
 
-
-  const commentHandle=(post)=>{
-   props.commenthandle(post)
-  }
+  const commentHandle = (post) => {
+    props.commenthandle(post);
+  };
 
   return (
     <>
@@ -140,8 +227,8 @@ function Homecontent(props) {
                   </div>
                 </div>
                 <div className="text-gray-600 cursor-pointer">
-                  <i className="bi bi-three-dots hover:bg-gray-300 text-xl rounded-xl p-1"></i>{" "}
-                  <i className="bi bi-x text-2xl hover:bg-gray-300 p-0.5 rounded-xl"></i>
+                  <i className="bi bi-three-dots hover:bg-gray-300 text-xl rounded-md p-1"></i>{" "}
+                  <i className="bi bi-x text-2xl hover:bg-gray-300 p-0.5 rounded-md"></i>
                 </div>
               </div>
               {/* joblist content section */}
@@ -203,54 +290,64 @@ function Homecontent(props) {
 
               {/* joblist apply and react section */}
               <div className="p-1 border-t border-gray-400 flex items-center justify-between">
-                <div className="flex w-2/4 items-center space-x-6 text-lg">
+                <div className="flex  items-center space-x-6 text-lg">
                   {/* Like Button */}
                   <button
                     onClick={() => handleLike(response._id)}
-                    className={`w-5/11  flex items-center ${
-                      like[response._id] ? `text-gray-800` : `text-gray-500 `
-                    }  focus:outline-none`}
+                    className={`rounded-md flex-1   justify-center px-2 py-1 shadow-sm shadow-slate-600 pl-3 flex items-center ${
+                      like[response._id] ? "text-gray-800" : "text-gray-500"
+                    } focus:outline-none`}
                   >
-                    <i
-                      className={`fas fa-thumbs-up ${
-                        like[response._id] ? "scale-125  " : ""
-                      } mr-1.5`}
-                    ></i>
-                    <span className={` ${like[response._id] ? " text-gray-800" : ""}
-                      } mr-1.5`}>{response.likes} Likes</span>
+                    <i className={`fas fa-thumbs-up  mr-1.5`}></i>
+                    <span
+                      className={` flex  ${
+                        like[response._id] ? "text-black " : "text-gray-500"
+                      }  mr-1.5 text-sm `}
+                    >
+                      {response.likes.length == 0
+                        ? "likes"
+                        : response.likes.length == 1
+                        ? " 1 like"
+                        : ` ${response.likes.length} likes`}
+                    </span>
                   </button>
 
                   {/* Dislike Button */}
                   <button
                     onClick={() => handledislike(response._id)}
-                    className={` w-5/11 flex items-center ${
-                      dislike[response._id]
-                        ? `text-gray-800`
-                        : `text-gray-500 `
-                    }  focus:outline-none`}
+                    className={` rounded-md  justify-center px-2 py-1 shadow-sm shadow-slate-600 pl-3 flex items-center ${
+                      dislike[response._id] ? "text-gray-800" : "text-gray-500"
+                    } focus:outline-none`}
                   >
-                    <i
-                      className={`fas fa-thumbs-down ${
-                        dislike[response._id] ? "scale-125  " : ""
-                      } mr-1.5`}
-                    ></i>
-                    <span className={` ${dislike[response._id] ? " text-gray-800" : ""}
-                      } mr-1.5`}>{response.dislikes} Dislikes</span>
+                    <i className={`fas fa-thumbs-down  mr-1.5`}></i>
+                    <span
+                      className={` ${
+                        dislike[response._id] ? "text-black" : "text-gray-500"
+                      }  mr-1.5 text-sm`}
+                    >
+                      {dislike[response._id] &&
+                        (response.dislikes.length == 1
+                          ? " 1 dislike"
+                          : ` ${response.dislikes.length} dislikes`)}
+                    </span>
                   </button>
                 </div>
 
                 {/* comment button */}
-                <button onClick={()=> commentHandle(response)} className=" w-1/4 flex  items-center text-gray-500 hover:text-gray-800 focus:outline-none">
-                  <i className="bi bi-chat-dots text-xl comment-icon"> </i>{" "}
+                <button
+                  onClick={() => commentHandle(response)}
+                  className="  rounded-md justify-center px-2 py-1 shadow-sm shadow-slate-600  flex text-gray-500 mr-2 items-center focus:outline-none"
+                >
+                  <i className="bi bi-chat-dots-fill text-xl comment-icon"> </i>{" "}
                   <span className="pl-1"> Comments</span>
                 </button>
 
-                <div className="w-1/4 ">
+                <div className=" ">
                   <button
                     onClick={() => {
                       props.jobapplyhandle(response.AuthorId);
                     }}
-                    className="border py-1 px-3 rounded-md bg-notification hover:bg-pink-700 text-white focus:outline-none"
+                    className="rounded- rounded-md justify-center px-2 py-1 shadow-sm text-gray-600 shadow-gray-500 font-semibold focus:outline-none"
                   >
                     Apply
                   </button>

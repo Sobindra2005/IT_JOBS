@@ -9,6 +9,7 @@ import { timeCalculate } from "../functions/function";
 import { GetUserById } from "../../api/getuser";
 
 function Comment(props) {
+  
   const [like, setLike] = useState([]);
   const [dislike, setDislike] = useState([]);
   const [commentLike, setCommentLike] = useState([]);
@@ -20,14 +21,21 @@ function Comment(props) {
 
   const backhandle = () => {
     props.setcomment(false);
-  };
+  };    
 
   const getuser = async (id) => {
-    console.log(id);
-    const getUserresponce = await GetUserById(id);
-
-    return getUserresponce.data
+    try {
+      const response = await GetUserById(id);
+      if (response && response.data) {
+        return response.data;
+      } else {
+        console.log("No data property on response object");
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
   };
+  
 
   const postcomment = async (id) => {
     if (!!comment) {
@@ -100,12 +108,18 @@ function Comment(props) {
     }));
   };
 
-// const fetchuserName= ()=>{
-//     const username=allcomment.map(async(comment)=>{
-//       const name= await getuser(comment.userId)
 
-//     })
-//   }
+  const fetchUserNames = async () => {
+    const commentsWithUsernames = await Promise.all(
+      allcomment.map(async (comment) => {
+        const user = await getuser(comment.UserId);
+     
+        return { ...comment, userName: `${user[0].firstName} ${user[0].lastName}` };
+      })
+    );
+    setallcomment(commentsWithUsernames);
+  };
+console.log(allcomment)
 
   useEffect(() => {
     socket.emit("send comment", {
@@ -114,27 +128,28 @@ function Comment(props) {
     });
     socket.emit("join comment", props.commentPost._id);
 
-    socket.on("receive comment", async(data) => {
-    setallcomment(data);
-      
+    socket.on("receive comment", async (data) => {
+      setallcomment(data);
     });
-   
 
     return () => {
       socket.off("receive comment");
     };
-     
-
-
   }, [props.commentPost._id]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      getCurrentTime();
+      getCurrentTime()
     }, 1000);
-
     return () => clearInterval(interval);
   }, [getCurrentTime]);
+
+  useEffect(() => {
+    if (allcomment.length > 0) {
+      fetchUserNames();
+    }
+  }, [allcomment.length]);
+
 
   useEffect(() => {
     handleInput();
@@ -144,7 +159,7 @@ function Comment(props) {
     <>
       <section className="  fixed border  w-[100%] bg-gray-400 m-auto  mt-2 text-center h-auto  pt-16">
         <div className="   overflow-y-auto overflow-x-hidden  bg-white mb-10 mt-1 Job-list-section flex-1 h-[82vh] w-[40%] m-auto flex flex-col px-4 border border-t-purple-200 shadow-xl">
-          <div className="sticky top-0 mb-4 pb-1 py-1 flex justify-end w-full bg-white">
+          <div className="sticky z-50 top-0 mb-4 pb-1 py-1 flex justify-end w-full bg-white">
             <div className="flex w-screen  justify-between items-center cursor-pointer">
               <span className="  relative text-black text-xl flex-1 text-center">
                 {props.commentPost.firstName} {props.commentPost.lastName}'s
@@ -238,68 +253,58 @@ function Comment(props) {
 
           {/* Joblist Apply and React Section */}
           <div className="p-1 border-y border-gray-500 flex items-center justify-between">
-            <div className="flex w-1/4 justify-between items-center text-lg">
+            <div className="flex w-[35%] justify-between items-center text-lg">
               {/* Like Button */}
               <button
                 onClick={() => handleLike(props.commentPost._id)}
-                className={` rounded-xl ${
-                  like[props.commentPost._id] ? "scale-110" : ""
-                }  justify-center px-2 py-1 shadow-sm shadow-slate-600 pl-3 flex items-center ${
+                className={` rounded-md   justify-center px-2 py-1 shadow-sm shadow-slate-600 pl-3 flex items-center ${
                   like[props.commentPost._id]
                     ? "text-gray-800"
                     : "text-gray-500"
                 } focus:outline-none`}
               >
                 <i
-                  className={`fas fa-thumbs-up ${
-                    like[props.commentPost._id] ? "scale-110" : ""
-                  } mr-1.5`}
+                  className={`fas fa-thumbs-up  mr-1.5`}
                 ></i>
                 <span
-                  className={`${
-                    like[props.commentPost._id] ? "text-gray-800" : ""
+                  className={`text-sm ${
+                    like[props.commentPost._id] ? "text-gray-800" : "text-gray-500"
                   }`}
-                >
-         
-                </span>
+                >like</span>
               </button>
 
               {/* Dislike Button */}
               <button
                 onClick={() => handleDislike(props.commentPost._id)}
-                className={`rounded-xl ${
-                  dislike[props.commentPost._id] ? "scale-110" : ""
-                } justify-center px-2 py-1 shadow-sm shadow-slate-600 w-2/5 flex items-center ${
+                className={`rounded-md justify-center px-2 py-1 shadow-sm shadow-slate-600 w-[fit-content] flex items-center ${
                   dislike[props.commentPost._id]
                     ? "text-gray-800"
                     : "text-gray-500"
                 } focus:outline-none`}
               >
                 <i
-                  className={`fas fa-thumbs-down ${
-                    dislike[props.commentPost._id] ? "scale-110" : ""
-                  } mr-1.5`}
+                  className={`fas fa-thumbs-down mr-1.5`}
                 ></i>
                 <span
-                  className={`${
-                    dislike[props.commentPost._id] ? "text-gray-800" : ""
+                  className={`text-sm ${
+                    dislike[props.commentPost._id] ? "text-gray-800" : "text-gray-500"
                   }`}
-                >
-                 
-                </span>
+                >dislike</span>
               </button>
             </div>
 
             {/* Comment Button */}
-            <button className="rounded-xl justify-center px-2 py-1 shadow-sm shadow-slate-600 w-2/5 flex text-gray-800 mr-2 items-center focus:outline-none">
-              <i className="bi bi-chat-dots-fill scale-110 text-xl comment-icon"></i>
-              <span className="pl-1 text-gray-800"></span>
+            <button className="rounded-md justify-center px-2 py-1 shadow-sm shadow-slate-600 w-[fit-content] flex text-gray-800 mr-2 items-center focus:outline-none">
+              <i className="bi  bi-chat-dots-fill text-xl comment-icon"></i>
+              <span
+                  className={`text-sm text-gray-800`}
+                >comments</span>
             </button>
 
             <div className="w-1/4">
               <button
                 onClick={() => props.jobapplyhandle(props.commentPost.AuthorId)}
-                className="rounded-xl justify-center px-2 py-1 shadow-sm text-gray-700 shadow-gray-500 font-semibold focus:outline-none"
+                className="rounded-md justify-center px-2 py-1 shadow-sm text-gray-700 shadow-gray-500 font-semibold focus:outline-none"
               >
                 Apply
               </button>
@@ -310,7 +315,7 @@ function Comment(props) {
           {allcomment.length > 0 ? (
             allcomment.map((newcomment) => (
               <div className="flex flex-col items-start w-full">
-                <div className="flex h-auto py-4 max-w-[80%]">
+                <div className="flex h-auto py-4 max-w-[100%]">
                   <img
                     className="h-11 w-11 flex-none rounded-full object-cover object-center"
                     src="https://cdn.vectorstock.com/i/500p/16/05/male-avatar-profile-picture-silhouette-light-vector-5351605.jpg"
@@ -318,8 +323,8 @@ function Comment(props) {
                   />
                   <div className="flex leading-none flex-col text-left">
                     <div className="w-full border leading-none border-gray-300 rounded-xl pl-4 px-4 py-2  text-gray-800 text-left ml-2">
-                      <h2 className=" text-base text-black ">
-                        <span className="normal-case bi bi-dot text-sm text-gray-400">
+                      <h2 className=" text-base text-black ">{newcomment.userName}
+                        <span className="normal-case bi bi-dot text-[12px] text-gray-400">
                           {timeCalculate(newcomment.createdAt)}
                         </span>
                       </h2>
@@ -354,7 +359,7 @@ function Comment(props) {
             <div className="text-gray-700 my-14 "> No comments to show </div>
           )}
 
-          <div className="flex w-full sticky bottom-0  h-auto border ">
+          <div className="flex z-50 w-full sticky bottom-0  h-auto border ">
             <textarea
               type="text"
               value={comment}

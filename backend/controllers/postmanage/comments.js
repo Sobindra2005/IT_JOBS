@@ -3,8 +3,6 @@ const { Comment } = require('../../models/comment')
 const postComment = async (req, res) => {
     const { comment, userId } = req.body;
     const postId = req.params.postId;
-
-    console.log(comment,userId,postId)
     const newComments = new Comment({
         comment:comment,
        postId: postId,

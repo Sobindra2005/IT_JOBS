@@ -1,45 +1,31 @@
-const express = require("express");
+const express=require('express')
 const { connectMongoDb } = require("./databaseConnect.js");
 const landingPageRoutes = require("./routes/notlogin.js");
 const { tokenAuthentication } = require('./middlewares/authenticate.js');
 const afterloginRoutes = require("./routes/afterLogin.js");
+const {app,io,server} =require('./server.js')
 
-const http = require('http');
 const path = require('path');
 require('dotenv').config();
 const cors = require('cors');
-const { Server } = require('socket.io');
+
 const { Message } = require('./models/message');
 const { Comment } = require('./models/comment.js')
-const app = express();
-const server = http.createServer(app);
-
-const port = 4000;
 
 const url = process.env.mongourl;
-
-server.listen(port, (req, res) => {
-  console.log(`server is connected at port: ${port}`);
-});
 
 
 app.use(express.json({}));
 
 app.use(cors({
   origin: 'http://localhost:5173',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 }));
 
-const io = new Server(server, {
-  pingTimeout: 60000,
-  cors: {
-    origin: 'http://localhost:5173',
-    methods: ['GET', 'POST'],
-    credentials: true,
-  }
-});
+
+
 io.on('connection', (socket) => {
 
   console.log(`socket ${socket.id} is connected !!!`);
@@ -59,10 +45,10 @@ io.on('connection', (socket) => {
     }
   })
 
-  socket.on('send comment',async (data) => {
+  socket.on('send comment', async (data) => {
     try {
-      const allcomments= await  Comment.find({postId:data.postId}).sort({ createdAt: -1 });
-      io.to(data.postId).emit('receive comment',allcomments);
+      const allcomments = await Comment.find({ postId: data.postId }).sort({ createdAt: -1 });
+      io.to(data.postId).emit('receive comment', allcomments);
     }
     catch (err) {
       console.log('error ', err)
