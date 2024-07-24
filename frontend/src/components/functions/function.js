@@ -19,8 +19,12 @@ export const timeCalculate = (timestamps) => {
       const msg = `${minute} minutes ago`;
       return msg;
     }
-    if (day < 1 && hour < 1 && minute < 1 && second > 1) {
+    if (day < 1 && hour < 1 && minute < 1 && second > 5) {
       const msg = `${second} seconds ago`;
+      return msg;
+    }
+    if (day < 1 && hour < 1 && minute < 1 && second < 5) {
+      const msg = `just now`;
       return msg;
     }
   };

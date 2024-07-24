@@ -140,7 +140,9 @@ console.log(responses)
      )
     });
 
-
+return ()=>{
+  socket.off('post data')
+}
   }, []);
 
   useEffect(() => {

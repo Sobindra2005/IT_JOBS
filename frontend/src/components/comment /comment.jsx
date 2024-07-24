@@ -9,7 +9,6 @@ import { timeCalculate } from "../functions/function";
 import { GetUserById } from "../../api/getuser";
 
 function Comment(props) {
-  
   const [like, setLike] = useState([]);
   const [dislike, setDislike] = useState([]);
   const [commentLike, setCommentLike] = useState([]);
@@ -21,7 +20,7 @@ function Comment(props) {
 
   const backhandle = () => {
     props.setcomment(false);
-  };    
+  };
 
   const getuser = async (id) => {
     try {
@@ -35,7 +34,6 @@ function Comment(props) {
       console.error("Error fetching user data:", error);
     }
   };
-  
 
   const postcomment = async (id) => {
     if (!!comment) {
@@ -44,10 +42,13 @@ function Comment(props) {
         comment,
         props.authenticatedUserDetails._id
       );
+  
+     
       socket.emit("send comment", {
         postId: props.commentPost._id,
         userId: props.authenticatedUserDetails._id,
       });
+     
       setComment("");
     }
   };
@@ -76,6 +77,7 @@ function Comment(props) {
   };
 
   const handleCommentDislike = (id) => {
+
     setCommentDislike((prevState) => ({
       ...prevState,
       [id]: !prevState[id],
@@ -108,52 +110,40 @@ function Comment(props) {
     }));
   };
 
+  const fetchUserNames = async (allcomments) => {
 
-  const fetchUserNames = async () => {
     const commentsWithUsernames = await Promise.all(
-      allcomment.map(async (comment) => {
+      allcomments.map(async (comment) => {
         const user = await getuser(comment.UserId);
-     
-        return { ...comment, userName: `${user[0].firstName} ${user[0].lastName}` };
+    
+        return {
+          ...comment,
+          userName: `${user[0].firstName} ${user[0].lastName}`,
+        };
       })
     );
     setallcomment(commentsWithUsernames);
   };
-console.log(allcomment)
+ 
 
   useEffect(() => {
-    socket.emit("send comment", {
-      postId: props.commentPost._id,
-      userId: props.authenticatedUserDetails._id,
+    socket.on("receive comment", async (data) => {
+     fetchUserNames(data)
     });
     socket.emit("join comment", props.commentPost._id);
-
-    socket.on("receive comment", async (data) => {
-      setallcomment(data);
-    });
-
+  
     return () => {
-      socket.off("receive comment");
+      socket.off("comments data");
     };
   }, [props.commentPost._id]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      getCurrentTime()
+      getCurrentTime();
     }, 1000);
     return () => clearInterval(interval);
   }, [getCurrentTime]);
 
-  useEffect(() => {
-    if (allcomment.length > 0) {
-      fetchUserNames();
-    }
-  }, [allcomment.length]);
-
-
-  useEffect(() => {
-    handleInput();
-  }, [comment]);
 
   return (
     <>
@@ -263,14 +253,16 @@ console.log(allcomment)
                     : "text-gray-500"
                 } focus:outline-none`}
               >
-                <i
-                  className={`fas fa-thumbs-up  mr-1.5`}
-                ></i>
+                <i className={`fas fa-thumbs-up  mr-1.5`}></i>
                 <span
                   className={`text-sm ${
-                    like[props.commentPost._id] ? "text-gray-800" : "text-gray-500"
+                    like[props.commentPost._id]
+                      ? "text-gray-800"
+                      : "text-gray-500"
                   }`}
-                >like</span>
+                >
+                  like
+                </span>
               </button>
 
               {/* Dislike Button */}
@@ -282,23 +274,23 @@ console.log(allcomment)
                     : "text-gray-500"
                 } focus:outline-none`}
               >
-                <i
-                  className={`fas fa-thumbs-down mr-1.5`}
-                ></i>
+                <i className={`fas fa-thumbs-down mr-1.5`}></i>
                 <span
                   className={`text-sm ${
-                    dislike[props.commentPost._id] ? "text-gray-800" : "text-gray-500"
+                    dislike[props.commentPost._id]
+                      ? "text-gray-800"
+                      : "text-gray-500"
                   }`}
-                >dislike</span>
+                >
+                  dislike
+                </span>
               </button>
             </div>
 
             {/* Comment Button */}
             <button className="rounded-md justify-center px-2 py-1 shadow-sm shadow-slate-600 w-[fit-content] flex text-gray-800 mr-2 items-center focus:outline-none">
               <i className="bi  bi-chat-dots-fill text-xl comment-icon"></i>
-              <span
-                  className={`text-sm text-gray-800`}
-                >comments</span>
+              <span className={`text-sm text-gray-800`}>comments</span>
             </button>
 
             <div className="w-1/4">
@@ -314,7 +306,10 @@ console.log(allcomment)
           {/* Comment Section */}
           {allcomment.length > 0 ? (
             allcomment.map((newcomment) => (
-              <div className="flex flex-col items-start w-full">
+              <div
+                key={newcomment._id}
+                className="flex flex-col items-start w-full"
+              >
                 <div className="flex h-auto py-4 max-w-[100%]">
                   <img
                     className="h-11 w-11 flex-none rounded-full object-cover object-center"
@@ -323,7 +318,8 @@ console.log(allcomment)
                   />
                   <div className="flex leading-none flex-col text-left">
                     <div className="w-full border leading-none border-gray-300 rounded-xl pl-4 px-4 py-2  text-gray-800 text-left ml-2">
-                      <h2 className=" text-base text-black ">{newcomment.userName}
+                      <h2 className=" text-base text-black ">
+                        {newcomment.userName}
                         <span className="normal-case bi bi-dot text-[12px] text-gray-400">
                           {timeCalculate(newcomment.createdAt)}
                         </span>

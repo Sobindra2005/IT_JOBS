@@ -38,16 +38,20 @@ io.on('connection', (socket) => {
   }
   );
 
-  socket.on('join comment', (id) => {
+  socket.on('join comment', async (id) => {
     console.log('joined comment room:', id);
     if (id) {
       socket.join(id)
+      const allcomments = await Comment.find({ postId: id }).sort({ createdAt: -1 });
+      console.log(allcomments)
+      io.to(id).emit('receive comment', allcomments);
     }
   })
 
   socket.on('send comment', async (data) => {
     try {
-      const allcomments = await Comment.find({ postId: data.postId }).sort({ createdAt: -1 });
+      const allcomments = await Comment.find({ postId: data.postId }).sort({ createdAt: -1 }).skip((page - 1) * limit)
+      .limit(limit);;
       io.to(data.postId).emit('receive comment', allcomments);
     }
     catch (err) {
