@@ -53,7 +53,20 @@ function App() {
 
   const DataAuthenticated = async () => {
     const data = await AuthenticatedUser();
+    console.log('data')
+    if(!data){
+    console.log('done')
+    await localStorage.removeItem("token");
+    axios.defaults.headers.common["Authorization"] = null;
+    props.setshowError(true);
+    props.setpopupmessage('Session Time out !!');
+    props.setshowpopup(true);
+    window.location.reload();
+   }
+  else{
     setAuthenticatedUserDetails(data.data);
+
+  } 
   };
 
   useEffect(() => {

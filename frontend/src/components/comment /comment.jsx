@@ -17,7 +17,7 @@ function Comment(props) {
   const [allcomment, setallcomment] = useState([]);
   const textareaRef = useRef(null);
   const navigate = useNavigate();
-
+  console.log(comment);
   const backhandle = () => {
     props.setcomment(false);
   };
@@ -37,18 +37,19 @@ function Comment(props) {
 
   const postcomment = async (id) => {
     if (!!comment) {
+      console.log("post comment ");
       const responce = await postComment(
         id,
         comment,
         props.authenticatedUserDetails._id
       );
-  
-     
+      console.log(responce);
+
       socket.emit("send comment", {
         postId: props.commentPost._id,
         userId: props.authenticatedUserDetails._id,
       });
-     
+      console.log(socket);
       setComment("");
     }
   };
@@ -77,7 +78,6 @@ function Comment(props) {
   };
 
   const handleCommentDislike = (id) => {
-
     setCommentDislike((prevState) => ({
       ...prevState,
       [id]: !prevState[id],
@@ -111,11 +111,9 @@ function Comment(props) {
   };
 
   const fetchUserNames = async (allcomments) => {
-
     const commentsWithUsernames = await Promise.all(
       allcomments.map(async (comment) => {
         const user = await getuser(comment.UserId);
-    
         return {
           ...comment,
           userName: `${user[0].firstName} ${user[0].lastName}`,
@@ -124,16 +122,17 @@ function Comment(props) {
     );
     setallcomment(commentsWithUsernames);
   };
- 
 
   useEffect(() => {
-    socket.on("receive comment", async (data) => {
-     fetchUserNames(data)
+    socket.on("receive intial comment",  (data) => {
+      fetchUserNames(data);
     });
     socket.emit("join comment", props.commentPost._id);
-  
+    socket.on("receive comment", (data) => {
+      fetchUserNames(data);
+    });
     return () => {
-      socket.off("comments data");
+      socket.off("receive intial comment");
     };
   }, [props.commentPost._id]);
 
@@ -143,7 +142,6 @@ function Comment(props) {
     }, 1000);
     return () => clearInterval(interval);
   }, [getCurrentTime]);
-
 
   return (
     <>

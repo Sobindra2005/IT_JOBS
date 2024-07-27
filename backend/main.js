@@ -43,16 +43,15 @@ io.on('connection', (socket) => {
     if (id) {
       socket.join(id)
       const allcomments = await Comment.find({ postId: id }).sort({ createdAt: -1 });
-      console.log(allcomments)
-      io.to(id).emit('receive comment', allcomments);
+      io.to(id).emit('receive intial comment', allcomments);
     }
   })
 
-  socket.on('send comment', async (data) => {
+  socket.on("send comment", async (data) => {
     try {
-      const allcomments = await Comment.find({ postId: data.postId }).sort({ createdAt: -1 }).skip((page - 1) * limit)
-      .limit(limit);;
-      io.to(data.postId).emit('receive comment', allcomments);
+      console.log('in send comment ')
+      const allcomments = await Comment.find({ postId: data.postId }).sort({ createdAt: -1 })
+      io.to(data.postId).emit("receive comment", allcomments);
     }
     catch (err) {
       console.log('error ', err)

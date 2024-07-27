@@ -6,7 +6,9 @@ const secretkey = process.env.secretkey
 
 
  function setUser(user){
-
+if(!user){
+    console.log('invalid user ')
+}
     return jwt.sign({
     _id:user._id,
     firstName:user.firstName,
@@ -17,8 +19,13 @@ const secretkey = process.env.secretkey
 }
 
  function getUser(token){
-    if(!token) return null
-    return jwt.verify(token,'secretkey')
+    if(!token) return console.log('invalid token !!!')
+    const user= jwt.verify(token,'secretkey')
+   if(!user){
+    console.log('invalid token')
+
+    }
+    return user
 }
 
 module.exports={getUser,setUser}

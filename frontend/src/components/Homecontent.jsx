@@ -18,7 +18,6 @@ function Homecontent(props) {
   const [like, setlike] = useState([]);
   const [dislike, setdislike] = useState([]);
   const navigate = useNavigate();
-console.log(responses)
   const getCurrentTime = useCallback(() => {
     const now = new Date();
     const hours = now.getHours();
@@ -26,123 +25,89 @@ console.log(responses)
     return { hours, seconds };
   }, []);
 
+console.log(responses,'this is responce')
+
   const addlike = async (postId) => {
-    const responce = await Addlike(postId, props.authenticatedUserDetails._id);
+    console.log("add like ");
+    const responce = await Addlike(postId);
+
+    if (responce.status === 200) {
+      const updatedResponce = await responses.map((response) => {
+        return response._id === responce.data[0]._id
+          ? responce.data[0]
+          : response;
+      });
+      setResponses(updatedResponce);
+    }
   };
 
   const removelike = async (postId) => {
-    const responce = await Removelike(
-      postId,
-      props.authenticatedUserDetails._id
-    );
+    console.log("here is remove like");
+    const responce = await Removelike(postId);
+    if (responce.status === 200) {
+      const updatedResponce = responses.map((response) => {
+        return response._id === responce.data[0]._id ? responce.data[0] : response;
+      });
+      setResponses(updatedResponce);
+    }
   };
 
   const addDislike = async (postId) => {
-    const responce = await AddDislike(
-      postId,
-      props.authenticatedUserDetails._id
-    );
-
-    
+    console.log("add dislike ");
+    const responce = await AddDislike(postId);
+    if (responce.status === 200) {
+      const updatedResponce = responses.map((response) => {
+        return response._id === responce.data[0]._id ? responce.data[0] : response;
+      });
+      setResponses(updatedResponce);
+    }
   };
 
   const removedislike = async (postId) => {
-    const responce = await removeDislike(
-      postId,
-      props.authenticatedUserDetails._id
-    );
-   
+    console.log("remove dislike ");
+    const responce = await removeDislike(postId);
+    if (responce.status === 200) {
+      const updatedResponce = responses.map((response) => {
+        return response._id === responce.data[0]._id ? responce.data[0] : response;
+      });
+      setResponses(updatedResponce);
+    }
   };
 
   async function getpost() {
     const response = await Getpost();
+    console.log("here in getpost", response.data);
     setResponses(response.data);
   }
 
-  const handleLike = (id) => {
-    setlike((prevState) => {
-      const isLiked = !prevState[id];
+  const handleLike = async (postId) => {
+    const post = responses.find((response) => response._id === postId);
 
-      if (isLiked) {
-       
-        addlike(id);
-        removedislike(id);
-
-        setdislike((prevState) => {
-          const updatedDislike = {
-            ...prevState,
-            [id]: false,
-          };
-          return updatedDislike;
-        });
-
-        const updatedLike = {
-          ...prevState,
-          [id]: true,
-        };
-
-        return updatedLike;
+    if (!!post) {
+      if (post.likes.includes(props.authenticatedUserDetails._id)) {
+        await removelike(postId);
       } else {
-        
-        removelike(id);
-        const updatedLike = {
-          ...prevState,
-          [id]: false,
-        };
-
-        return updatedLike;
+        await addlike(postId);
+        await removedislike(postId);
       }
-    });
+    }
   };
 
-  function handledislike(id) {
-    setdislike((prevState) => {
-      const isdisLiked = !prevState[id];
+  const handledislike = async (postId) => {
+    const post = responses.find((response) => response._id === postId);
 
-      if (isdisLiked) {
-        addDislike(id);
-        removelike(id);
-    
-        setlike((prevState) => {
-          const updatedlike = {
-            ...prevState,
-            [id]: false,
-          };
-          return updatedlike;
-        });
-
-        const updatedisLike = {
-          ...prevState,
-          [id]: true,
-        };
-
-        return updatedisLike;
+    if (post) {
+      if (post.dislikes.includes(props.authenticatedUserDetails._id)) {
+        await removedislike(postId);
       } else {
-      
-        removedislike(id);
-        const updatedisLike = {
-          ...prevState,
-          [id]: false,
-        };
-        return updatedisLike;
+        await addDislike(postId);
+        await removelike(postId);
       }
-    });
-  }
+    }
+  };
 
   useEffect(() => {
     getpost();
-
-    socket.on("post data", (updatedpost) => {
-     setResponses(prevPost =>
-     prevPost.map(post=>
-     post._id == updatedpost._id ? updatedpost : post
-     )
-     )
-    });
-
-return ()=>{
-  socket.off('post data')
-}
   }, []);
 
   useEffect(() => {
@@ -210,8 +175,8 @@ return ()=>{
                   <img
                     className="h-11 w-11 flex-none rounded-full object-cover object-center"
                     src={
-                      response.AuthorImgSrc
-                        ? `${response.AuthorImgSrc}`
+                      response?.AuthorImgSrc
+                        ? `${response?.AuthorImgSrc}`
                         : "https://cdn.vectorstock.com/i/500p/16/05/male-avatar-profile-picture-silhouette-light-vector-5351605.jpg"
                     }
                     alt=""
@@ -228,6 +193,7 @@ return ()=>{
                     </p>
                   </div>
                 </div>
+                {console.log(response)}
                 <div className="text-gray-600 cursor-pointer">
                   <i className="bi bi-three-dots hover:bg-gray-300 text-xl rounded-md p-1"></i>{" "}
                   <i className="bi bi-x text-2xl hover:bg-gray-300 p-0.5 rounded-md"></i>
@@ -260,7 +226,7 @@ return ()=>{
                   >
                     <b>Job Title:</b> {response.jobTitle} <br />
                     <b>Company Name:</b> {response.companyName} <br />
-                    <b>Salary:</b> {response.salary} <br />
+                    <b>Salary:</b> Rs.{response.salary} <br />
                     <b>Employment Type:</b> {response.employmentType} <br />
                     <b>Location:</b> {response.location} <br />
                   </p>
@@ -271,7 +237,7 @@ return ()=>{
                   >
                     <b>Job Title:</b> {response.jobTitle} <br />
                     <b>Company Name:</b> {response.companyName} <br />
-                    <b>Salary:</b> {response.salary} <br />
+                    <b>Salary:</b> Rs.{response.salary} <br />
                     <b>Employment Type:</b> {response.employmentType} <br />
                     <b>Location:</b> {response.location} <br />
                   </p>
@@ -281,7 +247,7 @@ return ()=>{
                   <p className="text-base text-gray-900 block ">
                     <b>Job Title:</b> {response.jobTitle} <br />
                     <b>Company Name:</b> {response.companyName} <br />
-                    <b>Salary:</b> {response.salary} <br />
+                    <b>Salary:</b> Rs.{response.salary} <br />
                     <b>Employment Type:</b> {response.employmentType} <br />
                     <b>Location:</b> {response.location} <br />
                   </p>
@@ -297,17 +263,25 @@ return ()=>{
                   <button
                     onClick={() => handleLike(response._id)}
                     className={`rounded-md flex-1   justify-center px-2 py-1 shadow-sm shadow-slate-600 pl-3 flex items-center ${
-                      like[response._id] ? "text-gray-800" : "text-gray-500"
+                      response.likes.includes(
+                        props.authenticatedUserDetails._id
+                      )
+                        ? "text-gray-800"
+                        : "text-gray-500"
                     } focus:outline-none`}
                   >
                     <i className={`fas fa-thumbs-up  mr-1.5`}></i>
                     <span
                       className={` flex  ${
-                        like[response._id] ? "text-black " : "text-gray-500"
+                        response.likes.includes(
+                          props.authenticatedUserDetails._id
+                        )
+                          ? "text-black "
+                          : "text-gray-500"
                       }  mr-1.5 text-sm `}
                     >
                       {response.likes.length == 0
-                        ? "likes"
+                        ? "like"
                         : response.likes.length == 1
                         ? " 1 like"
                         : ` ${response.likes.length} likes`}
@@ -324,11 +298,19 @@ return ()=>{
                     <i className={`fas fa-thumbs-down  mr-1.5`}></i>
                     <span
                       className={` ${
-                        dislike[response._id] ? "text-black" : "text-gray-500"
+                        response.dislikes.includes(
+                          props.authenticatedUserDetails._id
+                        )
+                          ? "text-black"
+                          : "text-gray-500"
                       }  mr-1.5 text-sm`}
                     >
-                      {dislike[response._id] &&
-                        (response.dislikes.length == 1
+                      {response.dislikes.includes(
+                        props.authenticatedUserDetails._id
+                      ) &&
+                        (response.dislikes.length == 0
+                          ? "dislike"
+                          : response.dislikes.length == 1
                           ? " 1 dislike"
                           : ` ${response.dislikes.length} dislikes`)}
                     </span>

@@ -4,6 +4,7 @@ import axios from "axios";
 
 function Left(props) {
     const navigate = useNavigate();
+    
     const logout = async () => {
     await localStorage.removeItem("token");
     axios.defaults.headers.common["Authorization"] = null;
