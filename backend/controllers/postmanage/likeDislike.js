@@ -1,5 +1,5 @@
 const { Jobs } = require('../../models/createJob')
-const { io } = require('../../server')
+
 const { collectionByIdandName } = require('../CollectionByIdandName')
 
 

@@ -14,7 +14,7 @@ server.listen(port, (req, res) => {
 const io = new Server(server, {
     pingTimeout: 60000,
     cors: {
-        origin: 'https://it-jobs-chi.vercel.app/',
+        origin: 'http://localhost:5173',
         methods: ['GET', 'POST'],
         credentials: true,
     }

@@ -7,21 +7,86 @@ import { postComment } from "../../api/comment";
 import { socket } from "../../socket";
 import { timeCalculate } from "../functions/function";
 import { GetUserById } from "../../api/getuser";
+import {
+  Addlike,
+  Removelike,
+  AddDislike,
+  removeDislike,
+} from "../../api/likeandDislike";
+import {
+  cmtlike,
+  cmtrmlike,
+  cmtdislike,
+  cmtrmdislike,
+} from "../../api/comment";
 
 function Comment(props) {
-  const [like, setLike] = useState([]);
-  const [dislike, setDislike] = useState([]);
-  const [commentLike, setCommentLike] = useState([]);
-  const [commentDislike, setCommentDislike] = useState([]);
   const [comment, setComment] = useState("");
   const [allcomment, setallcomment] = useState([]);
+  const [commentPost, setcommentPost] = useState(props.commentPost);
   const textareaRef = useRef(null);
   const navigate = useNavigate();
-  console.log(comment);
+
   const backhandle = () => {
     props.setcomment(false);
   };
 
+  // handle post
+  const addlike = async (postId) => {
+    const responce = await Addlike(postId);
+
+    if (responce.status === 200) {
+      setcommentPost(responce.data[0]);
+    }
+  };
+
+  const removelike = async (postId) => {
+
+    const responce = await Removelike(postId);
+    if (responce.status === 200) {
+      setcommentPost(responce.data[0]);
+    }
+  };
+
+  const addDislike = async (postId) => {
+
+    const responce = await AddDislike(postId);
+    if (responce.status === 200) {
+      setcommentPost(responce.data[0]);
+    }
+  };
+
+  const removedislike = async (postId) => {
+   
+    const responce = await removeDislike(postId);
+    if (responce.status === 200) {
+      setcommentPost(responce.data[0]);
+    }
+  };
+
+  const handleLike = async (postId) => {
+    if (!!commentPost) {
+      if (commentPost.likes.includes(props.authenticatedUserDetails._id)) {
+        await removelike(postId);
+      } else {
+        await addlike(postId);
+        await removedislike(postId);
+      }
+    }
+  };
+
+  const handledislike = async (postId) => {
+    if (!!commentPost) {
+      if (commentPost.dislikes.includes(props.authenticatedUserDetails._id)) {
+        await removedislike(postId);
+      } else {
+        await addDislike(postId);
+        await removelike(postId);
+      }
+    }
+  };
+
+  //get user by id
   const getuser = async (id) => {
     try {
       const response = await GetUserById(id);
@@ -35,6 +100,7 @@ function Comment(props) {
     }
   };
 
+  //comment handle
   const postcomment = async (id) => {
     if (!!comment) {
       console.log("post comment ");
@@ -43,7 +109,6 @@ function Comment(props) {
         comment,
         props.authenticatedUserDetails._id
       );
-      console.log(responce);
 
       socket.emit("send comment", {
         postId: props.commentPost._id,
@@ -53,6 +118,87 @@ function Comment(props) {
       setComment("");
     }
   };
+
+  //comment like interaction handle
+
+  const cmtaddlike = async (cmtId) => {
+    const responce = await cmtlike(cmtId);
+
+    if (responce.status === 200) {
+      const updatedResponce = await allcomment.map((comment) => {
+        return comment._id === responce.data[0]._id
+          ? responce.data[0]
+          : comment;
+      });
+      fetchUserNames(updatedResponce);
+    }
+  };
+
+  const cmtremovelike = async (cmtId) => {
+    console.log("here is remove like");
+    const responce = await cmtrmlike(cmtId);
+    if (responce.status === 200) {
+      const updatedResponce = allcomment.map((comment) => {
+        return comment._id === responce.data[0]._id
+          ? responce.data[0]
+          : comment;
+      });
+      fetchUserNames(updatedResponce);
+    }
+  };
+
+  const cmtaddDislike = async (cmtId) => {
+    console.log("add dislike ");
+    const responce = await cmtdislike(cmtId);
+    if (responce.status === 200) {
+      const updatedResponce = allcomment.map((comment) => {
+        return comment._id === responce.data[0]._id
+          ? responce.data[0]
+          : comment;
+      });
+      fetchUserNames(updatedResponce);
+    }
+  };
+
+  const cmtremovedislike = async (cmtId) => {
+    console.log("remove dislike ");
+    const responce = await cmtrmdislike(cmtId);
+    if (responce.status === 200) {
+      const updatedResponce = allcomment.map((comment) => {
+        return comment._id === responce.data[0]._id
+          ? responce.data[0]
+          : comment;
+      });
+      fetchUserNames(updatedResponce);
+    }
+  };
+
+  const cmthandleLike = async (cmtId) => {
+    const comment = allcomment.find((comment) => comment._id === cmtId);
+
+    if (!!comment) {
+      if (comment.likes.includes(props.authenticatedUserDetails._id)) {
+        await cmtremovelike(cmtId);
+      } else {
+        await cmtaddlike(cmtId);
+        await cmtremovedislike(cmtId);
+      }
+    }
+  };
+
+  const cmthandledislike = async (cmtId) => {
+    const comment = allcomment.find((comment) => comment._id === cmtId);
+
+    if (!!comment) {
+      if (comment.dislikes.includes(props.authenticatedUserDetails._id)) {
+        await cmtremovedislike(cmtId);
+      } else {
+        await cmtaddDislike(cmtId);
+        await cmtremovelike(cmtId);
+      }
+    }
+  };
+
   const getCurrentTime = useCallback(() => {
     const now = new Date();
     const hours = now.getHours();
@@ -64,50 +210,6 @@ function Comment(props) {
     const textarea = textareaRef.current;
     textarea.style.height = "auto";
     textarea.style.height = `${textarea.scrollHeight}px`;
-  };
-
-  const handleCommentLike = (id) => {
-    setCommentLike((prevState) => ({
-      ...prevState,
-      [id]: !prevState[id],
-    }));
-    setCommentDislike((prevState) => ({
-      ...prevState,
-      [id]: false,
-    }));
-  };
-
-  const handleCommentDislike = (id) => {
-    setCommentDislike((prevState) => ({
-      ...prevState,
-      [id]: !prevState[id],
-    }));
-    setCommentLike((prevState) => ({
-      ...prevState,
-      [id]: false,
-    }));
-  };
-
-  const handleLike = (id) => {
-    setLike((prevState) => ({
-      ...prevState,
-      [id]: !prevState[id],
-    }));
-    setDislike((prevState) => ({
-      ...prevState,
-      [id]: false,
-    }));
-  };
-
-  const handleDislike = (id) => {
-    setDislike((prevState) => ({
-      ...prevState,
-      [id]: !prevState[id],
-    }));
-    setLike((prevState) => ({
-      ...prevState,
-      [id]: false,
-    }));
   };
 
   const fetchUserNames = async (allcomments) => {
@@ -124,13 +226,14 @@ function Comment(props) {
   };
 
   useEffect(() => {
-    socket.on("receive intial comment",  (data) => {
+    socket.on("receive intial comment", (data) => {
       fetchUserNames(data);
     });
     socket.emit("join comment", props.commentPost._id);
     socket.on("receive comment", (data) => {
       fetchUserNames(data);
     });
+
     return () => {
       socket.off("receive intial comment");
     };
@@ -150,8 +253,7 @@ function Comment(props) {
           <div className="sticky z-50 top-0 mb-4 pb-1 py-1 flex justify-end w-full bg-white">
             <div className="flex w-screen  justify-between items-center cursor-pointer">
               <span className="  relative text-black text-xl flex-1 text-center">
-                {props.commentPost.firstName} {props.commentPost.lastName}'s
-                post
+                {commentPost.firstName} {commentPost.lastName}'s post
               </span>
               <i
                 onClick={() => backhandle()}
@@ -166,20 +268,20 @@ function Comment(props) {
               <img
                 className="h-11 w-11 flex-none rounded-full object-cover object-center"
                 src={
-                  props.commentPost.AuthorImgSrc
-                    ? `${props.commentPost.AuthorImgSrc}`
+                  commentPost.AuthorImgSrc
+                    ? `${commentPost.AuthorImgSrc}`
                     : "https://cdn.vectorstock.com/i/500p/16/05/male-avatar-profile-picture-silhouette-light-vector-5351605.jpg"
                 }
                 alt=""
               />
               <div className="flex flex-col pl-3 cursor-pointer">
                 <p className="text-base font-medium">
-                  {props.commentPost.firstName || props.commentPost.lastName
-                    ? `${props.commentPost.firstName} ${props.commentPost.lastName} `
+                  {commentPost.firstName || commentPost.lastName
+                    ? `${commentPost.firstName} ${commentPost.lastName} `
                     : "Unknown User"}
                 </p>
                 <p className="text-xs text-left text-gray-500 font-medium">
-                  {`${timeCalculate(props.commentPost?.createdAt)}`}
+                  {`${timeCalculate(commentPost?.createdAt)}`}
                 </p>
               </div>
             </div>
@@ -189,64 +291,61 @@ function Comment(props) {
           </div>
 
           {/* Joblist Content Section */}
-          {props.commentPost.ImgSrc ? (
+          {commentPost.ImgSrc ? (
             <img
-              src={`${props.commentPost.ImgSrc}`}
+              src={`${commentPost.ImgSrc}`}
               alt="random"
               className="shadow-inner border border-b-gray-200 w-full m-auto min-w-0 h-96 rounded-2xl object-cover object-center"
             />
           ) : null}
 
           {/* Job Overview Section */}
-          {props.commentPost.ImgSrc ? (
+          {commentPost.ImgSrc ? (
             <div
               className="px-1 pb-2 pt-2 text-left cursor-pointer"
-              onClick={() => toggleContent(props.commentPost._id)}
+              onClick={() => toggleContent(commentPost._id)}
             >
               <p
                 className={`text-base text-gray-900 ${
-                  expandedPosts[props.commentPost._id]
+                  expandedPosts[commentPost._id]
                     ? "hidden"
                     : "block line-clamp-2"
                 }`}
               >
-                <b>Job Title:</b> {props.commentPost.jobTitle} <br />
-                <b>Company Name:</b> {props.commentPost.companyName} <br />
-                <b>Salary:</b> {props.commentPost.salary} <br />
-                <b>Employment Type:</b> {props.commentPost.employmentType}{" "}
-                <br />
-                <b>Location:</b> {props.commentPost.location} <br />
+                <b>Job Title:</b> {commentPost.jobTitle} <br />
+                <b>Company Name:</b> {commentPost.companyName} <br />
+                <b>Salary:</b> {commentPost.salary} <br />
+                <b>Employment Type:</b> {commentPost.employmentType} <br />
+                <b>Location:</b> {commentPost.location} <br />
               </p>
               <p className="text-base text-gray-900 block">
-                <b>Job Title:</b> {props.commentPost.jobTitle} <br />
-                <b>Company Name:</b> {props.commentPost.companyName} <br />
-                <b>Salary:</b> {props.commentPost.salary} <br />
-                <b>Employment Type:</b> {props.commentPost.employmentType}{" "}
-                <br />
-                <b>Location:</b> {props.commentPost.location} <br />
+                <b>Job Title:</b> {commentPost.jobTitle} <br />
+                <b>Company Name:</b> {commentPost.companyName} <br />
+                <b>Salary:</b> {commentPost.salary} <br />
+                <b>Employment Type:</b> {commentPost.employmentType} <br />
+                <b>Location:</b> {commentPost.location} <br />
               </p>
             </div>
           ) : (
             <div className="px-1 pb-2 pt-2 text-left cursor-pointer">
               <p className="text-base text-gray-900 block">
-                <b>Job Title:</b> {props.commentPost.jobTitle} <br />
-                <b>Company Name:</b> {props.commentPost.companyName} <br />
-                <b>Salary:</b> {props.commentPost.salary} <br />
-                <b>Employment Type:</b> {props.commentPost.employmentType}{" "}
-                <br />
-                <b>Location:</b> {props.commentPost.location} <br />
+                <b>Job Title:</b> {commentPost.jobTitle} <br />
+                <b>Company Name:</b> {commentPost.companyName} <br />
+                <b>Salary:</b> {commentPost.salary} <br />
+                <b>Employment Type:</b> {commentPost.employmentType} <br />
+                <b>Location:</b> {commentPost.location} <br />
               </p>
             </div>
           )}
 
           {/* Joblist Apply and React Section */}
           <div className="p-1 border-y border-gray-500 flex items-center justify-between">
-            <div className="flex w-[35%] justify-between items-center text-lg">
+            <div className="flex w-[40%] justify-between items-center text-lg">
               {/* Like Button */}
               <button
-                onClick={() => handleLike(props.commentPost._id)}
+                onClick={() => handleLike(commentPost._id)}
                 className={` rounded-md   justify-center px-2 py-1 shadow-sm shadow-slate-600 pl-3 flex items-center ${
-                  like[props.commentPost._id]
+                  commentPost.likes.includes(props.authenticatedUserDetails._id)
                     ? "text-gray-800"
                     : "text-gray-500"
                 } focus:outline-none`}
@@ -254,20 +353,28 @@ function Comment(props) {
                 <i className={`fas fa-thumbs-up  mr-1.5`}></i>
                 <span
                   className={`text-sm ${
-                    like[props.commentPost._id]
+                    commentPost.likes.includes(
+                      props.authenticatedUserDetails._id
+                    )
                       ? "text-gray-800"
                       : "text-gray-500"
                   }`}
                 >
-                  like
+                  {commentPost.likes.length == 0
+                    ? "like"
+                    : commentPost.likes.length == 1
+                    ? " 1 like"
+                    : ` ${commentPost.likes.length} likes`}
                 </span>
               </button>
 
               {/* Dislike Button */}
               <button
-                onClick={() => handleDislike(props.commentPost._id)}
-                className={`rounded-md justify-center px-2 py-1 shadow-sm shadow-slate-600 w-[fit-content] flex items-center ${
-                  dislike[props.commentPost._id]
+                onClick={() => handledislike(commentPost._id)}
+                className={`rounded-md m-auto  justify-center px-2 py-1 shadow-sm shadow-slate-600 w-[fit-content] flex items-center ${
+                  commentPost.dislikes.includes(
+                    props.authenticatedUserDetails._id
+                  )
                     ? "text-gray-800"
                     : "text-gray-500"
                 } focus:outline-none`}
@@ -275,12 +382,22 @@ function Comment(props) {
                 <i className={`fas fa-thumbs-down mr-1.5`}></i>
                 <span
                   className={`text-sm ${
-                    dislike[props.commentPost._id]
+                    commentPost.dislikes.includes(
+                      props.authenticatedUserDetails._id
+                    )
                       ? "text-gray-800"
                       : "text-gray-500"
                   }`}
                 >
-                  dislike
+                  {commentPost.dislikes.includes(
+                    props.authenticatedUserDetails._id
+                  )
+                    ? commentPost.dislikes.length == 0
+                      ? "dislike"
+                      : commentPost.dislikes.length == 1
+                      ? " 1 dislike"
+                      : ` ${commentPost.dislikes.length} dislikes`
+                    : ""}
                 </span>
               </button>
             </div>
@@ -288,12 +405,14 @@ function Comment(props) {
             {/* Comment Button */}
             <button className="rounded-md justify-center px-2 py-1 shadow-sm shadow-slate-600 w-[fit-content] flex text-gray-800 mr-2 items-center focus:outline-none">
               <i className="bi  bi-chat-dots-fill text-xl comment-icon"></i>
-              <span className={`text-sm text-gray-800`}>comments</span>
+              <span className={`text-sm pl-1 text-gray-800`}>
+                {allcomment.length} comments
+              </span>
             </button>
 
             <div className="w-1/4">
               <button
-                onClick={() => props.jobapplyhandle(props.commentPost.AuthorId)}
+                onClick={() => props.jobapplyhandle(commentPost.AuthorId)}
                 className="rounded-md justify-center px-2 py-1 shadow-sm text-gray-700 shadow-gray-500 font-semibold focus:outline-none"
               >
                 Apply
@@ -328,21 +447,33 @@ function Comment(props) {
                     </div>
                     <div className="p-1 ml-2 flex justify-between w-[full]">
                       <span
-                        onClick={() => handleCommentLike(newcomment._id)}
+                        onClick={() => cmthandleLike(newcomment._id)}
                         className={`cursor-pointer ${
-                          commentLike[newcomment._id]
+                          newcomment.likes.includes(
+                            props.authenticatedUserDetails._id
+                          )
                             ? "bi bi-hand-thumbs-up-fill"
                             : "bi bi-hand-thumbs-up"
-                        } text-sm`}
-                      ></span>
+                        } text-sm pr-1`}
+                      >
+                        {newcomment.likes.length == 0
+                          ? ""
+                          : `${newcomment.likes.length}`}
+                      </span>
                       <span
-                        onClick={() => handleCommentDislike(newcomment._id)}
+                        onClick={() => cmthandledislike(newcomment._id)}
                         className={`cursor-pointer ${
-                          commentDislike[newcomment._id]
+                          newcomment.dislikes.includes(
+                            props.authenticatedUserDetails._id
+                          )
                             ? "bi bi-hand-thumbs-down-fill"
                             : "bi bi-hand-thumbs-down"
                         } text-sm`}
-                      ></span>
+                      >
+                        {newcomment.dislikes.length == 0
+                          ? ""
+                          : `${newcomment.dislikes.length}`}
+                      </span>
                       <span className="cursor-pointer text-sm">Reply</span>
                     </div>
                   </div>

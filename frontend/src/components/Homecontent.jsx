@@ -25,7 +25,7 @@ function Homecontent(props) {
     return { hours, seconds };
   }, []);
 
-console.log(responses,'this is responce')
+
 
   const addlike = async (postId) => {
     console.log("add like ");
@@ -76,7 +76,6 @@ console.log(responses,'this is responce')
 
   async function getpost() {
     const response = await Getpost();
-    console.log("here in getpost", response.data);
     setResponses(response.data);
   }
 
@@ -193,7 +192,7 @@ console.log(responses,'this is responce')
                     </p>
                   </div>
                 </div>
-                {console.log(response)}
+           
                 <div className="text-gray-600 cursor-pointer">
                   <i className="bi bi-three-dots hover:bg-gray-300 text-xl rounded-md p-1"></i>{" "}
                   <i className="bi bi-x text-2xl hover:bg-gray-300 p-0.5 rounded-md"></i>
