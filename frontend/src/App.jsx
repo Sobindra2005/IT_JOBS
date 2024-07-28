@@ -23,6 +23,9 @@ import AuthenticatedUser from "./api/authenticatedUserDetails.js";
 import { Success, Error } from "./components/popup/popup.jsx";
 import Comment from "./components/comment /comment.jsx";
 import { socket } from "./socket.js";
+import  Applicant  from "./components/job-section-view/applicant.jsx";
+import  Jobcreator from "./components/job-section-view/Jobcreatorview.jsx";
+import  JobseekerView  from "./components/job-section-view/JobseekerView.jsx";
 
 axios.defaults.timeout = 10000;
 
@@ -49,31 +52,28 @@ function App() {
   const [jobAuthorId, setjobAuthorId] = useState("");
   const [comment, setcomment] = useState(false);
   const [commentPost, setcommentPost] = useState([]);
-
+  const [jobView,setJobView]= useState(true)
 
   const DataAuthenticated = async () => {
     const data = await AuthenticatedUser();
-    console.log('data')
-    if(!data){
-    console.log('done')
-    await localStorage.removeItem("token");
-    axios.defaults.headers.common["Authorization"] = null;
-    props.setshowError(true);
-    props.setpopupmessage('Session Time out !!');
-    props.setshowpopup(true);
-    window.location.reload();
-   }
-  else{
-    setAuthenticatedUserDetails(data.data);
-
-  } 
+    console.log("data");
+    if (!data) {
+      console.log("done");
+      await localStorage.removeItem("token");
+      axios.defaults.headers.common["Authorization"] = null;
+      props.setshowError(true);
+      props.setpopupmessage("Session Time out !!");
+      props.setshowpopup(true);
+      window.location.reload();
+    } else {
+      setAuthenticatedUserDetails(data.data);
+    }
   };
 
   useEffect(() => {
     DataAuthenticated();
 
     if (isAuthenticated) {
- 
       socket.on("connect", () => {
         console.log("Socket connected:", socket.id);
       });
@@ -146,7 +146,7 @@ function App() {
 
   const commenthandle = (responce) => {
     setcomment(true);
-    setcommentPost(responce)
+    setcommentPost(responce);
   };
 
   return (
@@ -320,6 +320,24 @@ function App() {
                     jobapplyhandle={jobapplyhandle}
                     showJobposthandle={showJobposthandle}
                   />
+               
+                </>
+              }
+              isAuthenticated={isAuthenticated}
+            />
+          }
+        />
+
+<Route
+          path="/job"
+          element={
+            <ProtectedRoute
+              element={
+                <>
+                  <Afheader
+                    Messagehandle={Messagehandle}
+                    Notificationhandle={Notificationhandle}
+                  />
                   {showSuccess && (
                     <Success
                       showpopup={showpopup}
@@ -336,6 +354,37 @@ function App() {
                       popupmessage={popupmessage}
                     />
                   )}
+
+                
+                  {messagebox && (
+                    <Messagebox
+                      sendMessage={sendMessage}
+                      updateMsg={updateMsg}
+                      setAllmsg={setAllmsg}
+                      allmsg={allmsg}
+                      authenticatedUserDetails={authenticatedUserDetails}
+                      chatId={chatId}
+                      selectUserMsg={selectUserMsg}
+                      removeMessageBox={removeMessageBox}
+                    />
+                  )}
+                  {message && (
+                    <Message
+                      allmsg={allmsg}
+                      authenticatedUserDetails={authenticatedUserDetails}
+                      showMessageBox={showMessageBox}
+                      MessageList={MessageList}
+                    />
+                  )}
+                  {notification && <Notifications />}
+                 {jobView?
+                 <Jobcreator
+                 setJobView={setJobView}
+                 />:
+                 <JobseekerView
+                 setJobView={setJobView}
+                 />}
+                  
                 </>
               }
               isAuthenticated={isAuthenticated}
