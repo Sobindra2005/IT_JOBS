@@ -11,13 +11,14 @@ function Jobapply(props) {
   const [postalcode, setpostalcode] = useState("");
   const [address, setaddress] = useState("");
   const [descriptionforjob, setdescriptionforjob] = useState("");
-
+console.log(props.jobapplypostId)
   const jobapply = async (e) => {
     try {
       e.preventDefault();
       const responce = await Jobapplyapi(
         props.authenticatedUserDetails,
         props.jobAuthorId,
+        props.jobapplypostId,
         firstName,
         lastName,
         email,

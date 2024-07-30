@@ -4,14 +4,23 @@ const apllicantschema = new mongoose.Schema({
     applicantId:{
         type:mongoose.Schema.Types.ObjectId,
         required:true,
-        trim:true
+        trim:true,
+        ref:'User'
     }
     ,
     recruiterId:{
         type:mongoose.Schema.Types.ObjectId,
         required:true,
-        trim:true
+        trim:true,
+        ref:'User'
     },
+    postId:{
+        type:mongoose.Schema.Types.ObjectId,
+        required:true,
+        trim:true,
+        ref:'Jobs'
+    }
+    ,
     firstName: {
         type: String,
         required: true,

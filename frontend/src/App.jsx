@@ -52,7 +52,8 @@ function App() {
   const [jobAuthorId, setjobAuthorId] = useState("");
   const [comment, setcomment] = useState(false);
   const [commentPost, setcommentPost] = useState([]);
-  const [jobView,setJobView]= useState(true)
+  const [jobView,setJobView]= useState(false)
+ const [jobapplypostId,setjobapplypostId]= useState('')
 
   const DataAuthenticated = async () => {
     const data = await AuthenticatedUser();
@@ -89,9 +90,10 @@ function App() {
     }
   }, [isAuthenticated]);
 
-  const jobapplyhandle = (AuthorId) => {
+  const jobapplyhandle = (AuthorId,postId) => {
     setJobapply(true);
     setjobAuthorId(AuthorId);
+    setjobapplypostId(postId)
   };
 
   const removejobapplyhandle = () => {
@@ -257,6 +259,7 @@ function App() {
                   )}
                   {jobapply && (
                     <Jobapply
+                    jobapplypostId={jobapplypostId}
                       setshowError={setshowError}
                       setshowSuccess={setshowSuccess}
                       setpopupmessage={setpopupmessage}

@@ -328,7 +328,7 @@ function Homecontent(props) {
                 <div className=" ">
                   <button
                     onClick={() => {
-                      props.jobapplyhandle(response.AuthorId);
+                      props.jobapplyhandle(response.AuthorId,response._id);
                     }}
                     className="rounded- rounded-md justify-center px-2 py-1 shadow-sm text-gray-600 shadow-gray-500 font-semibold focus:outline-none"
                   >

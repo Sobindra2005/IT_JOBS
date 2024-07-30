@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import jobData from "../../demodata/jobList";
+import { appliedJobs } from "../../api/jobview/jobseeker";
 
 function JobseekerView(props) {
-  const [datas, setdatas] = useState([]);
+  const [appliedjobs, setappliedjobs] = useState([]);
   const [view, setview] = useState("applied-jobs");
 
   useEffect(() => {
@@ -13,15 +13,22 @@ function JobseekerView(props) {
       props.setJobView(false);
     }
   }, [view]);
-  useEffect(() => {
-    setdatas(jobData);
-  }, []);
 
-  const status = "Rejected";
+
+  const getappliedJobs=async ()=>{
+    const jobs=await appliedJobs()
+    console.log(jobs)
+    setappliedjobs(jobs.data)
+  }
+  useEffect(() => {
+    getappliedJobs()
+  }, []);
+  console.log(appliedjobs)
+  const status = "pending...";
 
   return (
     <>
-      <section className="main-content w-3/5 z-8 p-8 mt-3  border-t-2 border-gray-300  shadow-xl h-auto m-auto pt-16">
+      <section className="main-content w-3/5 z-8 p-8 mt-3  border-t-2 border-gray-300  shadow-md h-auto m-auto pt-16">
         <select
           id="view"
           value={view}
@@ -44,11 +51,11 @@ function JobseekerView(props) {
               <div className="normal-case ">Status </div>
             </div>
           </div>
-          {datas.map((data, index) => (
+          {appliedjobs.map((data, index) => (
             <>
               <div
                 key={index}
-                className="mt-3 p-4 flex flex-row justify-between rounded-3xl w-full shadow shadow-zinc-400 "
+                className="mt-3 hover:bg-gray-200  p-4 flex flex-row justify-between rounded-xl w-full shadow shadow-zinc-400 "
               >
                 <div className="flex flex-row ">
                   <span className="flex items-center"> {index + 1}.</span>
@@ -59,7 +66,9 @@ function JobseekerView(props) {
                 <div className="flex h-full ">
                   {/* date of post */}
                   <p className=" flex items-center mr-[5rem] text-sm text-gray-600 ">
-                    24th july, 2024
+                  {
+                  `${new Date(data.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`
+                   }
                   </p>
                   <button
                     type="submit"
@@ -70,7 +79,7 @@ function JobseekerView(props) {
                         status === "Accepted"
                           ? "text-yellow-400  "
                           : status === "Rejected"
-                          ? "text-red-800"
+                          ? "text-red-700"
                           : "text-green-600 "
                       }`}
                     >
