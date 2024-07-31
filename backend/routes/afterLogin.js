@@ -7,9 +7,9 @@ const { getpost } = require("../controllers/home/home")
 const { jobapply } = require("../controllers/jobapply/jobapply")
 const { removeDisLike, addDisLike, removelike, addlike } = require('../controllers/postmanage/likeDislike')
 const { postComment } = require('../controllers/postmanage/comments')
-const {getUserById}= require('../controllers/getuserByid')
-const { getJobs } = require("../controllers/job/jobcreator")
+const { getUserById } = require('../controllers/getuserByid')
 const { getappliedJobs } = require("../controllers/job/Jobseeker")
+const { getJobs, ApplicantsList, RejectHandle, pendingHandle, AcceptHandle } = require("../controllers/job/jobcreator")
 
 router.get('/getUser/:id', getUserById)
 router.get('/',)
@@ -25,6 +25,13 @@ router.put('/addlike/:postId', addlike)
 router.delete('/removedislike/:postId', removeDisLike)
 router.delete('/removelike/:postId', removelike)
 router.post('/comment/:postId', postComment)
-router.get('/postedjob',getJobs)
-router.get('/appliedJobs',getappliedJobs)
+router.get('/postedjob', getJobs)
+router.get('/appliedJobs', getappliedJobs)
+router.get('/applicants/:postId', ApplicantsList)
+router.patch('/accept/:id',AcceptHandle)
+router.patch('/reject/:id',RejectHandle)
+router.patch('/pending/:id',pendingHandle)
+
+
+
 module.exports = router

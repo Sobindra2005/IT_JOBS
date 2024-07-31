@@ -11,7 +11,7 @@ function Jobapply(props) {
   const [postalcode, setpostalcode] = useState("");
   const [address, setaddress] = useState("");
   const [descriptionforjob, setdescriptionforjob] = useState("");
-console.log(props.jobapplypostId)
+  console.log()
   const jobapply = async (e) => {
     try {
       e.preventDefault();
@@ -66,7 +66,7 @@ console.log(props.jobapplypostId)
 
   return (
     <>
-      <div className="w-screen  overflow-scroll fixed inset-0 bg-gray-800 bg-opacity-60 z-50 flex justify-center  ">
+      <div className="w-screen h-screen overflow-scroll fixed inset-0 bg-gray-800 bg-opacity-60 z-50 flex justify-center  ">
         <div className="bg-white  border relative h-auto px-3 border-black  p-2  rounded-xl w-2/5 overflow-scroll  my-2 shadow-md  flex flex-col  ">
           <div className="flex ">
             <h1 className=" text-center flex  justify-center mx-auto w-2/4 text-xl border-b-2 border-gradient-to-r from-transparent via-black to-transparent  font-semibold text-gray-600 ">

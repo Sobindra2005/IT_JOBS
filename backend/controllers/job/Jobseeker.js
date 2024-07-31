@@ -12,10 +12,10 @@ const getappliedJobs = async (req, res) => {
                 jobTitle: postDetails ? postDetails.jobTitle : null,
             };
         }));
-        console.log(allAppliedJobs)
+
         return res.status(200).json(allAppliedJobs);
     } catch (error) {
-        console.error(error);
+        console.error(error)
         return res.status(500).json({ error: 'An error occurred while fetching applied jobs' });
     }
 };

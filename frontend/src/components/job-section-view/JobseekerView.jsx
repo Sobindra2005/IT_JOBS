@@ -17,14 +17,12 @@ function JobseekerView(props) {
 
   const getappliedJobs=async ()=>{
     const jobs=await appliedJobs()
-    console.log(jobs)
+  
     setappliedjobs(jobs.data)
   }
   useEffect(() => {
     getappliedJobs()
   }, []);
-  console.log(appliedjobs)
-  const status = "pending...";
 
   return (
     <>
@@ -45,9 +43,9 @@ function JobseekerView(props) {
         <div className="border-t-2  border-black mt-2 ">
           {/* Top bar  */}
           <div className=" mt-2 text-gray-600 text-md  px-2 pl-10 flex justify-between ">
-            <div>jobs Title </div>
+            <div>jobs Titles </div>
             <div className="flex pr-10 ">
-              <div className="mr-[8rem] ">dates of Apply</div>
+              <div className="mr-[8rem] ">dates of Applies</div>
               <div className="normal-case ">Status </div>
             </div>
           </div>
@@ -55,7 +53,7 @@ function JobseekerView(props) {
             <>
               <div
                 key={index}
-                className="mt-3 hover:bg-gray-200  p-4 flex flex-row justify-between rounded-xl w-full shadow shadow-zinc-400 "
+                className="mt-3 hover:bg-gray-200 cursor-pointer  p-4 flex flex-row justify-between rounded-xl w-full shadow shadow-zinc-400 "
               >
                 <div className="flex flex-row ">
                   <span className="flex items-center"> {index + 1}.</span>
@@ -76,14 +74,21 @@ function JobseekerView(props) {
                   >
                     <span
                       className={`ml-2 flex justify-center w-full ${
-                        status === "Accepted"
-                          ? "text-yellow-400  "
-                          : status === "Rejected"
-                          ? "text-red-700"
-                          : "text-green-600 "
+                        data.status === "Accepted"
+                          ? "text-yellow-500  "
+                          : data.status === "Rejected"
+                          ? "text-red-800"
+                          : "text-orange-600 "
                       }`}
                     >
-                      {status}
+                      {data.status}
+                      <span className={`pl-2 ${
+                        data.status === "Accepted"
+                          ? " bi bi-check-circle-fill "
+                          : data.status === "Rejected"
+                          ? "bi bi-x-circle-fill "
+                          : "bi-hourglass-split"
+                      }`}></span>
                     </span>
                   </button>
                 </div>

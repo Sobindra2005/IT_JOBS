@@ -23,9 +23,9 @@ import AuthenticatedUser from "./api/authenticatedUserDetails.js";
 import { Success, Error } from "./components/popup/popup.jsx";
 import Comment from "./components/comment /comment.jsx";
 import { socket } from "./socket.js";
-import  Applicant  from "./components/job-section-view/applicant.jsx";
-import  Jobcreator from "./components/job-section-view/Jobcreatorview.jsx";
-import  JobseekerView  from "./components/job-section-view/JobseekerView.jsx";
+import Applicant from "./components/job-section-view/applicant.jsx";
+import Jobcreator from "./components/job-section-view/Jobcreatorview.jsx";
+import JobseekerView from "./components/job-section-view/JobseekerView.jsx";
 
 axios.defaults.timeout = 10000;
 
@@ -52,14 +52,15 @@ function App() {
   const [jobAuthorId, setjobAuthorId] = useState("");
   const [comment, setcomment] = useState(false);
   const [commentPost, setcommentPost] = useState([]);
-  const [jobView,setJobView]= useState(false)
- const [jobapplypostId,setjobapplypostId]= useState('')
+  const [jobView, setJobView] = useState(false);
+  const [jobapplypostId, setjobapplypostId] = useState("");
+  const [applicant, setapplicant] = useState(false);
+  const [applicantList, setApplicantList] = useState([]);
 
   const DataAuthenticated = async () => {
     const data = await AuthenticatedUser();
-    console.log("data");
+
     if (!data) {
-      console.log("done");
       await localStorage.removeItem("token");
       axios.defaults.headers.common["Authorization"] = null;
       props.setshowError(true);
@@ -90,10 +91,11 @@ function App() {
     }
   }, [isAuthenticated]);
 
-  const jobapplyhandle = (AuthorId,postId) => {
+  const jobapplyhandle = async (AuthorId, postId) => {
+    console.log(AuthorId, postId);
     setJobapply(true);
     setjobAuthorId(AuthorId);
-    setjobapplypostId(postId)
+    setjobapplypostId(postId);
   };
 
   const removejobapplyhandle = () => {
@@ -259,7 +261,7 @@ function App() {
                   )}
                   {jobapply && (
                     <Jobapply
-                    jobapplypostId={jobapplypostId}
+                      jobapplypostId={jobapplypostId}
                       setshowError={setshowError}
                       setshowSuccess={setshowSuccess}
                       setpopupmessage={setpopupmessage}
@@ -323,7 +325,6 @@ function App() {
                     jobapplyhandle={jobapplyhandle}
                     showJobposthandle={showJobposthandle}
                   />
-               
                 </>
               }
               isAuthenticated={isAuthenticated}
@@ -331,7 +332,7 @@ function App() {
           }
         />
 
-<Route
+        <Route
           path="/job"
           element={
             <ProtectedRoute
@@ -358,7 +359,6 @@ function App() {
                     />
                   )}
 
-                
                   {messagebox && (
                     <Messagebox
                       sendMessage={sendMessage}
@@ -380,14 +380,21 @@ function App() {
                     />
                   )}
                   {notification && <Notifications />}
-                 {jobView?
-                 <Jobcreator
-                 setJobView={setJobView}
-                 />:
-                 <JobseekerView
-                 setJobView={setJobView}
-                 />}
-                  
+                  {jobView ? (
+                    <Jobcreator
+                      setapplicant={setapplicant}
+                      setJobView={setJobView}
+                      setApplicantList={setApplicantList}
+                    />
+                  ) : (
+                    <JobseekerView setJobView={setJobView} />
+                  )}
+                  {applicant && (
+                    <Applicant
+                      applicantList={applicantList}
+                      setapplicant={setapplicant}
+                    />
+                  )}
                 </>
               }
               isAuthenticated={isAuthenticated}

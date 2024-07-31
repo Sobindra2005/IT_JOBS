@@ -412,7 +412,7 @@ function Comment(props) {
 
             <div className="w-1/4">
               <button
-                onClick={() => props.jobapplyhandle(commentPost.AuthorId)}
+                onClick={() => props.jobapplyhandle(commentPost.AuthorId,commentPost._id)}
                 className="rounded-md justify-center px-2 py-1 shadow-sm text-gray-700 shadow-gray-500 font-semibold focus:outline-none"
               >
                 Apply

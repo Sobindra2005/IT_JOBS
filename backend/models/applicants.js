@@ -68,6 +68,12 @@ const apllicantschema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true
+    },
+    status:{
+        type:String,
+        trim:true,
+        enum:['Accepted','Rejected','Pending'],
+        default: 'Pending'
     }
 },{
     timestamps:true
