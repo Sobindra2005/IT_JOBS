@@ -56,7 +56,7 @@ function App() {
   const [jobapplypostId, setjobapplypostId] = useState("");
   const [applicant, setapplicant] = useState(false);
   const [applicantList, setApplicantList] = useState([]);
-
+console.log(applicantList)
   const DataAuthenticated = async () => {
     const data = await AuthenticatedUser();
 
@@ -391,6 +391,8 @@ function App() {
                   )}
                   {applicant && (
                     <Applicant
+                    setApplicantList={setApplicantList}
+
                       applicantList={applicantList}
                       setapplicant={setapplicant}
                     />

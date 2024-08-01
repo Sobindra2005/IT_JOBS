@@ -9,18 +9,34 @@ function Applicant(props) {
 
   const acceptHandle = async (id) => {
     const responce = await AcceptApi(id);
-    console.log(responce)
+    const updatedResponce = responce.data;
+    props.setApplicantList((prev) =>
+      prev.map((applicant) =>
+        applicant._id === id ? updatedResponce : applicant
+      )
+    );
   };
+
   const rejectHandle = async (id) => {
     const responce = await RejectApi(id);
-    console.log(responce)
-
+    const updatedResponce = responce.data;
+    props.setApplicantList((prev) =>
+      prev.map((applicant) =>
+        applicant._id === id ? updatedResponce : applicant
+      )
+    );
   };
+
   const pendingHandle = async (id) => {
     const responce = await PendingAPi(id);
-    console.log(responce)
-
+    const updatedResponce = responce.data;
+    props.setApplicantList((prev) =>
+      prev.map((applicant) =>
+        applicant._id === id ? updatedResponce : applicant
+      )
+    );
   };
+
   return (
     <>
       <div className="w-screen h-screen  overflow-scroll pt-10 fixed inset-0 bg-gray-800 bg-opacity-60 z-30 flex justify-center  ">
@@ -39,7 +55,10 @@ function Applicant(props) {
             {props.applicantList.length > 0 ? (
               props.applicantList.map((data, index) => (
                 <>
-                  <div className="mt-3  px-4 py-2 flex flex-row hover:bg-gray-100  cursor-pointer  justify-between rounded-xl w-full shadow shadow-zinc-400 ">
+                  <div
+                    key={index}
+                    className="mt-3  px-4 py-2 flex flex-row hover:bg-gray-100  cursor-pointer  justify-between rounded-xl w-full shadow shadow-zinc-400 "
+                  >
                     <div className="flex flex-row ">
                       <img
                         className="h-14 w-14 cursor-pointer object-center object-cover border border-gray-700 p-0.5 flex-none rounded-full bg-gray-50"
