@@ -38,12 +38,10 @@ io.on('connection', (socket) => {
   console.log(clients)
 
   socket.on('identify notification', async (receiverId) => {
-    console.log('socket event is listened ')
-    console.log(receiverId)
-    const notifications = await Notification.find({ receiverId: receiverId }).sort({updatedAt: -1 }).exec()
+    const notifications = await Notification.find({ receiverId: receiverId }).sort({createdAt: -1 }).populate('userId').exec()
     io.to(clients.get(receiverId)).emit('notifications', notifications)
   })
-
+ 
   socket.on("join chat", (room) => {
     console.log("Join chat room:", room);
     if (room) {

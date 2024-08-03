@@ -20,6 +20,8 @@ import {
   cmtrmdislike,
 } from "../../api/comment";
 
+import { NotifyComment } from "../../api/Notifications";
+
 function Comment(props) {
   const [comment, setComment] = useState("");
   const [allcomment, setallcomment] = useState([]);
@@ -41,7 +43,6 @@ function Comment(props) {
   };
 
   const removelike = async (postId) => {
-
     const responce = await Removelike(postId);
     if (responce.status === 200) {
       setcommentPost(responce.data[0]);
@@ -49,7 +50,6 @@ function Comment(props) {
   };
 
   const addDislike = async (postId) => {
-
     const responce = await AddDislike(postId);
     if (responce.status === 200) {
       setcommentPost(responce.data[0]);
@@ -57,7 +57,6 @@ function Comment(props) {
   };
 
   const removedislike = async (postId) => {
-   
     const responce = await removeDislike(postId);
     if (responce.status === 200) {
       setcommentPost(responce.data[0]);
@@ -114,13 +113,22 @@ function Comment(props) {
         postId: props.commentPost._id,
         userId: props.authenticatedUserDetails._id,
       });
-      console.log(socket);
       setComment("");
+
+      const notifyResponce = await NotifyComment(
+        commentPost.AuthorId,
+        props.authenticatedUserDetails._id,
+        commentPost.jobTitle
+      );
+      console.log(notifyResponce)
+      if (notifyResponce.status === 200 &&  commentPost.AuthorId != props.authenticatedUserDetails._id ) {
+        console.log('on emitting event ')
+        socket.emit('identify notification',commentPost.AuthorId)
+      }
     }
   };
 
   //comment like interaction handle
-
   const cmtaddlike = async (cmtId) => {
     const responce = await cmtlike(cmtId);
 
@@ -406,18 +414,23 @@ function Comment(props) {
             <button className="rounded-md justify-center px-2 py-1 shadow-sm shadow-slate-600 w-[fit-content] flex text-gray-800 mr-2 items-center focus:outline-none">
               <i className="bi  bi-chat-dots-fill text-xl comment-icon"></i>
               <span className={`text-sm pl-1 text-gray-800`}>
-                {allcomment.length} comments
+                {allcomment.length > 0 && allcomment.length} comments
               </span>
             </button>
-
-            <div className="w-1/4">
-              <button
-                onClick={() => props.jobapplyhandle(commentPost.AuthorId,commentPost._id)}
-                className="rounded-md justify-center px-2 py-1 shadow-sm text-gray-700 shadow-gray-500 font-semibold focus:outline-none"
-              >
-                Apply
-              </button>
-            </div>
+            {commentPost.AuthorId === props.authenticatedUserDetails._id ? (
+              <div></div>
+            ) : (
+              <div className="w-1/4">
+                <button
+                  onClick={() =>
+                    props.jobapplyhandle(commentPost.AuthorId, commentPost._id)
+                  }
+                  className="rounded-md justify-center px-2 py-1 shadow-sm text-gray-700 shadow-gray-500 font-semibold focus:outline-none"
+                >
+                  Apply
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Comment Section */}

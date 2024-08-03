@@ -47,7 +47,7 @@ function Jobapply(props) {
       );
 
       if(notifyresponce.status === 200){
-        console.log('socket event is emitted here ')
+   
         socket.emit('identify notification',props.jobAuthorId)
       }
     } catch (error) {

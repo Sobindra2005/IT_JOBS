@@ -20,20 +20,18 @@ function Afheader({ Messagehandle, Notificationhandle }) {
           <div className="nav-bar m-0 p-0 flex items-center w-96  cursor-pointer">
             <div>
               <NavLink to="/home">
-     
                 <i id="active" className="bi bi-house"></i>
               </NavLink>
             </div>
 
             <div>
               <NavLink to="/job">
-          
                 <i id="active" className="bi bi-briefcase"></i>
               </NavLink>
             </div>
+         
             <div>
               <NavLink to="/search">
- 
                 <i id="active" className="bi bi-search"></i>
               </NavLink>
             </div>
@@ -47,7 +45,6 @@ function Afheader({ Messagehandle, Notificationhandle }) {
             </div>
             <div id="profile-button">
               <NavLink to="/profile">
-     
                 <i id="active" className="bi bi-person"></i>
               </NavLink>
             </div>

@@ -11,6 +11,8 @@ import {
   AddDislike,
   removeDislike,
 } from "../api/likeandDislike";
+import { Follow, Unfollow } from "../api/followHandle";
+import { Notifylike, Notifydislike } from "../api/Notifications";
 
 function Homecontent(props) {
   const [responses, setResponses] = useState([]);
@@ -25,7 +27,7 @@ function Homecontent(props) {
     return { hours, seconds };
   }, []);
 
-  const addlike = async (postId) => {
+  const addlike = async (postId, authorId, jobtitle) => {
     console.log("add like ");
     const responce = await Addlike(postId);
 
@@ -36,6 +38,19 @@ function Homecontent(props) {
           : response;
       });
       setResponses(updatedResponce);
+    }
+
+    const notifyresponce = await Notifylike(
+      authorId,
+      props.authenticatedUserDetails._id,
+      jobtitle
+    );
+    console.log(notifyresponce);
+    if (
+      notifyresponce.status == 200 &&
+      authorId == props.authenticatedUserDetails._id
+    ) {
+      socket.emit("identify notification", authorId);
     }
   };
 
@@ -52,7 +67,7 @@ function Homecontent(props) {
     }
   };
 
-  const addDislike = async (postId) => {
+  const addDislike = async (postId, authorId, jobtitle) => {
     console.log("add dislike ");
     const responce = await AddDislike(postId);
     if (responce.status === 200) {
@@ -62,6 +77,19 @@ function Homecontent(props) {
           : response;
       });
       setResponses(updatedResponce);
+    }
+
+    const notifyresponce = await Notifydislike(
+      authorId,
+      props.authenticatedUserDetails._id,
+      jobtitle
+    );
+    console.log(notifyresponce);
+    if (
+      notifyresponce.status == 200 &&
+      authorId == props.authenticatedUserDetails._id
+    ) {
+      socket.emit("identify notification", authorId);
     }
   };
 
@@ -77,33 +105,34 @@ function Homecontent(props) {
       setResponses(updatedResponce);
     }
   };
+ 
 
   async function getpost() {
     const response = await Getpost();
     setResponses(response.data);
   }
 
-  const handleLike = async (postId) => {
+  const handleLike = async (postId, authorId, jobtitle) => {
     const post = responses.find((response) => response._id === postId);
 
     if (!!post) {
       if (post.likes.includes(props.authenticatedUserDetails._id)) {
         await removelike(postId);
       } else {
-        await addlike(postId);
+        await addlike(postId, authorId, jobtitle);
         await removedislike(postId);
       }
     }
   };
 
-  const handledislike = async (postId) => {
+  const handledislike = async (postId, authorId, jobtitle) => {
     const post = responses.find((response) => response._id === postId);
 
     if (post) {
       if (post.dislikes.includes(props.authenticatedUserDetails._id)) {
         await removedislike(postId);
       } else {
-        await addDislike(postId);
+        await addDislike(postId, authorId, jobtitle);
         await removelike(postId);
       }
     }
@@ -131,6 +160,18 @@ function Homecontent(props) {
 
   const commentHandle = (post) => {
     props.commenthandle(post);
+  };
+
+  //follow Handle
+
+  const followHandle = async (userId) => {
+    const responce = await Follow(userId);
+    console.log(responce);
+  };
+
+  const unfollowHandle = async (userId) => {
+    const responce = await Unfollow(userId);
+    console.log(responce);
   };
 
   return (
@@ -186,10 +227,23 @@ function Homecontent(props) {
                   />
 
                   <div className="flex flex-col pl-3 cursor-pointer">
-                    <p className="text-base font-medium">
+                    <p className="text-lg font-medium">
                       {response.firstName
                         ? `${response.firstName} ${response.lastName}`
                         : "Unknown User"}
+                      {response.AuthorId ===
+                      props.authenticatedUserDetails._id ? (
+                        ""
+                      ) : (
+                        <span>
+                          <button
+                            className={`bg-blue-900
+                           ml-3 text-sm text-white px-2 rounded-sm shadow-md `}
+                          >
+                            {false ? "Unfollow" : "Follow"}
+                          </button>
+                        </span>
+                      )}
                     </p>
                     <p className="text-xs text-left text-gray-500 font-medium">
                       {`${timeCalculate(response?.createdAt)}`}
@@ -264,7 +318,13 @@ function Homecontent(props) {
                 <div className="flex  items-center space-x-6 text-lg">
                   {/* Like Button */}
                   <button
-                    onClick={() => handleLike(response._id)}
+                    onClick={() =>
+                      handleLike(
+                        response._id,
+                        response.AuthorId,
+                        response.jobTitle
+                      )
+                    }
                     className={`rounded-md flex-1   justify-center px-2 py-1 shadow-sm shadow-slate-600 pl-3 flex items-center ${
                       response.likes.includes(
                         props.authenticatedUserDetails._id
@@ -301,7 +361,13 @@ function Homecontent(props) {
 
                   {/* Dislike Button */}
                   <button
-                    onClick={() => handledislike(response._id)}
+                    onClick={() =>
+                      handledislike(
+                        response._id,
+                        response.AuthorId,
+                        response.jobTitle
+                      )
+                    }
                     className={` rounded-md  justify-center px-2 py-1 shadow-sm shadow-slate-600 pl-3 flex items-center  ${
                       response.dislikes.includes(
                         props.authenticatedUserDetails._id
@@ -333,23 +399,30 @@ function Homecontent(props) {
                 </div>
 
                 {/* comment button */}
-                <button
-                  onClick={() => commentHandle(response)}
-                  className="  rounded-md justify-center px-2 py-1 shadow-sm shadow-slate-600  flex text-gray-500 mr-2 items-center focus:outline-none"
-                >
-                  <i className="bi bi-chat-dots-fill text-xl comment-icon"> </i>{" "}
-                  <span className="pl-1"> Comments</span>
-                </button>
-
-                <div className=" ">
+                <div className="w-[55%] flex justify-around">
                   <button
-                    onClick={() => {
-                      props.jobapplyhandle(response.AuthorId, response._id);
-                    }}
-                    className="rounded- rounded-md justify-center px-2 py-1 shadow-sm text-gray-600 shadow-gray-500 font-semibold focus:outline-none"
+                    onClick={() => commentHandle(response)}
+                    className="  rounded-md justify-center px-2 py-1 shadow-sm shadow-slate-600  flex text-gray-500 mr-2 items-center focus:outline-none"
                   >
-                    Apply
+                    <i className="bi bi-chat-dots-fill text-xl comment-icon">
+                      {" "}
+                    </i>{" "}
+                    <span className="pl-1"> Comments</span>
                   </button>
+                  {props.authenticatedUserDetails._id == response.AuthorId ? (
+                    <div></div>
+                  ) : (
+                    <div className=" ">
+                      <button
+                        onClick={() => {
+                          props.jobapplyhandle(response.AuthorId, response._id);
+                        }}
+                        className="rounded- rounded-md justify-center px-2 py-1 shadow-sm text-gray-600 shadow-gray-500 font-semibold focus:outline-none"
+                      >
+                        Apply
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

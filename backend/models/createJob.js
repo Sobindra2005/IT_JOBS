@@ -6,6 +6,7 @@ const createJobSchema = new mongoose.Schema(
         AuthorId: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
+            ref:'User'
         },
         firstName: {
             type: String,

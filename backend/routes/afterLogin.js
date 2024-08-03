@@ -10,7 +10,8 @@ const { postComment } = require('../controllers/postmanage/comments')
 const { getUserById } = require('../controllers/getuserByid')
 const { getappliedJobs } = require("../controllers/job/Jobseeker")
 const { getJobs, ApplicantsList, RejectHandle, pendingHandle, AcceptHandle } = require("../controllers/job/jobcreator")
-const { jobapplyNotification, getNotifications } = require("../controllers/Notifications/notification")
+const { jobapplyNotification, getNotifications, dislikeNotification,likeNotification,commentNotification, seenHandle } = require("../controllers/Notifications/notification")
+const { Follow, unFollow } = require("../controllers/followunfollow/followUnfollow")
 
 router.get('/getUser/:id', getUserById)
 router.get('/',)
@@ -21,18 +22,30 @@ router.get('/authenticated', authenticatedUserDetails)
 router.post('/createJob/:authorId', createJob)
 router.get('/home', getpost)
 router.post('/jobapply', jobapply)
+
 router.put('/adddislike/:postId', addDisLike)
 router.put('/addlike/:postId', addlike)
 router.delete('/removedislike/:postId', removeDisLike)
 router.delete('/removelike/:postId', removelike)
 router.post('/comment/:postId', postComment)
+
 router.get('/postedjob', getJobs)
 router.get('/appliedJobs', getappliedJobs)
 router.get('/applicants/:postId', ApplicantsList)
-router.patch('/accept/:id',AcceptHandle)
-router.patch('/reject/:id',RejectHandle)
-router.patch('/pending/:id',pendingHandle)
-router.post('/notify/jobapply',jobapplyNotification)
-router.get('/notification',getNotifications)
 
+router.patch('/accept/:id', AcceptHandle)
+router.patch('/reject/:id', RejectHandle)
+router.patch('/pending/:id', pendingHandle)
+
+router.post('/notify/jobapply', jobapplyNotification)
+router.post('/notify/comment', commentNotification)
+router.post('/notify/like', likeNotification)
+router.post('/notify/dislike', dislikeNotification)
+
+router.get('/notification', getNotifications)
+
+router.put('/follow', Follow)
+router.delete('/unfollow', unFollow)
+
+router.post('/seen',seenHandle)
 module.exports = router

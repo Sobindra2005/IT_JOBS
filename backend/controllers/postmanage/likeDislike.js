@@ -35,9 +35,7 @@ const addDisLike = async (req, res) => {
         const data = await collectionByIdandName(Jobs, postId)
         return res.status(200).json(data)
     }
-    catch (err) { // const data = collectionByIdandName(Jobs, postId)
-        // console.log(data)
-        // return res.status(200).json(data)
+    catch (err) {
         console.log('err occur here in dislike :-', err)
     }
 
