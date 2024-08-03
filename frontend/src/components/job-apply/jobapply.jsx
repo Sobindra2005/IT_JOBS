@@ -1,5 +1,7 @@
+import { NotifyJobapply } from "../../api/Notifications";
 import { Jobapplyapi } from "../../api/jobapply";
 import react, { useState } from "react";
+import {socket} from '../../socket'
 
 function Jobapply(props) {
   const [firstName, setfirstName] = useState("");
@@ -11,9 +13,10 @@ function Jobapply(props) {
   const [postalcode, setpostalcode] = useState("");
   const [address, setaddress] = useState("");
   const [descriptionforjob, setdescriptionforjob] = useState("");
-  console.log()
+  
   const jobapply = async (e) => {
     try {
+      console.log(props.jobAuthorId)
       e.preventDefault();
       const responce = await Jobapplyapi(
         props.authenticatedUserDetails,
@@ -29,13 +32,23 @@ function Jobapply(props) {
         address,
         descriptionforjob
       );
-      console.log(responce);
 
       if (responce.status === 200) {
         props.setshowSuccess(true);
         props.setpopupmessage("Job apply  Successfully");
         props.setshowpopup(true);
         props.removejobapplyhandle();
+      }
+
+      const notifyresponce = await NotifyJobapply(
+        props.jobAuthorId,
+        props.authenticatedUserDetails,
+        responce.data.postId.jobTitle
+      );
+
+      if(notifyresponce.status === 200){
+        console.log('socket event is emitted here ')
+        socket.emit('identify notification',props.jobAuthorId)
       }
     } catch (error) {
       if (error.response) {
@@ -63,6 +76,7 @@ function Jobapply(props) {
       }
     }
   };
+
 
   return (
     <>

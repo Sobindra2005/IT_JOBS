@@ -1,17 +1,18 @@
-const express=require('express')
+const express = require('express')
 const { connectMongoDb } = require("./databaseConnect.js");
 const landingPageRoutes = require("./routes/notlogin.js");
 const { tokenAuthentication } = require('./middlewares/authenticate.js');
 const afterloginRoutes = require("./routes/afterLogin.js");
-const {app,io,server} =require('./server.js')
-const cmtHanldeRoute =require('./routes/comment.js')
+const { app, io, server } = require('./server.js')
+const cmtHanldeRoute = require('./routes/comment.js')
 
 const path = require('path');
 require('dotenv').config();
 const cors = require('cors');
 
 const { Message } = require('./models/message');
-const { Comment } = require('./models/comment.js')
+const { Comment } = require('./models/comment.js');
+const { Notification } = require('./models/notifications.js');
 
 const url = process.env.mongourl;
 
@@ -25,11 +26,23 @@ app.use(cors({
   credentials: true,
 }));
 
-
+const clients = new Map();
 
 io.on('connection', (socket) => {
+  console.log('socket id connected ', socket.id)
 
-  console.log(`socket ${socket.id} is connected !!!`);
+  socket.on('online', (userId) => {
+    clients.set(userId, socket.id);
+  })
+
+  console.log(clients)
+
+  socket.on('identify notification', async (receiverId) => {
+    console.log('socket event is listened ')
+    console.log(receiverId)
+    const notifications = await Notification.find({ receiverId: receiverId }).sort({updatedAt: -1 }).exec()
+    io.to(clients.get(receiverId)).emit('notifications', notifications)
+  })
 
   socket.on("join chat", (room) => {
     console.log("Join chat room:", room);
@@ -72,6 +85,12 @@ io.on('connection', (socket) => {
 
   socket.on("disconnect", () => {
     console.log(`socket ${socket.id} is disconnected `);
+    for (let [userId, socketId] of clients.entries()) {
+      if (socketId === socket.id) {
+        clients.delete(userId);
+        break;
+      }
+    }
   });
 });
 
@@ -87,4 +106,4 @@ app.set('view engine', 'ejs');
 
 app.use("/", landingPageRoutes);
 app.use("/", tokenAuthentication, afterloginRoutes);
-app.use('/cmt',tokenAuthentication,cmtHanldeRoute)
+app.use('/cmt', tokenAuthentication, cmtHanldeRoute)

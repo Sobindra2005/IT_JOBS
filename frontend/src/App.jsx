@@ -56,7 +56,8 @@ function App() {
   const [jobapplypostId, setjobapplypostId] = useState("");
   const [applicant, setapplicant] = useState(false);
   const [applicantList, setApplicantList] = useState([]);
-console.log(applicantList)
+  console.log(applicantList);
+
   const DataAuthenticated = async () => {
     const data = await AuthenticatedUser();
 
@@ -73,9 +74,17 @@ console.log(applicantList)
   };
 
   useEffect(() => {
-    DataAuthenticated();
+    const autheticationProcess = async () => {
+      await DataAuthenticated();
+    };
+    autheticationProcess();
+  }, []); 
 
-    if (isAuthenticated) {
+  useEffect(() => {
+    if (!!authenticatedUserDetails && !!isAuthenticated) {
+      
+      socket.emit("online", authenticatedUserDetails._id);
+
       socket.on("connect", () => {
         console.log("Socket connected:", socket.id);
       });
@@ -88,8 +97,14 @@ console.log(applicantList)
       socket.on("disconnect", () => {
         console.log("Socket disconnected:", socket.id);
       });
+
+      return () => {
+        socket.off("connect");
+        socket.off("message received");
+        socket.off("disconnect");
+      };
     }
-  }, [isAuthenticated]);
+  }, [authenticatedUserDetails, isAuthenticated]);
 
   const jobapplyhandle = async (AuthorId, postId) => {
     console.log(AuthorId, postId);
@@ -391,8 +406,7 @@ console.log(applicantList)
                   )}
                   {applicant && (
                     <Applicant
-                    setApplicantList={setApplicantList}
-
+                      setApplicantList={setApplicantList}
                       applicantList={applicantList}
                       setapplicant={setapplicant}
                     />

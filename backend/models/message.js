@@ -40,13 +40,16 @@ const messageSchema = new mongoose.Schema(
             type: String,
             required: true,
             trim: true
+        },
+        isRead: {
+            type: Boolean,
+            default: false
         }
-
     },
     { timestamps: true }
 )
 
 const Message = mongoose.model('Message', messageSchema)
-const MsgRecord= mongoose.model('MsgRecord',recordSchema)
+const MsgRecord = mongoose.model('MsgRecord', recordSchema)
 
-module.exports = {MsgRecord,Message}
+module.exports = { MsgRecord, Message }

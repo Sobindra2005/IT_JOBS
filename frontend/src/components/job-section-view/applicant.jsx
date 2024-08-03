@@ -43,7 +43,7 @@ function Applicant(props) {
         <div className=" w-3/5 rounded-xl  shadow-slate-800 z-8 pb-8 text-center bg-white h-[98%] shadow-xl overflow-scroll m-auto ">
           <div className="flex  pt-8 pb-2 px-8 sticky top-0 bg-white   justify-end  ">
             <h1 className="text-2xl w-full flex justify-start font-semibold ">
-              Applicants List
+              Applicants List ({props.applicantList.length})
             </h1>
             <i
               onClick={() => hideapplicant()}

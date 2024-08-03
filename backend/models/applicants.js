@@ -1,24 +1,24 @@
 const mongoose = require('mongoose')
 
 const apllicantschema = new mongoose.Schema({
-    applicantId:{
-        type:mongoose.Schema.Types.ObjectId,
-        required:true,
-        trim:true,
-        ref:'User'
+    applicantId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        trim: true,
+        ref: 'User'
     }
     ,
-    recruiterId:{
-        type:mongoose.Schema.Types.ObjectId,
-        required:true,
-        trim:true,
-        ref:'User'
+    recruiterId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        trim: true,
+        ref: 'User'
     },
-    postId:{
-        type:mongoose.Schema.Types.ObjectId,
-        required:true,
-        trim:true,
-        ref:'Jobs'
+    postId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        trim: true,
+        ref: 'Jobs'
     }
     ,
     firstName: {
@@ -69,16 +69,20 @@ const apllicantschema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    status:{
-        type:String,
-        trim:true,
-        enum:['Accepted','Rejected','Pending'],
+    isRead: {
+        type: Boolean,
+        default: false
+    },
+    status: {
+        type: String,
+        trim: true,
+        enum: ['Accepted', 'Rejected', 'Pending'],
         default: 'Pending'
     }
-},{
-    timestamps:true
+}, {
+    timestamps: true
 }
 )
 
-const applicants=mongoose.model('applicants',apllicantschema)
-module.exports={applicants}
+const applicants = mongoose.model('applicants', apllicantschema)
+module.exports = { applicants }

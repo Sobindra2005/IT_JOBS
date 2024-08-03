@@ -46,7 +46,7 @@ function Jobcreator(props) {
           <option value="applied-jobs">Applied Jobs</option>
         </select>
 
-        <h1 className="text-2xl text-left font-semibold ">Job Lists</h1>
+        <h1 className="text-2xl text-left font-semibold ">Job Lists({jobs.length})</h1>
         {/* job lists overview */}
 
         <div className="border-t-2  border-black mt-2 ">

@@ -25,8 +25,6 @@ function Homecontent(props) {
     return { hours, seconds };
   }, []);
 
-
-
   const addlike = async (postId) => {
     console.log("add like ");
     const responce = await Addlike(postId);
@@ -46,7 +44,9 @@ function Homecontent(props) {
     const responce = await Removelike(postId);
     if (responce.status === 200) {
       const updatedResponce = responses.map((response) => {
-        return response._id === responce.data[0]._id ? responce.data[0] : response;
+        return response._id === responce.data[0]._id
+          ? responce.data[0]
+          : response;
       });
       setResponses(updatedResponce);
     }
@@ -57,7 +57,9 @@ function Homecontent(props) {
     const responce = await AddDislike(postId);
     if (responce.status === 200) {
       const updatedResponce = responses.map((response) => {
-        return response._id === responce.data[0]._id ? responce.data[0] : response;
+        return response._id === responce.data[0]._id
+          ? responce.data[0]
+          : response;
       });
       setResponses(updatedResponce);
     }
@@ -68,7 +70,9 @@ function Homecontent(props) {
     const responce = await removeDislike(postId);
     if (responce.status === 200) {
       const updatedResponce = responses.map((response) => {
-        return response._id === responce.data[0]._id ? responce.data[0] : response;
+        return response._id === responce.data[0]._id
+          ? responce.data[0]
+          : response;
       });
       setResponses(updatedResponce);
     }
@@ -192,7 +196,7 @@ function Homecontent(props) {
                     </p>
                   </div>
                 </div>
-           
+
                 <div className="text-gray-600 cursor-pointer">
                   <i className="bi bi-three-dots hover:bg-gray-300 text-xl rounded-md p-1"></i>{" "}
                   <i className="bi bi-x text-2xl hover:bg-gray-300 p-0.5 rounded-md"></i>
@@ -269,7 +273,15 @@ function Homecontent(props) {
                         : "text-gray-500"
                     } focus:outline-none`}
                   >
-                    <i className={`fas fa-thumbs-up  mr-1.5`}></i>
+                    <i
+                      className={` ${
+                        response.likes.includes(
+                          props.authenticatedUserDetails._id
+                        )
+                          ? "text-gray-800"
+                          : "text-gray-500"
+                      }  fas fa-thumbs-up  mr-1.5`}
+                    ></i>
                     <span
                       className={` flex  ${
                         response.likes.includes(
@@ -290,8 +302,12 @@ function Homecontent(props) {
                   {/* Dislike Button */}
                   <button
                     onClick={() => handledislike(response._id)}
-                    className={` rounded-md  justify-center px-2 py-1 shadow-sm shadow-slate-600 pl-3 flex items-center ${
-                      dislike[response._id] ? "text-gray-800" : "text-gray-500"
+                    className={` rounded-md  justify-center px-2 py-1 shadow-sm shadow-slate-600 pl-3 flex items-center  ${
+                      response.dislikes.includes(
+                        props.authenticatedUserDetails._id
+                      )
+                        ? "text-black"
+                        : "text-gray-500"
                     } focus:outline-none`}
                   >
                     <i className={`fas fa-thumbs-down  mr-1.5`}></i>
@@ -328,7 +344,7 @@ function Homecontent(props) {
                 <div className=" ">
                   <button
                     onClick={() => {
-                      props.jobapplyhandle(response.AuthorId,response._id);
+                      props.jobapplyhandle(response.AuthorId, response._id);
                     }}
                     className="rounded- rounded-md justify-center px-2 py-1 shadow-sm text-gray-600 shadow-gray-500 font-semibold focus:outline-none"
                   >
