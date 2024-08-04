@@ -62,7 +62,7 @@ function Notifications() {
                           <span className="font-[500]">
                             {data.userId.firstName} {data.userId.lastName}{" "}
                           </span>
-                          <span className="font-normal normal-case text-[15px] text-gray-900">
+                          <span className="font-normal  normal-case text-[15px] text-gray-800">
                             {data.message}
                           </span>
                         </p>

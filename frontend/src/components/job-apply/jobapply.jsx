@@ -1,7 +1,7 @@
-import { NotifyJobapply } from "../../api/Notifications";
+import { Notification } from "../../api/Notifications";
 import { Jobapplyapi } from "../../api/jobapply";
 import react, { useState } from "react";
-import {socket} from '../../socket'
+import { socket } from "../../socket";
 
 function Jobapply(props) {
   const [firstName, setfirstName] = useState("");
@@ -13,10 +13,10 @@ function Jobapply(props) {
   const [postalcode, setpostalcode] = useState("");
   const [address, setaddress] = useState("");
   const [descriptionforjob, setdescriptionforjob] = useState("");
-  
+
   const jobapply = async (e) => {
     try {
-      console.log(props.jobAuthorId)
+      console.log(props.jobAuthorId);
       e.preventDefault();
       const responce = await Jobapplyapi(
         props.authenticatedUserDetails,
@@ -39,16 +39,17 @@ function Jobapply(props) {
         props.setshowpopup(true);
         props.removejobapplyhandle();
       }
+      if (props.authenticatedUserDetails._id != props.jobAuthorId) {
+        const notifyresponce = await Notification(
+          props.jobAuthorId,
+          props.authenticatedUserDetails._id,
+          responce.data.postId.jobTitle,
+          `has applied for your ${responce.data.postId.jobTitle} job role. Review their application now!`
+        );
 
-      const notifyresponce = await NotifyJobapply(
-        props.jobAuthorId,
-        props.authenticatedUserDetails,
-        responce.data.postId.jobTitle
-      );
-
-      if(notifyresponce.status === 200){
-   
-        socket.emit('identify notification',props.jobAuthorId)
+        if (notifyresponce.status === 200) {
+          socket.emit("identify notification", props.jobAuthorId);
+        }
       }
     } catch (error) {
       if (error.response) {
@@ -76,7 +77,6 @@ function Jobapply(props) {
       }
     }
   };
-
 
   return (
     <>

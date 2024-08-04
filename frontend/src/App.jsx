@@ -406,6 +406,7 @@ function App() {
                   )}
                   {applicant && (
                     <Applicant
+                    authenticatedUserDetails={authenticatedUserDetails}
                       setApplicantList={setApplicantList}
                       applicantList={applicantList}
                       setapplicant={setapplicant}

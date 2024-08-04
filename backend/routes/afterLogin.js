@@ -10,7 +10,7 @@ const { postComment } = require('../controllers/postmanage/comments')
 const { getUserById } = require('../controllers/getuserByid')
 const { getappliedJobs } = require("../controllers/job/Jobseeker")
 const { getJobs, ApplicantsList, RejectHandle, pendingHandle, AcceptHandle } = require("../controllers/job/jobcreator")
-const { jobapplyNotification, getNotifications, dislikeNotification,likeNotification,commentNotification, seenHandle } = require("../controllers/Notifications/notification")
+const { getNotifications, seenHandle,  Notify } = require("../controllers/Notifications/notification")
 const { Follow, unFollow } = require("../controllers/followunfollow/followUnfollow")
 
 router.get('/getUser/:id', getUserById)
@@ -37,15 +37,12 @@ router.patch('/accept/:id', AcceptHandle)
 router.patch('/reject/:id', RejectHandle)
 router.patch('/pending/:id', pendingHandle)
 
-router.post('/notify/jobapply', jobapplyNotification)
-router.post('/notify/comment', commentNotification)
-router.post('/notify/like', likeNotification)
-router.post('/notify/dislike', dislikeNotification)
+router.post('/notify', Notify)
 
 router.get('/notification', getNotifications)
 
 router.put('/follow', Follow)
 router.delete('/unfollow', unFollow)
 
-router.post('/seen',seenHandle)
+router.post('/seen', seenHandle)
 module.exports = router

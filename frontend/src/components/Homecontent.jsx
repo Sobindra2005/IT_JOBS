@@ -12,7 +12,7 @@ import {
   removeDislike,
 } from "../api/likeandDislike";
 import { Follow, Unfollow } from "../api/followHandle";
-import { Notifylike, Notifydislike } from "../api/Notifications";
+import { Notification } from "../api/Notifications";
 
 function Homecontent(props) {
   const [responses, setResponses] = useState([]);
@@ -39,18 +39,17 @@ function Homecontent(props) {
       });
       setResponses(updatedResponce);
     }
-
-    const notifyresponce = await Notifylike(
-      authorId,
-      props.authenticatedUserDetails._id,
-      jobtitle
-    );
-    console.log(notifyresponce);
-    if (
-      notifyresponce.status == 200 &&
-      authorId == props.authenticatedUserDetails._id
-    ) {
-      socket.emit("identify notification", authorId);
+    if (authorId != props.authenticatedUserDetails._id) {
+      const notifyresponce = await Notification(
+        authorId,
+        props.authenticatedUserDetails._id,
+        jobtitle,
+        ` liked your ${jobtitle} job post.`
+      );
+      console.log(notifyresponce);
+      if (notifyresponce.status == 200) {
+        socket.emit("identify notification", authorId);
+      }
     }
   };
 
@@ -78,18 +77,17 @@ function Homecontent(props) {
       });
       setResponses(updatedResponce);
     }
+    if (authorId != props.authenticatedUserDetails._id) {
+      const notifyresponce = await Notification(
+        authorId,
+        props.authenticatedUserDetails._id,
+        jobtitle,
+        ` disliked your ${jobtitle} job post.`
+      );
 
-    const notifyresponce = await Notifydislike(
-      authorId,
-      props.authenticatedUserDetails._id,
-      jobtitle
-    );
-    console.log(notifyresponce);
-    if (
-      notifyresponce.status == 200 &&
-      authorId == props.authenticatedUserDetails._id
-    ) {
-      socket.emit("identify notification", authorId);
+      if (notifyresponce.status == 200) {
+        socket.emit("identify notification", authorId);
+      }
     }
   };
 
@@ -105,7 +103,6 @@ function Homecontent(props) {
       setResponses(updatedResponce);
     }
   };
- 
 
   async function getpost() {
     const response = await Getpost();

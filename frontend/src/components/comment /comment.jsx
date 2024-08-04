@@ -20,7 +20,7 @@ import {
   cmtrmdislike,
 } from "../../api/comment";
 
-import { NotifyComment } from "../../api/Notifications";
+import { Notification } from "../../api/Notifications";
 
 function Comment(props) {
   const [comment, setComment] = useState("");
@@ -40,6 +40,20 @@ function Comment(props) {
     if (responce.status === 200) {
       setcommentPost(responce.data[0]);
     }
+
+    if (commentPost.AuthorId != props.authenticatedUserDetails._id) {
+      const notifyResponce = await Notification(
+        commentPost.AuthorId,
+        props.authenticatedUserDetails._id,
+        commentPost.jobTitle,
+        `liked your ${commentPost.jobTitle} job post.`
+      );
+
+      if (notifyResponce.status === 200) {
+        console.log("on emitting event ");
+        socket.emit("identify notification", commentPost.AuthorId);
+      }
+    }
   };
 
   const removelike = async (postId) => {
@@ -53,6 +67,20 @@ function Comment(props) {
     const responce = await AddDislike(postId);
     if (responce.status === 200) {
       setcommentPost(responce.data[0]);
+    }
+
+    if (commentPost.AuthorId != props.authenticatedUserDetails._id) {
+      const notifyResponce = await Notification(
+        commentPost.AuthorId,
+        props.authenticatedUserDetails._id,
+        commentPost.jobTitle,
+        ` disliked your ${commentPost.jobTitle} job post.`
+      );
+
+      if (notifyResponce.status === 200) {
+        console.log("on emitting event ");
+        socket.emit("identify notification", commentPost.AuthorId);
+      }
     }
   };
 
@@ -114,16 +142,18 @@ function Comment(props) {
         userId: props.authenticatedUserDetails._id,
       });
       setComment("");
+      if (commentPost.AuthorId != props.authenticatedUserDetails._id) {
+        const notifyResponce = await Notification(
+          commentPost.AuthorId,
+          props.authenticatedUserDetails._id,
+          commentPost.jobTitle,
+          `commented on your ${commentPost.jobTitle} job post.`
+        );
 
-      const notifyResponce = await NotifyComment(
-        commentPost.AuthorId,
-        props.authenticatedUserDetails._id,
-        commentPost.jobTitle
-      );
-      console.log(notifyResponce)
-      if (notifyResponce.status === 200 &&  commentPost.AuthorId != props.authenticatedUserDetails._id ) {
-        console.log('on emitting event ')
-        socket.emit('identify notification',commentPost.AuthorId)
+        if (notifyResponce.status === 200) {
+          console.log("on emitting event ");
+          socket.emit("identify notification", commentPost.AuthorId);
+        }
       }
     }
   };

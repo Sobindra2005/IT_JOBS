@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { AcceptApi, RejectApi, PendingAPi } from "../../api/jobview/jobcreator";
+import { Notification } from "../../api/Notifications";
 
 function Applicant(props) {
   console.log(props.applicantList);
@@ -7,7 +8,7 @@ function Applicant(props) {
     props.setapplicant(false);
   };
 
-  const acceptHandle = async (id) => {
+  const acceptHandle = async (id, userId, jobtitle) => {
     const responce = await AcceptApi(id);
     const updatedResponce = responce.data;
     props.setApplicantList((prev) =>
@@ -15,9 +16,19 @@ function Applicant(props) {
         applicant._id === id ? updatedResponce : applicant
       )
     );
+    const notifyresponce = await Notification(
+      userId,
+      props.authenticatedUserDetails._id,
+      jobtitle,
+      ` The status of your application for the ${jobtitle} job role has been updated`
+    );
+
+    if (notifyresponce.status == 200) {
+      socket.emit("identify notification", authorId);
+    }
   };
 
-  const rejectHandle = async (id) => {
+  const rejectHandle = async (id, userId, jobtitle) => {
     const responce = await RejectApi(id);
     const updatedResponce = responce.data;
     props.setApplicantList((prev) =>
@@ -25,6 +36,16 @@ function Applicant(props) {
         applicant._id === id ? updatedResponce : applicant
       )
     );
+    const notifyresponce = await Notification(
+      userId,
+      props.authenticatedUserDetails._id,
+      jobtitle,
+      ` The status of your application for the ${jobtitle} job role has been updated`
+    );
+
+    if (notifyresponce.status == 200) {
+      socket.emit("identify notification", authorId);
+    }
   };
 
   const pendingHandle = async (id) => {
@@ -113,14 +134,26 @@ function Applicant(props) {
                       ) : (
                         <>
                           <button
-                            onClick={() => rejectHandle(data._id)}
+                            onClick={() =>
+                              rejectHandle(
+                                data._id,
+                                data.applicantId,
+                                data.postId.jobTitle
+                              )
+                            }
                             type="submit"
                             className=" flex items-center font-medium text-base bg-red-800 bg-opacity-80 text-white  px-2 h-9 rounded-md  shadow-md "
                           >
                             <i className="bi bi-x-circle pr-1 "></i> Reject
                           </button>
                           <button
-                            onClick={() => acceptHandle(data._id)}
+                            onClick={() =>
+                              acceptHandle(
+                                data._id,
+                                data.applicantId,
+                                data.postId.jobTitle
+                              )
+                            }
                             type="submit"
                             className=" flex items-center font-medium text-base bg-yellow-700 bg-opacity-90 text-white  px-2 h-9 rounded-md  shadow-md "
                           >

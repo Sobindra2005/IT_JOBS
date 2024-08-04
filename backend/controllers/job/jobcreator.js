@@ -18,7 +18,7 @@ const getJobs = async (req, res) => {
 
 const ApplicantsList = async (req, res) => {
     const postId = req.params.postId
-    const allApplicants = await applicants.find({ postId: postId })
+    const allApplicants = await applicants.find({ postId: postId }).populate('postId').exec()
     return res.status(200).json(allApplicants)
 }
 
