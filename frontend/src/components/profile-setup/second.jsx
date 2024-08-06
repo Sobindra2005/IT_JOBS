@@ -28,7 +28,7 @@ export const Second = (props) => {
       {/* screeen div */}
       <div className="w-screen h-screen flex justify-center flex-col bg-white items-center">
         {/* component div */}
-    
+
         <div className="w-[23rem]  border justify-around border-black  text-gray-800 items-center rounded h-[25rem] shadow bg-[#eff0ed] flex flex-col">
           {/* title of the div */}
           <h1 className="text-center pt-2  text-xl   w-[20rem] text-gray-700 ">
@@ -77,20 +77,19 @@ export const Second = (props) => {
 
             <div className="flex justify-around  m-auto mt-12 text-xl  my-3 w-[100%]  ">
               <button
+                onClick={() => props.setView("third")}
                 type="button "
-                className=" px-3  rounded-sm  cursor-pointer text-black "
+                className=" px-3 py-1 border border-black rounded  cursor-pointer text-black "
               >
                 {" "}
-                Skip <span className="bi bi-skip-forward"></span>
+                Skip
               </button>
-              <button
-                type="button "
-                className="text-black px-3 cursor-pointer"
+              <div
+                onClick={() => props.setView("third")}
+                className=" bg-blue-700 flex items-center justify-center text-white rounded cursor-pointer"
               >
-               
-                Next{" "}
-                <span className="bi bi-arrow-right"></span>
-              </button>
+                <Button variant="filled "> Next</Button>
+              </div>
             </div>
           </div>
         </div>

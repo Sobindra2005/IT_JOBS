@@ -40,7 +40,7 @@ const Messagebox = (props) => {
 
   return (
     <>
-      <div className="Message z-10 bg-white fixed right-80 bottom-6 mt-16 border rounded-3xl cursor-pointer h-2/3 w-1/4 shadow-lg shadow-blue-500/50">
+      <div className="Message z-10  bg-white fixed right-80 bottom-6 mt-16 border rounded-3xl cursor-pointer h-2/3 w-1/4 shadow-lg shadow-blue-500/50">
         {/* top component */}
         <div className="pl-2 pt-2 pb-2 w-full shadow-lg flex flex-row pr-2">
           {/* left, right component controller */}
@@ -83,7 +83,7 @@ const Messagebox = (props) => {
                   : "justify-start"
               }`}
             >
-              <p className="px-2 break-words break-all block normal-case py-1 w-auto max-w-[50%] rounded-r-xl rounded-t-xl bg-cyan-400">
+              <p className={`${props.authenticatedUserDetails._id === msg.senderId ?'rounded-l-xl rounded-t-xl  ':'rounded-r-xl rounded-t-xl '}px-2 break-words break-all block normal-case py-1 w-auto max-w-[50%]  bg-cyan-400`}>
                 {msg.message}
               </p>
             </div>

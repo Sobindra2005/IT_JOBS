@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { AcceptApi, RejectApi, PendingAPi } from "../../api/jobview/jobcreator";
 import { Notification } from "../../api/Notifications";
+import {socket} from '../../socket'
 
 function Applicant(props) {
   console.log(props.applicantList);
@@ -24,7 +25,7 @@ function Applicant(props) {
     );
 
     if (notifyresponce.status == 200) {
-      socket.emit("identify notification", authorId);
+      socket.emit("identify notification", userId);
     }
   };
 
@@ -44,7 +45,7 @@ function Applicant(props) {
     );
 
     if (notifyresponce.status == 200) {
-      socket.emit("identify notification", authorId);
+      socket.emit("identify notification", userId);
     }
   };
 

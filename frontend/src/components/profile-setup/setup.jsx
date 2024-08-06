@@ -204,7 +204,7 @@ export const SkillSuggestion = (props) => {
             </div>
             <button
               type="submit"
-              className="p-2 mt-3 m-auto mb-2 bg-[#415a77] text-xl flex justify-center text-white w-[90%] rounded"
+              className="p-2 mt-3 m-auto mb-2 bg-blue-700 text-xl flex justify-center text-white w-[90%] rounded"
             >
               Next <i className="bi bi-arrow-right flex items-center pl-2"> </i>
             </button>
