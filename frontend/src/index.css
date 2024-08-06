@@ -9,9 +9,7 @@
   -webkit-box-orient: vertical;
 }
 
-*{
-  text-transform: capitalize;
-}
+
 html {
   scroll-behavior: smooth;
 }

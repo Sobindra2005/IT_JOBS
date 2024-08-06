@@ -9,15 +9,20 @@ This project aims to create a platform specifically for IT roles, where users ca
 
     User authentication (signup, login, logout)
     CRUD operations for job post 
-    Commenting system
+    real time Commenting system
+    real time notification system 
+    job apply and reject functionality 
     Basic admin functionalities
     Real-time communication
 
 # My contributions:
+    -developed several features, such as the login system with frontend error handling, post like/dislike with real-time updates, and a notification system.   
+    
+    -worked on both the frontend and backend, integrating WebSockets for real-time communication and implementing authentication with JWT.
 
-    Designed and developed RESTful APIs using Node.js and Express.js 
-    Implemented secure user authentication system for signup and login functionalities
-    designed and developed  ui using fameworks such as   react and tailwind.css
+    -encountered and resolved various errors, including CSS issues, WebSocket integration challenges, and MongoDB versioning problems.
+
+    -delved into various technologies and tools, like Tailwind CSS for styling, Axios for API requests, and Socket.IO for real-time features.
 
 # Tools and Technologies:
     Node.js

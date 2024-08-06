@@ -26,6 +26,7 @@ import { socket } from "./socket.js";
 import Applicant from "./components/job-section-view/applicant.jsx";
 import Jobcreator from "./components/job-section-view/Jobcreatorview.jsx";
 import JobseekerView from "./components/job-section-view/JobseekerView.jsx";
+import { MainSetup } from "./components/profile-setup/mainProfileSetup.jsx";
 
 axios.defaults.timeout = 10000;
 
@@ -78,11 +79,10 @@ function App() {
       await DataAuthenticated();
     };
     autheticationProcess();
-  }, []); 
+  }, []);
 
   useEffect(() => {
     if (!!authenticatedUserDetails && !!isAuthenticated) {
-      
       socket.emit("online", authenticatedUserDetails._id);
 
       socket.on("connect", () => {
@@ -406,7 +406,7 @@ function App() {
                   )}
                   {applicant && (
                     <Applicant
-                    authenticatedUserDetails={authenticatedUserDetails}
+                      authenticatedUserDetails={authenticatedUserDetails}
                       setApplicantList={setApplicantList}
                       applicantList={applicantList}
                       setapplicant={setapplicant}
@@ -476,6 +476,22 @@ function App() {
             />
           }
         />
+
+        <Route
+          path="/profileSetup"
+          element={
+            <ProtectedRoute
+              element={
+                <>
+                  <MainSetup 
+                  authenticatedUserDetails={authenticatedUserDetails}/>
+                </>
+              }
+              isAuthenticated={isAuthenticated}
+            />
+          }
+        />
+
         <Route
           path="/search"
           element={

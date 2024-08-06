@@ -2,7 +2,7 @@ function Right(props) {
   return (
     <>
       <div className="w-1/4 p-5 h-3/4   ">
-        <div className=" p-7  shadow-md  cursor-pointer flex flex-col shadow-gray-300 border-l-2 border-t-2 bg-white  border-sky-200 rounded-xl h-full ">
+        <div className=" p-7 z shadow-md  cursor-pointer flex flex-col shadow-gray-300 border-l-2 border-t-2 bg-white  border-sky-200 rounded-xl h-full ">
           <h1 className="text-gray-500 text-base font-medium ">More details</h1>
           <div className="text-base py-1 border-t-2 border-gray-300 pt-4  flex flex-row ">
             <i className="bi bi-envelope  mr-4 text-2xl text-gray-700  "></i>

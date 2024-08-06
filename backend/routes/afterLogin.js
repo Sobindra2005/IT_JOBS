@@ -10,8 +10,10 @@ const { postComment } = require('../controllers/postmanage/comments')
 const { getUserById } = require('../controllers/getuserByid')
 const { getappliedJobs } = require("../controllers/job/Jobseeker")
 const { getJobs, ApplicantsList, RejectHandle, pendingHandle, AcceptHandle } = require("../controllers/job/jobcreator")
-const { getNotifications, seenHandle,  Notify } = require("../controllers/Notifications/notification")
+const { getNotifications, seenHandle, Notify } = require("../controllers/Notifications/notification")
 const { Follow, unFollow } = require("../controllers/followunfollow/followUnfollow")
+const upload = require('../config.multer')
+const { profileSetup } = require("../controllers/profileSetup/profileSetup")
 
 router.get('/getUser/:id', getUserById)
 router.get('/',)
@@ -45,4 +47,7 @@ router.put('/follow', Follow)
 router.delete('/unfollow', unFollow)
 
 router.post('/seen', seenHandle)
+
+router.post('/profileSetup', upload.single('image'), profileSetup)
+
 module.exports = router
