@@ -36,6 +36,7 @@ function App() {
   );
   const [selectUserMsg, setSelectUserMsg] = useState("");
   const [authenticatedUserDetails, setAuthenticatedUserDetails] = useState([]);
+
   const [message, setMessage] = useState(false);
   const [messagebox, setMessagebox] = useState(false);
   const [notification, setNotification] = useState(false);
@@ -57,7 +58,7 @@ function App() {
   const [jobapplypostId, setjobapplypostId] = useState("");
   const [applicant, setapplicant] = useState(false);
   const [applicantList, setApplicantList] = useState([]);
-  console.log(applicantList);
+  console.log(authenticatedUserDetails);
 
   const DataAuthenticated = async () => {
     const data = await AuthenticatedUser();
@@ -260,87 +261,93 @@ function App() {
           element={
             <ProtectedRoute
               element={
-                <>
-                  <Afheader
-                    Messagehandle={Messagehandle}
-                    Notificationhandle={Notificationhandle}
-                  />
-                  {comment && (
-                    <Comment
+                authenticatedUserDetails.firsttime == true ? (
+                  <>
+                    <Navigate to="/profileSetup" />
+                  </>
+                ) : (
+                  <>
+                    <Afheader
+                      Messagehandle={Messagehandle}
+                      Notificationhandle={Notificationhandle}
+                    />
+                    {comment && (
+                      <Comment
+                        jobapplyhandle={jobapplyhandle}
+                        showJobposthandle={showJobposthandle}
+                        authenticatedUserDetails={authenticatedUserDetails}
+                        setcomment={setcomment}
+                        commentPost={commentPost}
+                      />
+                    )}
+                    {jobapply && (
+                      <Jobapply
+                        jobapplypostId={jobapplypostId}
+                        setshowError={setshowError}
+                        setshowSuccess={setshowSuccess}
+                        setpopupmessage={setpopupmessage}
+                        setshowpopup={setshowpopup}
+                        jobAuthorId={jobAuthorId}
+                        authenticatedUserDetails={authenticatedUserDetails}
+                        removejobapplyhandle={removejobapplyhandle}
+                      />
+                    )}
+                    {showSuccess && (
+                      <Success
+                        showpopup={showpopup}
+                        setshowSuccess={setshowSuccess}
+                        setshowpopup={setshowpopup}
+                        popupmessage={popupmessage}
+                      />
+                    )}
+                    {showError && (
+                      <Error
+                        showpopup={showpopup}
+                        setshowError={setshowError}
+                        setshowpopup={setshowpopup}
+                        popupmessage={popupmessage}
+                      />
+                    )}
+
+                    {jobpost && (
+                      <Jobposting
+                        setshowError={setshowError}
+                        setshowSuccess={setshowSuccess}
+                        setpopupmessage={setpopupmessage}
+                        setshowpopup={setshowpopup}
+                        authenticatedUserDetails={authenticatedUserDetails}
+                        removeJobposthandle={removeJobposthandle}
+                      />
+                    )}
+                    {messagebox && (
+                      <Messagebox
+                        sendMessage={sendMessage}
+                        updateMsg={updateMsg}
+                        setAllmsg={setAllmsg}
+                        allmsg={allmsg}
+                        authenticatedUserDetails={authenticatedUserDetails}
+                        chatId={chatId}
+                        selectUserMsg={selectUserMsg}
+                        removeMessageBox={removeMessageBox}
+                      />
+                    )}
+                    {message && (
+                      <Message
+                        allmsg={allmsg}
+                        authenticatedUserDetails={authenticatedUserDetails}
+                        showMessageBox={showMessageBox}
+                        MessageList={MessageList}
+                      />
+                    )}
+                    {notification && <Notifications />}
+                    <Homecontent
+                      commenthandle={commenthandle}
+                      authenticatedUserDetails={authenticatedUserDetails}
                       jobapplyhandle={jobapplyhandle}
                       showJobposthandle={showJobposthandle}
-                      authenticatedUserDetails={authenticatedUserDetails}
-                      setcomment={setcomment}
-                      commentPost={commentPost}
                     />
-                  )}
-                  {jobapply && (
-                    <Jobapply
-                      jobapplypostId={jobapplypostId}
-                      setshowError={setshowError}
-                      setshowSuccess={setshowSuccess}
-                      setpopupmessage={setpopupmessage}
-                      setshowpopup={setshowpopup}
-                      jobAuthorId={jobAuthorId}
-                      authenticatedUserDetails={authenticatedUserDetails}
-                      removejobapplyhandle={removejobapplyhandle}
-                    />
-                  )}
-                  {showSuccess && (
-                    <Success
-                      showpopup={showpopup}
-                      setshowSuccess={setshowSuccess}
-                      setshowpopup={setshowpopup}
-                      popupmessage={popupmessage}
-                    />
-                  )}
-                  {showError && (
-                    <Error
-                      showpopup={showpopup}
-                      setshowError={setshowError}
-                      setshowpopup={setshowpopup}
-                      popupmessage={popupmessage}
-                    />
-                  )}
-
-                  {jobpost && (
-                    <Jobposting
-                      setshowError={setshowError}
-                      setshowSuccess={setshowSuccess}
-                      setpopupmessage={setpopupmessage}
-                      setshowpopup={setshowpopup}
-                      authenticatedUserDetails={authenticatedUserDetails}
-                      removeJobposthandle={removeJobposthandle}
-                    />
-                  )}
-                  {messagebox && (
-                    <Messagebox
-                      sendMessage={sendMessage}
-                      updateMsg={updateMsg}
-                      setAllmsg={setAllmsg}
-                      allmsg={allmsg}
-                      authenticatedUserDetails={authenticatedUserDetails}
-                      chatId={chatId}
-                      selectUserMsg={selectUserMsg}
-                      removeMessageBox={removeMessageBox}
-                    />
-                  )}
-                  {message && (
-                    <Message
-                      allmsg={allmsg}
-                      authenticatedUserDetails={authenticatedUserDetails}
-                      showMessageBox={showMessageBox}
-                      MessageList={MessageList}
-                    />
-                  )}
-                  {notification && <Notifications />}
-                  <Homecontent
-                    commenthandle={commenthandle}
-                    authenticatedUserDetails={authenticatedUserDetails}
-                    jobapplyhandle={jobapplyhandle}
-                    showJobposthandle={showJobposthandle}
-                  />
-                </>
+                  </>
+                )
               }
               isAuthenticated={isAuthenticated}
             />
@@ -483,8 +490,29 @@ function App() {
             <ProtectedRoute
               element={
                 <>
-                  <MainSetup 
-                  authenticatedUserDetails={authenticatedUserDetails}/>
+                  <MainSetup
+                    authenticatedUserDetails={authenticatedUserDetails}
+                    setshowError={setshowError}
+                    setshowSuccess={setshowSuccess}
+                    setpopupmessage={setpopupmessage}
+                    setshowpopup={setshowpopup}
+                  />
+                  {showSuccess && (
+                    <Success
+                      showpopup={showpopup}
+                      setshowSuccess={setshowSuccess}
+                      setshowpopup={setshowpopup}
+                      popupmessage={popupmessage}
+                    />
+                  )}
+                  {showError && (
+                    <Error
+                      showpopup={showpopup}
+                      setshowError={setshowError}
+                      setshowpopup={setshowpopup}
+                      popupmessage={popupmessage}
+                    />
+                  )}
                 </>
               }
               isAuthenticated={isAuthenticated}

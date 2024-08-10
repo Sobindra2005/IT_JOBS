@@ -3,20 +3,23 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 
 
+const addProtocolIfMissing = (url) => {
+  if (!/^https?:\/\//i.test(url)) {
+    return `https://${url}`;
+  }
+  return url;
+};
+
 export const Third = (props) => {
   const [addLink, setaddLink] = useState(false);
-  const [link, setlink] = useState({
-    github: "",
-    instagram: "",
-    twitter: "",
-    snapchat: "",
-    whatsapp: "",
-    linkedln: "",
-  });
-  const [websiteLink, setwebsiteLink] = useState(false);
   const [text, setText] = useState("");
+  const [websiteLink, setwebsiteLink] = useState(false);
   const [wordCount, setWordCount] = useState(0);
-
+  const [websiteValue, setwebsiteValue] = useState("");
+  const [currentSocialLink, setcurrentSocialLink] = useState("");
+  const [currentSocialplatform, setcurrentSocialplatform] = useState("");
+ 
+console.log(text)
   const countWords = (str) => {
     const words = str
       .trim()
@@ -35,6 +38,47 @@ export const Third = (props) => {
     } else {
     }
   };
+
+  const socialPlatfromSave = () => {
+    if (currentSocialplatform == "github") {
+      props.setlink({
+        ...props.link,
+        github: currentSocialLink,
+      });
+    }
+    if (currentSocialplatform == "instagram") {
+      props.setlink({
+        ...props.link,
+        instagram: currentSocialLink,
+      });
+    }
+    if (currentSocialplatform == "twitter") {
+      props.setlink({
+        ...props.link,
+        twitter: currentSocialLink,
+      });
+    }
+    if (currentSocialplatform == "facebook") {
+      props.setlink({
+        ...props.link,
+        facebook: currentSocialLink,
+      });
+    }
+
+    if (currentSocialplatform == "linkedln") {
+      props.setlink({
+        ...props.link,
+        linkedln: currentSocialLink,
+      });
+    }
+    setcurrentSocialLink("");
+    setcurrentSocialplatform("");
+  };
+
+  const hasSocialLinks = Object.entries(props.link)
+    .filter(([key]) => key !== "protofolio")
+    .some(([key, url]) => url !== "");
+
   return (
     <>
       {/* screeen div */}
@@ -75,22 +119,30 @@ export const Third = (props) => {
                 <>
                   <div className="w-full flex flex-col">
                     <select
+                      value={currentSocialplatform}
+                      onChange={(e) => setcurrentSocialplatform(e.target.value)}
                       id="roles"
                       className="text-[16px] p-1 border border-gray-700 bg-gray-300 rounded-md mb-4 w-[fit-content] px-3 m-auto"
                     >
+                      <option value="" disabled>
+                        select media
+                      </option>
                       <option value="github">Github</option>
                       <option value="instagram">Instagram</option>
                       <option value="twitter">Twitter</option>
-                      <option value="snapchat">Snapchat</option>
+                      <option value="facebook">facebook</option>
                       <option value="whatsapp">Whatsapp</option>
                       <option value="linkedln">Linkedln</option>
                     </select>
                     <TextField
+                      value={currentSocialLink}
+                      onChange={(e) => setcurrentSocialLink(e.target.value)}
                       id="outlined-basic"
                       label="Add Links"
                       variant="outlined"
                     />
                     <button
+                      onClick={() => socialPlatfromSave()}
                       type="text"
                       className="text-[16px] mt-1 border border-gray-700 bg-gray-300 rounded-md w-[fit-content] px-3 self-end"
                     >
@@ -99,35 +151,127 @@ export const Third = (props) => {
                   </div>
                 </>
               )}
-              <h1 className="text-black text-left mt-3 w-full  flex justify-between ">
-                Websites  {websiteLink === true && (
-                    <button
-                      onClick={() => setwebsiteLink(false)}
-                      type="text"
-                      className="text-[16px]  border border-gray-700 bg-gray-300 rounded-md  w-[fit-content] px-3 "
+              {/* Mapping through social links, excluding protofolio */}
+              {hasSocialLinks &&
+                Object.entries(props.link)
+                  .filter(([key,url]) => key !== "protofolio" &&  url !== "")
+                  .map(([platform, url]) => (
+                    <div
+                      key={platform}
+                      className="mt-1 flex justify-between text-[16px] border border-gray-700 bg-gray-300 rounded-md w-full px-3"
                     >
-                      cancel
-                    </button>
-                  )}
+                      <div>
+                        <span className="bi bi-globe pr-4 border-r-2 border-gray-500"></span>
+                        <a
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 pl-2 text-[underline]"
+                          href={`${addProtocolIfMissing(url)}`}
+                        >
+                          {addProtocolIfMissing(url)}
+                        </a>
+                      </div>
+                      <span
+                        onClick={() => {
+                          props.setlink({
+                            ...props.link,
+                            [platform]: "",
+                          });
+                        }}
+                        className="bi bi-x text-lg text-black cursor-pointer"
+                      >
+                        {" "}
+                      </span>
+                    </div>
+                  ))}
+
+              <h1 className="text-black text-left mt-3 w-full  flex justify-between ">
+                Websites{" "}
+                {!props.link.protofolio && (
+                  <span>
+                    {" "}
+                    {websiteLink === true && (
+                      <button
+                        onClick={() => setwebsiteLink(false)}
+                        type="text"
+                        className="text-[16px]  border border-gray-700 bg-gray-300 rounded-md  w-[fit-content] px-3 "
+                      >
+                        cancel
+                      </button>
+                    )}
+                  </span>
+                )}
               </h1>
-              {websiteLink === false && (
-                <button
-                  onClick={() => setwebsiteLink(true)}
-                  type="text"
-                  className="text-[16px] mt-1 border self-center border-gray-700 bg-gray-300 rounded-md w-[fit-content] px-3 "
-                >
-                  Add protofolio website{" "}
-                 
-                </button>
+
+              {props.link.protofolio && (
+                <>
+                  <div className=" mt-1 flex justify-between text-[16px]  border border-gray-700 bg-gray-300 rounded-md  w-full px-3">
+                    <div>
+                      {" "}
+                      <span className="bi bi-globe pr-4 border-r-2  border-gray-500"></span>
+                      <a
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 pl-2 text-[underline]"
+                        href={`${addProtocolIfMissing(props.link.protofolio)}`}
+                      >
+                        {addProtocolIfMissing(props.link.protofolio)}
+                      </a>
+                    </div>
+
+                    <span
+                      onClick={(e) =>
+                        props.setlink({
+                          ...props.link,
+                          protofolio: "",
+                        })
+                      }
+                      className=" bi bi-x text-lg text-black cursor-pointer "
+                    >
+                      {" "}
+                    </span>
+                  </div>
+                </>
               )}
 
-              {websiteLink === true && (
-                <TextField
-                  id="outlined-basic"
-                  label="Add protofolio website"
-                  variant="outlined"
-                
-                />
+              {!props.link.protofolio && (
+                <div className="flex flex-col">
+                  {websiteLink === false && (
+                    <button
+                      onClick={() => setwebsiteLink(true)}
+                      type="text"
+                      className="text-[16px] mt-1 border self-center border-gray-700 bg-gray-300 rounded-md w-[fit-content] px-3 "
+                    >
+                      Add protofolio website{" "}
+                    </button>
+                  )}
+
+                  {websiteLink === true && (
+                    <>
+                      {" "}
+                      <TextField
+                        value={websiteValue}
+                        onChange={(e) => setwebsiteValue(e.target.value)}
+                        id="outlined-basic"
+                        label="Add protofolio website"
+                        variant="outlined"
+                      />
+                      <button
+                        onClick={async (e) => {
+                          await props.setlink({
+                            ...props.link,
+                            protofolio: websiteValue,
+                          });
+                          await setwebsiteValue("");
+                        }}
+                        type="text"
+                        className="text-[16px] mt-1 border border-gray-700 bg-gray-300 rounded-md w-[fit-content] px-3 self-end"
+                      >
+                        save
+                      </button>
+                    </>
+                  )}
+                </div>
               )}
               <h1 className="text-black text-left w-full  flex justify-between ">
                 Bio
@@ -136,7 +280,12 @@ export const Third = (props) => {
               <textarea
                 value={text}
                 placeholder="Add Bio"
-                onChange={handleChange}
+                onChange={async(e)=>{
+                 await  setText(e.target.value)
+                 await  props.setFormData({
+                  ...props.formData,
+                  Bio:text
+                })}}
                 rows="3"
                 spellCheck={false}
                 className="bg-[#eff0ed] text-[18px] px-1  font-normal outline-none  border resize-none rounded-md border-gray-700 "
@@ -146,7 +295,10 @@ export const Third = (props) => {
               </div>
             </div>
           </div>
-          <div onClick={()=>props.setConfirm(true)} className="  w-full bg-blue-700 rounded text-white flex justify-center items-center h-[3rem] ">
+          <div
+            onClick={() => props.setConfirm(true)}
+            className="  w-full bg-blue-700 rounded text-white flex justify-center items-center h-[3rem] "
+          >
             <Button variant="filled" className="w-full h-full">
               Submit{" "}
             </Button>

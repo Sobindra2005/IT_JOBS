@@ -1,14 +1,21 @@
 import { FaGithub, FaLinkedin, FaFacebook } from "react-icons/fa";
 import projects from "../../demodata/project";
 import { useEffect, useState } from "react";
+import { ProfileData } from "../../api/profile";
+
 
 function Center(props) {
   const [Projects, setprojects] = useState([]);
-
+  const [userData, setuserData] = useState({});
   useEffect(() => {
     setprojects(projects);
-  }, []);
-
+    if (props.authenticatedUserDetails._id) {
+      const responce = ProfileData(props.authenticatedUserDetails._id).then(
+        (data) => setuserData(data.data)
+      );
+    }
+  }, [props.authenticatedUserDetails]);
+console.log(userData)
   return (
     <>
       {/* section for the center */}
@@ -29,14 +36,14 @@ function Center(props) {
                 {/* name and title */}
                 <div className="ml-2 flex flex-col justify-center ">
                   <h1 className="text-xl font-semibold text-gray-700   ">
-                   {props.authenticatedUserDetails.firstName} {props.authenticatedUserDetails.lastName}
+                 {userData.fullName}
                   </h1>
                   <p className=" text-base text-gray-500 font-medium ">
                     {props.authenticatedUserDetails.roles}
                   </p>
                 </div>
               </div>
-              {/* social media links */}
+              {/* social media links */}{
               <div className=" w-auto h-auto gap-x-3 cursor-pointer text-white flex flex-row items-center ">
                 <FaGithub
                   size={38}
@@ -50,21 +57,18 @@ function Center(props) {
                   size={38}
                   className=" bg-blue-700 rounded-md p-2 hover:bg-blue-600"
                 />
-              </div>
+              </div>}
             </div>
           </div>
           <div className="mt-20 ">
-            <h1 className="text-xl font-semibold text-cyan-700 leading-10 ">
+            <h1 className="text-xl font-semibold text-gray-700 leading-10 ">
               About me{" "}
             </h1>
             <p className="text-base text-gray-500 font-medium">
               {" "}
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi
-              perspiciatis nemo Lorem, ipsum dolor sit
+          {userData?.Bio}
               <br />
-              <br />
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa,
-              quasi? Lorem ipsum dolor sit
+            <p className="text-gray-700 ">Lives in <span className="text-blue-500 cursor-pointer ">{`${userData.address},${userData.city}.`}</span></p>  
             </p>
           </div>
         </div>
@@ -93,16 +97,26 @@ function Center(props) {
 
               <tbody>
                 {Projects.map((project, index) => (
-                       <tr key={index} className="border-t-2 border-gray-300">
-                       <td className=" p-2 "> {project.name} </td>
-                       <td className={`p-2 ${ project.status==="In Progress"?'text-green-700': project.status==='Pending'?'text-red-900':'text-yellow-400' }`} >{project.status} </td>
-                       <td className="text-blue-600  p-2 pr-2  underline ">
-                         <a href=" ">github</a>{" "}
-                       </td>
-                       <td className="text-blue-600  p-2  underline ">
-                         <a href="">project Link</a>
-                       </td>
-                     </tr>
+                  <tr key={index} className="border-t-2 border-gray-300">
+                    <td className=" p-2 "> {project.name} </td>
+                    <td
+                      className={`p-2 ${
+                        project.status === "In Progress"
+                          ? "text-green-700"
+                          : project.status === "Pending"
+                          ? "text-red-900"
+                          : "text-yellow-400"
+                      }`}
+                    >
+                      {project.status}{" "}
+                    </td>
+                    <td className="text-blue-600  p-2 pr-2  underline ">
+                      <a href=" ">github</a>{" "}
+                    </td>
+                    <td className="text-blue-600  p-2  underline ">
+                      <a href="">project Link</a>
+                    </td>
+                  </tr>
                 ))}
               </tbody>
             </table>

@@ -3,9 +3,8 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 
 export const Second = (props) => {
-  const [profilePic, setProfilePic] = useState(null);
   const fileInputRef = useRef(null);
-
+  const [profile,setprofile]=useState(null)
   const handleDivClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -15,9 +14,10 @@ export const Second = (props) => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
+      props.setProfilePic(file)
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProfilePic(reader.result);
+        setprofile(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -39,9 +39,9 @@ export const Second = (props) => {
           <div className="w-full ">
             <div className="flex flex-col justify-center  ">
               <div className="relative mt-2 w-[9rem] m-auto   h-[9rem] flex flex-col  rounded-full overflow-hidden cursor-pointer bg-[#b0c4b1] border border-gray-300">
-                {profilePic ? (
+                {profile ? (
                   <img
-                    src={profilePic}
+                    src={profile}
                     alt="Profile"
                     className="w-full h-full object-cover"
                   />
@@ -58,16 +58,18 @@ export const Second = (props) => {
               <input
                 type="file"
                 ref={fileInputRef}
+                name="image"
                 className="hidden"
                 accept="image/*"
                 onChange={handleFileChange}
+                required
               />
               <div className="mt-5 m-auto flex justify-center items-center ">
                 {" "}
                 <Button
                   onClick={handleDivClick}
                   variant="contained"
-                  size="large"
+                  size="lprofilePicarge"
                   className="w-[fit-content]  text-white "
                 >
                   upload
@@ -78,7 +80,7 @@ export const Second = (props) => {
             <div className="flex justify-around  m-auto mt-12 text-xl  my-3 w-[100%]  ">
               <button
                 onClick={() => props.setView("third")}
-                type="button "
+                type="submit "
                 className=" px-3 py-1 border border-black rounded  cursor-pointer text-black "
               >
                 {" "}
@@ -88,7 +90,10 @@ export const Second = (props) => {
                 onClick={() => props.setView("third")}
                 className=" bg-blue-700 flex items-center justify-center text-white rounded cursor-pointer"
               >
-                <Button variant="filled "> Next</Button>
+                <Button type="submit" variant="filled ">
+                  {" "}
+                  Next
+                </Button>
               </div>
             </div>
           </div>

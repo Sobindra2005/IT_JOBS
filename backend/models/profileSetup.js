@@ -4,11 +4,12 @@ const profileSetupSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        required: true,
+        unique: true
     },
-    profilePic:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'Image'
+    profilePic: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Image'
     }
     ,
     fullName: {
@@ -26,7 +27,7 @@ const profileSetupSchema = new mongoose.Schema({
         trim: true,
         required: true
     },
-    streetAddress: {
+    address: {
         type: String,
         trim: true,
 
@@ -66,15 +67,43 @@ const profileSetupSchema = new mongoose.Schema({
         trim: true,
         required: true
     },
-    languages: {
+    languages: [{
         type: String,
         trim: true,
         required: true
+    }],
+    protofolio: {
+        type: String,
+        trim: true
     },
+    github: {
+        type: String,
+        trim: true
+    },
+    instagram: {
+        type: String,
+        trim: true
+    },
+    twitter: {
+        type: String,
+        trim: true
+    },
+    facebook: {
+        type: String,
+        trim: true
+    },
+    linkedln: {
+        type: String,
+        trim: true
+    },
+    Bio: {
+        type: String,
+       trim:true
+   }
 })
 
 
-const profile= mongoose.model('profile',profileSetupSchema)
+const profile = mongoose.model('profile', profileSetupSchema)
 
 
-module.exports={profile}
+module.exports = { profile }

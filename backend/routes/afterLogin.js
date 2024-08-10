@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const { messageList, postMsg, startOrGetMsg } = require('../controllers/message/messagecontroller')
+const { messageList, postMsg, startOrGetMsg ,latestMsg} = require('../controllers/message/messagecontroller')
 const { authenticatedUserDetails } = require("../controllers/authenticateduser")
 const { createJob } = require('../controllers/createJob/createJob')
 const { getpost } = require("../controllers/home/home")
@@ -14,6 +14,7 @@ const { getNotifications, seenHandle, Notify } = require("../controllers/Notific
 const { Follow, unFollow } = require("../controllers/followunfollow/followUnfollow")
 const upload = require('../config.multer')
 const { profileSetup } = require("../controllers/profileSetup/profileSetup")
+const { getProfileData } = require("../controllers/profile/profile")
 
 router.get('/getUser/:id', getUserById)
 router.get('/',)
@@ -23,6 +24,9 @@ router.post('/msg/:chatId', postMsg)
 router.get('/authenticated', authenticatedUserDetails)
 router.post('/createJob/:authorId', createJob)
 router.get('/home', getpost)
+router.get('/profile/:id',getProfileData)
+router.get('/latestmsg/:receiverId',latestMsg)
+
 router.post('/jobapply', jobapply)
 
 router.put('/adddislike/:postId', addDisLike)
@@ -48,6 +52,6 @@ router.delete('/unfollow', unFollow)
 
 router.post('/seen', seenHandle)
 
-router.post('/profileSetup', upload.single('image'), profileSetup)
+router.post('/profileSetup', upload.single('profilePic'), profileSetup)
 
 module.exports = router

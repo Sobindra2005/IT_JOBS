@@ -33,3 +33,11 @@ export const postMessage =(senderId,receiverId,chatId,message)=> api.post(`${API
     }
 
 )
+
+export const LatestMsg=(receiverId)=> api.get(`${API_BASE_URL}/latestmsg/${receiverId}`,{
+    headers: {
+        Authorization: `Bearer ${token}`,
+    },
+})
+
+

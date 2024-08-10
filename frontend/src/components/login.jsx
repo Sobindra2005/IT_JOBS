@@ -16,9 +16,11 @@ function Login(props) {
         email,
         password,
       });
-console.log(loginData)
       console.log(loginData);
+      console.log(loginData);
+
       if (loginData.status === 200) {
+        
         const token = await loginData.data;
         props.setshowSuccess(true);
         props.setpopupmessage("Login Successfully");
@@ -26,10 +28,8 @@ console.log(loginData)
         await localStorage.setItem("token", `${token}`);
         window.location.reload();
       }
-
     } catch (error) {
       if (error.response) {
-
         if (error.response.status === 401 || error.response.status === 404) {
           props.setshowError(true);
           props.setpopupmessage("Invalid Email/Password");
@@ -40,13 +40,13 @@ console.log(loginData)
           props.setshowpopup(true);
         }
       } else if (error.request) {
-        
         console.error("No response received:", error.request);
         props.setshowError(true);
-        props.setpopupmessage("No response from server. Please try again later.");
+        props.setpopupmessage(
+          "No response from server. Please try again later."
+        );
         props.setshowpopup(true);
       } else {
-     
         console.error("Error message:", error.message);
         props.setshowError(true);
         props.setpopupmessage("An error occurred. Please try again later.");
@@ -54,8 +54,6 @@ console.log(loginData)
       }
     }
   };
-  
-
 
   return (
     <>

@@ -17,7 +17,7 @@ export const Confirm = (props) => {
             <Button onClick={() => props.setConfirm(false)} variant="outlined">
               Cancel
             </Button>
-            <Button onClick={() => props.setConfirm()} variant="contained">Confirm</Button>
+            <Button onClick={props.confirmHandle} type='submit'  variant="contained">Confirm</Button>
           </div>
         </div>
       </div>

@@ -41,11 +41,11 @@ const startOrGetMsg = async (req, res) => {
 
     try {
         const { senderId, receiverId } = await req.body
-      
+
         const chatId = await generateId(senderId, receiverId)
-     
+
         const chatSession = await MsgRecord.find({ chatId })
-     
+
         if (chatSession.length == 0) {
             newchatSession = new MsgRecord({
                 senderId: senderId,
@@ -53,12 +53,13 @@ const startOrGetMsg = async (req, res) => {
                 chatId: chatId,
             })
             await newchatSession.save()
-     
+
             return res.status(200).json({ chatId, message: [] })
         }
         else {
-            const allMessage = await Message.find({ chatId }).sort({ timestamp: 1 });
-         
+            await Message.updateMany({chatId:chatId},{$set:{isRead:true}})
+            const allMessage = await Message.find({ chatId }).sort({ timestamp: 1 })
+
             return res.status(200).json({ allMessage, chatId })
         }
     }
@@ -68,9 +69,9 @@ const startOrGetMsg = async (req, res) => {
 }
 
 async function postMsg(req, res) {
-    const { senderId, receiverId,chatId, message } = await req.body
+    const { senderId, receiverId, chatId, message } = await req.body
     const chatid = await generateId(senderId, receiverId)
-    if(chatid != chatId){
+    if (chatid != chatId) {
         console.log('unexpected ')
     }
     const newMsg = new Message({
@@ -83,4 +84,13 @@ async function postMsg(req, res) {
     const allMessage = await Message.find({ chatId }).sort({ timestamp: 1 });
     return res.status(200).json({ allMessage, sucess: true })
 }
-module.exports = { messageList, postMsg, startOrGetMsg }
+
+
+const latestMsg = async (req, res) => {
+
+    const receiverId=req.params.receiverId
+    const chatId = await generateId(req.user._id,receiverId)
+    const latestMsg = await Message.find({ chatId: chatId }).sort({ createdAt: -1 }).limit(1)
+    return res.status(200).json(latestMsg)
+}
+module.exports = { messageList, postMsg, startOrGetMsg, latestMsg }
