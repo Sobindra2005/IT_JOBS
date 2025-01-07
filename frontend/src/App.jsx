@@ -21,7 +21,7 @@ import Jobapply from "./components/job-apply/jobapply.jsx";
 import { messageList } from "./api/messageHanlde.js";
 import AuthenticatedUser from "./api/authenticatedUserDetails.js";
 import { Success, Error } from "./components/popup/popup.jsx";
-import Comment from "./components/comment /comment.jsx";
+import Comment from "./components/comment/comment.jsx";
 import { socket } from "./socket.js";
 import Applicant from "./components/job-section-view/applicant.jsx";
 import Jobcreator from "./components/job-section-view/Jobcreatorview.jsx";
@@ -40,7 +40,6 @@ function App() {
   const [message, setMessage] = useState(false);
   const [messagebox, setMessagebox] = useState(false);
   const [notification, setNotification] = useState(false);
-
   const [jobpost, setJobpost] = useState(false);
   const [jobapply, setJobapply] = useState(false);
   const [MessageList, setMessageList] = useState([]);

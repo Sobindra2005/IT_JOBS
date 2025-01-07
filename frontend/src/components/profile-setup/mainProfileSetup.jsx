@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRouter } from "react";
 import { First } from "./first";
 import { Second } from "./second";
 import { Third } from "./third";
@@ -11,7 +11,7 @@ export const MainSetup = (props) => {
   const [view, setView] = useState("first");
   const [confirm, setConfirm] = useState(false);
   const navigate=useNavigate()
-
+  const router=useRouter()
   const [link, setlink] = useState({
     protofolio: "",
   });
@@ -49,7 +49,7 @@ export const MainSetup = (props) => {
         props.setshowSuccess(true);
         props.setpopupmessage("Your profile information has been updated successfully !");
         props.setshowpopup(true);
-        navigate("/home")
+       router.push('/home')
       }
     } catch (err) {
       console.log("error occured ", err);

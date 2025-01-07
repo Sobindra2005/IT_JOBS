@@ -14,8 +14,8 @@ const { Message } = require('./models/message');
 const { Comment } = require('./models/comment.js');
 const { Notification } = require('./models/notifications.js');
 
-const url = process.env.mongourl;
-
+const url = process.env.MONGO_URL;
+console.log(url)
 
 app.use(express.json({}));
 

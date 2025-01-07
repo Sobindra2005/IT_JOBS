@@ -181,7 +181,7 @@ function Homecontent(props) {
             <div className="flex cursor-pointer">
               <img
                 className="h-12 w-12 flex-none border border-gray-300 rounded-full object-cover object-center"
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTH6_3LEQ3Mt1Or0Zx53Yoyi-5qzZ55DdxVng&s"
+                src={`${props.authenticatedUserDetails}`}
                 alt=""
               />
               <p className="flex items-center font-medium pl-3 text-xl">
