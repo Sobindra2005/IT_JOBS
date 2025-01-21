@@ -14,7 +14,7 @@ function Afheader({ Messagehandle, Notificationhandle }) {
         <div className=" top-bar flex flex-row justify-between w-screen items-center pr-2 ">
           <div className="logo text-3xl font-bold">
             <a className="no-underline text-white cursor-pointer" href="">
-              <h1>IT Jobs</h1>
+              <h1>TalentForge</h1>
             </a>
           </div>
           <div className="nav-bar m-0 p-0 flex items-center w-96  cursor-pointer">
