@@ -8,7 +8,7 @@ function Blheader() {
         <div className="top-bar text-white w-screen flex flex-row items-center">
           <div className=" logo text-3xl font-bold ">
             <Link to="">
-              <h1>IT Jobs</h1>
+              <h1>TalentForge</h1>
             </Link>
           </div>
           <div className="nav-buttons">
